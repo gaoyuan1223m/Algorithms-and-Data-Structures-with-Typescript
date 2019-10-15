@@ -1,5 +1,5 @@
 
-export class LinkedList<T> {
+export class OneWayLinkedList<T> {
 
     private _head: ListNode<T>;
     private _tail: ListNode<T>;

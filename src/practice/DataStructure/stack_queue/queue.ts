@@ -1,4 +1,4 @@
-import { LinkedList } from "../linked-list/linked-list";
+import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
 
 /**
  * @First_In_and_First_Out
@@ -34,10 +34,10 @@ export class ArrayQueue<T> {
 
 export class LinkedListQueue<T> {
 
-    private _llq: LinkedList<T>;
+    private _llq: OneWayLinkedList<T>;
 
     constructor() {
-        this._llq = new LinkedList<T>()
+        this._llq = new OneWayLinkedList<T>()
     }
 
     get size(): number {

@@ -1,6 +1,6 @@
-import { LinkedList } from "./linked-list";
+import { OneWayLinkedList } from "./one-way-linked-list";
 
-const myLinkList = new LinkedList<number>();
+const myLinkList = new OneWayLinkedList<number>();
 
 myLinkList.addFirst(4);
 myLinkList.addFirst(5);

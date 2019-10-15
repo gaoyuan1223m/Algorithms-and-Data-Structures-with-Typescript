@@ -4,7 +4,7 @@
  * Push()
  * Pop()
  */
-import { LinkedList } from "../linked-list/linked-list";
+import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
 
 export class ArrayStack<T> {
 
@@ -37,10 +37,10 @@ export class ArrayStack<T> {
 
 export class LinkedListStack<T> {
 
-    private _ls: LinkedList<T>;
+    private _ls: OneWayLinkedList<T>;
 
     constructor() {
-        this._ls = new LinkedList<T>();
+        this._ls = new OneWayLinkedList<T>();
     }
 
     get size(): number {
