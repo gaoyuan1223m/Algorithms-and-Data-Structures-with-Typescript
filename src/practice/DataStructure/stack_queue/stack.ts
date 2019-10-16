@@ -50,6 +50,7 @@ export class LinkedListStack<T> {
     get peek(): T {
         return this._ls.first;
     }
+    
     public push(value: T): void {
         return this._ls.addFirst(value);
     }
