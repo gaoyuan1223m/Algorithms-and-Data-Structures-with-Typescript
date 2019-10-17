@@ -1,11 +1,32 @@
+import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
 
+export interface HashClassInterface<T> {
+    hashCode(key: T): number;
+    equals(key: T): boolean;
+}
 
+export interface HashInterface<K, V> {
+    readonly size: number;
+    clear(): void;
+    delete(key: K): boolean;
+    get(key: K): V;
+    has(key: K): boolean;
+    set(key: K, value: V): this;
+    forEach(callbackfn: (value: V, key: K, dict: Dictionary<K, V>) => void, thisArg?: any): void
+}
 
+export class Dictionary<K, V> implements HashInterface<K,V> {
 
-export class Dictionary<K, V> {
+    private _capacity: number;
+    private _array: Array<OneWayLinkedList<V>>;
 
-    constructor() {
-
+    /** 
+     * @param capacity Prime Number would be peferred
+     */
+    constructor(capacity: number) {
+        this._capacity = capacity;
+        this._array = new Array<OneWayLinkedList<V>>(capacity);
+        this._array.fill(new OneWayLinkedList<V>());
     }
 
     public clear(): void {
@@ -52,11 +73,11 @@ export class Dictionary<K, V> {
 
 /**
  * @Data_Member
- * 
+ *
  * @Operations
- * 
+ *
  * @Hash
- * 
+ *
  * @Collisions碰撞_Resolution
  *      *R1: Open Address*
  *          *-> Linear Probing线性探索， 找下一个地址 最差O(n)， 会产生primary clustering*
@@ -64,7 +85,7 @@ export class Dictionary<K, V> {
  *      *R2: Separate Chain*
  *          *-> 建立链表，最差O(n)*
  *      *抽屉越满->查找效率越低 ->Load factor: 一个抽屉中元素/Table Size (2/3为上限 python) -> Table Size变化的时候需要 Re-Hash*
- * 
+ *
  * *所有的进入HASH魔法盒都将转换成Integer, 再进行HASH Function, 得到HASHCODE, 取余数组长度*
  * *1. key is Int, key(output) is key(input)*
  * *2. key is Float, key(output) is key的整数部分 × prime + 小数部分*
