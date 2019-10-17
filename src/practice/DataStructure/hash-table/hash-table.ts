@@ -11,15 +11,19 @@ export class Dictionary<K, V> {
     public clear(): void {
 
     }
+
     public delete(key: K): boolean {
         return false
     }
+
     public forEach(callbackfn: (value: V, key: K, dict: Dictionary<K, V>) => void, thisArg?: any): void {
 
-    };
+    }
+
     public get(key: K): V | undefined {
         return undefined
     }
+
     public has(key: K): boolean {
         return false
     }
@@ -53,12 +57,13 @@ export class Dictionary<K, V> {
  * 
  * @Hash
  * 
- * @Collisions碰撞
+ * @Collisions碰撞_Resolution
  *      *R1: Open Address*
- *      *R2: *
- * 
- * @Resolution
- * 
+ *          *-> Linear Probing线性探索， 找下一个地址 最差O(n)， 会产生primary clustering*
+ *          *-> Quadratic Probing平方探索， 会产生second clustering*
+ *      *R2: Separate Chain*
+ *          *-> 建立链表，最差O(n)*
+ *      *抽屉越满->查找效率越低 ->Load factor: 一个抽屉中元素/Table Size (2/3为上限 python) -> Table Size变化的时候需要 Re-Hash*
  * 
  * *所有的进入HASH魔法盒都将转换成Integer, 再进行HASH Function, 得到HASHCODE, 取余数组长度*
  * *1. key is Int, key(output) is key(input)*
