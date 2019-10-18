@@ -1,11 +1,12 @@
 {
-  "name":"ds_algo",
+  "name": "ds_algo",
   "version": "1.0.0",
   "description": "Learn DS and Algo",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
-    "DS", "Algo", "TS"
+    "DS",
+    "Algo",
+    "TS"
   ],
   "author": "RYAN",
   "license": "MIT",
