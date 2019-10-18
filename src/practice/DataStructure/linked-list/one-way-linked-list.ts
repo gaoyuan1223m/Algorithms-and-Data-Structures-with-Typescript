@@ -1,12 +1,12 @@
+import { ILinkedList } from "./linked-list-interface";
 
-export class OneWayLinkedList<T> {
+export class OneWayLinkedList<T> implements ILinkedList<T> {
 
     private _head: ListNode<T>;
     private _tail: ListNode<T>;
     private _size: number;
 
     constructor() {
-        this._head = new ListNode<T>();
         this._size = 0;
     }
 
@@ -14,54 +14,137 @@ export class OneWayLinkedList<T> {
         return this._size;
     }
 
-    get first(): T {
-        return this._head.next.value;
+    get head(): T {
+        return this._head.value;
     }
 
-    public addFirst(value: T): void {
-        const newNode = new ListNode<T>().addValue(value);
-        newNode.next = this._head.next;
-        this._head.next = newNode;
-        if (!this._tail) {
-            this._tail = newNode;
-        }
-        this._size += 1;
+    get tail(): T {
+        return this._tail.value;
     }
 
-    public append(value: T): void {
+    append(value: T): this {
         const newNode = new ListNode<T>().addValue(value);
-        if (this._tail) {
+
+        if (this._head) {
             this._tail.next = newNode;
+            this._tail = newNode
         } else {
-            this._head.next = newNode;
+            this._head = newNode;
+            this._tail = this._head;
         }
-        this._tail = newNode;
+
         this._size += 1;
+        return this;
     }
 
-    public removeFirst(): T {
-        const first = this._head.next.value;
-        this._head.next = this._head.next.next;
-        if (!this._head.next) {
-            this._tail = this._head.next;
+    insert(value: T, index: number): this {
+        if (index < 0 || index > this._size) return this;
+
+        if (index === this._size) {
+            this.append(value);
+            return this;
         }
-        this._size -= 1;
-        return first;
+
+        const newNode = new ListNode<T>().addValue(value);
+
+        if (index === 0) {
+            newNode.next = this._head;
+            this._head = newNode;
+            this._size += 1;
+            return this;
+        }
+
+        const preNode = this._getNode(index - 1);
+        newNode.next = preNode.next;
+        preNode.next = newNode;
+        this._size += 1;
+
+        return this;
     }
 
-    public print(): void {
-        let pointer = this._head.next;
+    insertFirst(value: T): this {
+        return this.insert(value, 0);
+    }
+
+    findbyIndex(index: number): T {
+        const pointer = this._getNode(index);
+        return pointer ? pointer.value : null;
+    }
+
+    indexOf(value: T): number {
+        let i = -1;
+        let nowNode = this._head;
+        while (nowNode) {
+            i += 1;
+            if(nowNode.value.toString() === value.toString()) return i;
+            nowNode = nowNode.next;
+        }
+        return -1;
+    }
+
+    removeByIndex(index: number): T {
+        if (index < 0 || index > this._size) return null;
+
+        let delNode: ListNode<T> = null;
+        if(index === 0) {
+            delNode = this._head;
+            this._head = this._head.next;
+            if(!this.head) this._tail = null;
+            this._size -= 1;
+            return delNode.value;
+        }
+
+        const preNode = this._getNode(index - 1);
+        delNode = preNode.next;
+        preNode.next = preNode.next.next;
+
+        if(!delNode.next) this._tail = preNode;
+        this._size -= 1;
+        return delNode.value;
+    }
+
+    removeFirst(): T {
+        return this.removeByIndex(0);
+    }
+
+    removeLast(): T {
+        return this.removeByIndex(this._size - 1);
+    }
+
+    print(): void {
+        let pointer = this._head;
         let str = 'HEAD -> ';
         while (pointer) {
-            str += ` ${pointer.value} ->`
+            str += `${pointer.value} -> `
             pointer = pointer.next;
         }
-        str += ` END`;
+        str += `END`;
         console.log(str);
     }
 
-    public isEmpty(): boolean {
+    clear(): void {
+        this._head = null;
+        this._tail = null;
+        this._size = 0;
+    }
+
+    isEmpty(): boolean {
         return this._size === 0;
+    }
+
+    private _getNode(index: number): ListNode<T> {
+
+        if (index < 0 || index >= this._size) return null;
+
+        let pointer = this._head;
+        let i = index;
+
+        while (i > 0) {
+            pointer = pointer.next;
+            i--;
+        }
+
+        return pointer;
     }
 
 }

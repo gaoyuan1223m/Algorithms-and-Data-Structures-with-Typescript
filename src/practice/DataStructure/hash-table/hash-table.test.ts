@@ -1,5 +1,5 @@
 import { HashClassInterface } from "./hash-table";
-Object
+
 class HashEntity implements HashClassInterface<HashEntity>, Object {
 
     private _id: string;
