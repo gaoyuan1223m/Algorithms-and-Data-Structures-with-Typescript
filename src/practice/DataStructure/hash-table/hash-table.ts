@@ -1,12 +1,12 @@
 import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
 
 export interface HashClassInterface<T> {
-    hashCode(key: T): number;
+    hashCode(): number;
     equals(key: T): boolean;
 }
 
 export interface HashInterface<K, V> {
-    readonly size: number;
+    size: number;
     clear(): void;
     delete(key: K): boolean;
     get(key: K): V;
@@ -15,10 +15,14 @@ export interface HashInterface<K, V> {
     forEach(callbackfn: (value: V, key: K, dict: Dictionary<K, V>) => void, thisArg?: any): void
 }
 
-export class Dictionary<K, V> implements HashInterface<K,V> {
+export class Dictionary<K, V> implements HashInterface<K, V> {
 
     private _capacity: number;
     private _array: Array<OneWayLinkedList<V>>;
+    private _keys: Array<K>;
+    private _values: Array<V>;
+
+    public size: number;
 
     /** 
      * @param capacity Prime Number would be peferred
@@ -27,6 +31,8 @@ export class Dictionary<K, V> implements HashInterface<K,V> {
         this._capacity = capacity;
         this._array = new Array<OneWayLinkedList<V>>(capacity);
         this._array.fill(new OneWayLinkedList<V>());
+        this._keys = [];
+        this._values = [];
     }
 
     public clear(): void {
@@ -42,32 +48,43 @@ export class Dictionary<K, V> implements HashInterface<K,V> {
     }
 
     public get(key: K): V | undefined {
-        return undefined
+        return undefined;        
     }
 
     public has(key: K): boolean {
-        return false
+        return !(this._array[this.getIndex(key)].size === 0);
     }
 
     public set(key: K, value: V): this {
+        this._array[this.getIndex(key)].append(value);
         return this
     }
 
-    readonly size: number;
+    private hashCode(str: string): number {
 
-    private hashcode = (v: K): number => {
-        const s: string = v.toString();
+        const len: number = str.length;
+
         let hash: number = 0;
-        if (s.length == 0) {
+        if (len == 0) {
             return hash;
         }
-        for (let i = 0; i < s.length; i++) {
-            let char = s.charCodeAt(i);
+
+        for (let i = 0; i < len; i++) {
+            let char = str.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
             hash = hash & hash; // Convert to 32bit integer
         }
-        return hash;
+
+        return Math.abs(hash);
     }
+
+    private getIndex(key: K): number {
+        const s = key.toString();
+        const hc = this.hashCode(s);
+        return hc % this._capacity;
+    }
+
+
 }
 
 
