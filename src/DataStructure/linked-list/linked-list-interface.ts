@@ -1,5 +1,20 @@
 export interface ILinkedList<T> {
     /**
+     * Return the number of the list nodes on current Linked List
+     */
+    readonly size: number;
+
+    /**
+     * Return the value (typeof T) of the HEAD list node 
+     */
+    readonly head: T;
+
+    /**
+     * Return the value (typeof T) of the TAIL list node
+     */
+    readonly tail: T;
+    
+    /**
      * Add a List Node at the end of the Linked List
      * @param value value of a single list node
      */

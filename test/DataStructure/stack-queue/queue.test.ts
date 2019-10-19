@@ -1,4 +1,4 @@
-import { LinkedListQueue, ArrayQueue } from "./queue";
+import { LinkedListQueue, ArrayQueue } from "../../../src/DataStructure/stack-queue/queue";
 
 /**
  * @test_LinkedListQueue

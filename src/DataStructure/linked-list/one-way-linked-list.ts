@@ -115,7 +115,7 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
         let pointer = this._head;
         let str = 'HEAD -> ';
         while (pointer) {
-            str += `${pointer.value} -> `
+            str += `[${pointer.value.toString()}] -> `
             pointer = pointer.next;
         }
         str += `END`;

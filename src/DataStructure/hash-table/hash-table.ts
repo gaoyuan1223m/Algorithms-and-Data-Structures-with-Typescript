@@ -1,28 +1,17 @@
 import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
-
-export interface HashClassInterface<T> {
-    hashCode(): number;
-    equals(key: T): boolean;
-}
-
-export interface HashInterface<K, V> {
-    size: number;
-    clear(): void;
-    delete(key: K): boolean;
-    get(key: K): V;
-    has(key: K): boolean;
-    set(key: K, value: V): this;
-    forEach(callbackfn: (value: V, key: K, dict: Dictionary<K, V>) => void, thisArg?: any): void
-}
+import { HashInterface } from "./hash-table-interface";
 
 export class Dictionary<K, V> implements HashInterface<K, V> {
 
     private _capacity: number;
+    private _size: number;
     private _array: Array<OneWayLinkedList<V>>;
     private _keys: Array<K>;
     private _values: Array<V>;
 
-    public size: number;
+    get size(): number {
+        return this._size;
+    } 
 
     /** 
      * @param capacity Prime Number would be peferred
@@ -30,9 +19,12 @@ export class Dictionary<K, V> implements HashInterface<K, V> {
     constructor(capacity: number) {
         this._capacity = capacity;
         this._array = new Array<OneWayLinkedList<V>>(capacity);
-        this._array.fill(new OneWayLinkedList<V>());
         this._keys = [];
         this._values = [];
+
+        for (let i = 0; i < this._capacity; i++) {
+            this._array[i] = new OneWayLinkedList<V>();
+        }
     }
 
     public clear(): void {
@@ -48,19 +40,39 @@ export class Dictionary<K, V> implements HashInterface<K, V> {
     }
 
     public get(key: K): V | undefined {
+        const i = this._getIndex(key);
+
+        if(this._array[i].isEmpty()) return undefined;
+
+        
         return undefined;        
     }
 
     public has(key: K): boolean {
-        return !(this._array[this.getIndex(key)].size === 0);
+        return !this._array[this._getIndex(key)].isEmpty();
     }
 
     public set(key: K, value: V): this {
-        this._array[this.getIndex(key)].append(value);
-        return this
+        this._array[this._getIndex(key)].append(value);
+        return this;
     }
 
-    private hashCode(str: string): number {
+    public print(): void {
+        for (const item of this._array) {
+            item.print();
+        }
+    }
+
+    private _getIndex(key: K): number {
+        const s = key.toString();
+        // console.log(`s: ${s}`);
+        const hc = this._hashCode(s);
+        // console.log(`hc: ${hc}`);
+        // console.log(`index: ${hc % this._capacity}`);
+        return hc % this._capacity;
+    }
+
+    private _hashCode(str: string): number {
 
         const len: number = str.length;
 
@@ -77,13 +89,6 @@ export class Dictionary<K, V> implements HashInterface<K, V> {
 
         return Math.abs(hash);
     }
-
-    private getIndex(key: K): number {
-        const s = key.toString();
-        const hc = this.hashCode(s);
-        return hc % this._capacity;
-    }
-
 
 }
 
