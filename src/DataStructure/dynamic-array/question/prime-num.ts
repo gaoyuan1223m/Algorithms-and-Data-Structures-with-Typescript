@@ -12,16 +12,16 @@
  * Return an array<number> containing element from 0 to n (n included)
  */
 
-const generateArrWithUpperLimit = (n: number): number[] => {
+export const generateArrWithUpperLimit = (n: number): number[] => {
     // O(n)
-    return Array.from({ length: n + 1 }).map((v, i) => i);
+    return Array.from({ length: n + 1 }, (v, k) => k);
 }
 
 /**
  * Filter out all composite numbers from the array<number> that contains element from 0 to n
  * @param arr: must be increasingly sorted
  */
-const filterOutCompositeNumbers = (arr: number[]): number[] => {
+export const filterOutCompositeNumbers = (arr: number[]): number[] => {
 
     const n = Math.ceil(Math.sqrt(arr.length));
 
@@ -42,7 +42,7 @@ const filterOutCompositeNumbers = (arr: number[]): number[] => {
  * A composite number must be a sum of two primes
  * @param n: Composite number
  */
-const primeSum = (n: number): number[][] | number[] => {
+export const primeSum = (n: number): number[][] | number[] => {
 
     const primes = filterOutCompositeNumbers(generateArrWithUpperLimit(n));
     console.log(primes);
@@ -61,13 +61,15 @@ const primeSum = (n: number): number[][] | number[] => {
     return result.length ? result.reverse() : [-1, -1];
 }
 
-console.log(primeSum(12));
+// console.log(primeSum(12));
 
 
 /**
+ * Return the number of primes less then n
+ * @param n given a random integer
  * @ For LeetCode Solutions
  */
-const primes = (n: number): number => {
+export const primes = (n: number): number => {
     let count = 0;
     let l = Math.floor(n / 32) + 1;
     let arr = [];

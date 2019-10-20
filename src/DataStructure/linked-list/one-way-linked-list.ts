@@ -1,6 +1,6 @@
 import { ILinkedList } from "./linked-list-interface";
 
-export class OneWayLinkedList<T> implements ILinkedList<T> {
+export class OneWayLinkedList<T> implements ILinkedList<T> {    
 
     private _head: ListNode<T>;
     private _tail: ListNode<T>;
@@ -22,8 +22,8 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
         return this._tail.value;
     }
 
-    append(value: T): this {
-        const newNode = new ListNode<T>().addValue(value);
+    append(value: T, nodeId?: string): this {
+        const newNode = new ListNode<T>().addValue(value, nodeId);
 
         if (this._head) {
             this._tail.next = newNode;
@@ -54,7 +54,7 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
             return this;
         }
 
-        const preNode = this._getNode(index - 1);
+        const preNode = this._getNodeByIndex(index - 1);
         newNode.next = preNode.next;
         preNode.next = newNode;
         this._size += 1;
@@ -67,7 +67,12 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
     }
 
     findbyIndex(index: number): T {
-        const pointer = this._getNode(index);
+        const pointer = this._getNodeByIndex(index);
+        return pointer ? pointer.value : null;
+    }
+
+    findByNodeId(nodeId: string): T {
+        const pointer = this._getNodeByNodeId(nodeId);
         return pointer ? pointer.value : null;
     }
 
@@ -94,13 +99,17 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
             return delNode.value;
         }
 
-        const preNode = this._getNode(index - 1);
+        const preNode = this._getNodeByIndex(index - 1);
         delNode = preNode.next;
         preNode.next = preNode.next.next;
 
         if(!delNode.next) this._tail = preNode;
         this._size -= 1;
         return delNode.value;
+    }
+
+    removeByNodeId(nodeId: string): T {
+        throw new Error("Method not implemented.");
     }
 
     removeFirst(): T {
@@ -132,7 +141,7 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    private _getNode(index: number): ListNode<T> {
+    private _getNodeByIndex(index: number): ListNode<T> {
 
         if (index < 0 || index >= this._size) return null;
 
@@ -147,15 +156,38 @@ export class OneWayLinkedList<T> implements ILinkedList<T> {
         return pointer;
     }
 
+    private _getNodeByNodeId(nodeId: string): ListNode<T> {
+        let pointer = this._head;
+
+        while(pointer && pointer.nodeId !== nodeId ){
+            pointer = pointer.next
+        }
+
+        return pointer;
+    }
+
 }
 
 class ListNode<T> {
 
+    /**
+     * unique node_id is used for linear searching
+     */
+    public nodeId: string;
+
+    /**
+     * value for each List Node
+     */
     public value: T;
+
+    /**
+     * next List Node
+     */
     public next: ListNode<T>;
 
-    addValue(v: T) {
-        this.value = v;
+    addValue(value: T, nodeId?: string) {
+        this.value = value;
+        this.nodeId = nodeId;
         return this;
     }
 
