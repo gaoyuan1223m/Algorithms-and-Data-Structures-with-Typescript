@@ -1,3 +1,4 @@
+
 export interface IArray<T> {
     readonly size: number;
     get(index: number): T;

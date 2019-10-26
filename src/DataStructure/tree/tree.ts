@@ -1,69 +1,106 @@
+import { IComparable } from "../../Interface/IComparable";
+
 /**
  * @BinarySearchTree
  */
 
 class TreeNode<T> {
-    private _value: T;
-    private _left: TreeNode<T>;
-    private _right: TreeNode<T>;
 
-    get value() {
-        return this._value;   
+    public node: T;
+    public left: TreeNode<T>;
+    public right: TreeNode<T>;
+
+    constructor(node: T) {
+        this.node = node;
     }
 
-    get left() {
-        return this._left;   
-    }
-
-    get right() {
-        return this._right;
-    }
-
-    public setValue(value: T) {
-        this._value = value;
-        return this;
-    }
-
-    public setLeft(left: TreeNode<T>) {
-        this._left = left;
-        return this;
-    }
-
-    public setRight(right: TreeNode<T>) {
-        this._right = right;
-        return this;
-    }
-
-    public build() {
-
-    }
 }
 
-class BinarySearchTree<T> {
+/**
+ * *搜索时间复杂度： Average-> O(lgn), WorstCase->O(n)*
+ */
+export class BinarySearchTree<T extends IComparable<T>> {
 
     private _root: TreeNode<T>;
 
-    public insert(value: T): TreeNode<T> {
+    get root(): TreeNode<T> {
         return this._root;
     }
 
-    public remove(value: T): TreeNode<T> {
-        return this._root;
+    insert(node: T): this {        
+        this._root = this._insertByRecursion(this._root, node);
+        return this;
     }
 
-    public getMax(): TreeNode<T> {
-        return this._root;
+    private _insertByRecursion(treeNode: TreeNode<T>, node: T): TreeNode<T> {
+        if(!treeNode) {
+            return new TreeNode<T>(node);
+        }
+
+        if(treeNode.node.isEqualTo(node)) return;
+
+        if(node.isGreaterThan(treeNode.node)) {
+            treeNode.right = this._insertByRecursion(treeNode.right, node);
+        } else {
+            treeNode.left = this._insertByRecursion(treeNode.left, node);
+        }
+
+        return treeNode;
     }
+
+    private _insertByIteraton() {
+
+    }
+
+    contains(value: T): boolean {
+        
+        return false;
+    }
+
+    findPath(value: T): number[] {
+        return []
+    }
+
+    remove(value: T): this {
+        
+        return this;
+    }
+
+    getMax(): TreeNode<T> {
+        return this._getMaxByRecursion(this._root);
+    }
+
+    private _getMaxByRecursion(treeNode: TreeNode<T>): TreeNode<T> {
+        if(!treeNode.right) return treeNode;
+
+        return this._getMaxByRecursion(treeNode.right);
+    }
+
+    private _getMaxByIteration(treeNode: TreeNode<T>): TreeNode<T> {
+
+        while(treeNode.right){
+            treeNode = treeNode.right;
+        }
+        return treeNode;
+    }
+
+    getMin(): TreeNode<T> {
+        return this._getMinByRecursion(this._root);
+    }
+
+    private _getMinByRecursion(treeNode: TreeNode<T>): TreeNode<T> {
+        if(!treeNode.left) return treeNode;
+
+        return this._getMaxByRecursion(treeNode.left);
+    }
+
+    private _getMinByIteration(treeNode: TreeNode<T>): TreeNode<T> {
+
+        while(treeNode.left){
+            treeNode = treeNode.left;
+        }
+        return treeNode;
+    }    
 
 }
-
-const left = new TreeNode<string>().setValue('left');
-const right = new TreeNode<string>().setValue('right');
-const root = new TreeNode<string>().setValue('root').setRight(right).setLeft(left);
-
-// console.log(root.value);
-// console.log(root.left.value);
-// console.log(root.left);
-// console.log(root.right.value)
-// console.log(root.right);
 

@@ -1,5 +1,6 @@
 import { IArray } from "./dynamic-array-interface";
 
+
 export class DynamicArray<T> implements IArray<T> {
 
     private _size: number;
@@ -15,7 +16,7 @@ export class DynamicArray<T> implements IArray<T> {
     get size(): number {
         return this._size;
     }
-
+    
     get(index: number): T {
         return this._array[this._getValidIndex(index)];
     }
@@ -81,12 +82,16 @@ export class DynamicArray<T> implements IArray<T> {
     }
 
     private _getValidIndex(index: number): number {
-        if (index >= this._array.length || index + this._size < 0) {
+        if(!Number.isInteger(index)) {
+            throw new Error("Index should be INTEGER!");
+        }
+
+        if (index >= this._array.length || index + this._array.length < 0) {
             throw new Error("Index out of Boundary!");
         }
 
         if (index < 0) {
-            index += this._size;
+            index += this._array.length;
         }
 
         return index;
