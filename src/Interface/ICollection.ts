@@ -1,6 +1,5 @@
-import { IComparable } from "./IComparable";
 
-export interface ICollection<T extends IComparable<T>> {
+export interface ICollection<T> {
     readonly size: number;
 
     contains(value: T): boolean;

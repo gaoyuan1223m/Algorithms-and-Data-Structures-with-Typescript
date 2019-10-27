@@ -19,7 +19,7 @@ class TreeNode<T> {
 /**
  * *搜索时间复杂度： Average-> O(lgn), WorstCase->O(n)*
  */
-export class BinarySearchTree<T extends IComparable<T>> {
+export class BinarySearchTree<T extends IComparable> {
 
     private _root: TreeNode<T>;
 
@@ -39,7 +39,7 @@ export class BinarySearchTree<T extends IComparable<T>> {
 
         if(treeNode.node.isEqualTo(node)) return;
 
-        if(node.isGreaterThan(treeNode.node)) {
+        if(treeNode.node.isLessThan(node.value)) {
             treeNode.right = this._insertByRecursion(treeNode.right, node);
         } else {
             treeNode.left = this._insertByRecursion(treeNode.left, node);

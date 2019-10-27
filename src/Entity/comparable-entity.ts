@@ -1,6 +1,7 @@
 import { IComparable } from "../Interface/IComparable";
 
-export class Number implements IComparable<Number> {    
+export class Number implements IComparable {
+    
     private _value: number;
 
     constructor(value: number) {
@@ -11,16 +12,16 @@ export class Number implements IComparable<Number> {
         return this._value;
     }
 
-    isEqualTo(value: Number): boolean {
-        return this._value === value.value;
+    isEqualTo(num: number): boolean {
+        return this._value === num;
     }
     
-    isLessThan(value: Number): boolean {
-        return this._value < value.value;
+    isLessThan(num: number): boolean {
+        return this._value < num;
     }
 
-    isGreaterThan(value: Number): boolean {
-        return this._value > value.value;
+    isGreaterThan(num: number): boolean {
+        return this._value > num;
     }
-    
+
 }

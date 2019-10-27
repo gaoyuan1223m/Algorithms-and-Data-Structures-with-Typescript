@@ -1,15 +1,16 @@
 import { BinarySearchTree } from "../../../src/DataStructure/tree/tree";
 import { Number } from "../../../src/Entity/comparable-entity";
+import { Console } from "../../../src/Utils/high-light";
 
 
 const BST = new BinarySearchTree<Number>();
 
 /**
- * *          7        *
+ * *          7            *
  *          /   \
- * *       5      9     *
+ * *       5      9        *
  *        / \   /   \
- * *     4   6 8    11   *
+ * *     4   6 8    11     *
  *      /         /    \
  * *   3         10     12 *   
  */
@@ -26,28 +27,29 @@ BST
     .insert(new Number(10));
 
 
-console.log(`Leaf Node with Max Node:`)
+Console.Err(`Leaf Node with Max Node`);
 console.log(BST.getMax());
-console.log(`**************************************************`);
+Console.OK(`**************************************************`);
 
 const root = BST.root;
-console.log('Leaf Node: 3')
+// console.log(root)
+Console.Err('Leaf Node: 3')
 console.log(root.left.left.left);
-console.log(`**************************************************`);
+Console.Warn(`**************************************************`);
 
-console.log('Leaf Node: 6')
+Console.Err('Leaf Node: 6')
 console.log(root.left.right);
 console.log(`**************************************************`);
 
-console.log('Leaf Node: 3')
+Console.Err('Leaf Node: 3')
 console.log(root.left.left.left);
 console.log(`**************************************************`);
 
-console.log(`Leaf Node: 12`);
+Console.Err(`Leaf Node: 12`);
 console.log(root.right.right.right);
 console.log(`**************************************************`);
 
-console.log(`Leaf Node: 10`);
+Console.Err(`Leaf Node: 10`);
 console.log(root.right.right.left);
 console.log(`**************************************************`);
 

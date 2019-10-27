@@ -1,6 +1,5 @@
-import { IComparable } from "./IComparable";
 
-export interface IList<T extends IComparable<T>> {
+export interface IList<T> {
     /**
      * Return the number of the list nodes on current Linked List
      */
