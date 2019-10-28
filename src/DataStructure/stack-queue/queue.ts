@@ -1,4 +1,7 @@
 import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
+import { IStack } from "../../Interface/IStack.Generic";
+import { IQueue } from "../../Interface/IQueue";
+import { IGenericComparable } from "../../Interface/IComparable";
 
 /**
  * @First_In_and_First_Out
@@ -7,8 +10,8 @@ import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
  * Dequeue()
  */
 
-export class ArrayQueue<T> {
-
+export class ArrayQueue<T extends IGenericComparable<T>> implements IQueue<T> {
+    
     private _aq: Array<T>;
 
     constructor() {
@@ -19,15 +22,27 @@ export class ArrayQueue<T> {
         return this._aq.length;
     }
 
-    public enqueue(value: T): void {
+    enqueue(value: T): void {
         this._aq.push(value);
     }
 
-    public dequeue(): T {
-        return this._aq.shift() as T;
+    dequeue(): T | undefined {
+        return this._aq.shift();
     }
 
-    public print(): void {
+    contains(value: T): boolean {
+        throw new Error("Method not implemented.");
+    }
+
+    isEmpty(): boolean {
+        return this._aq.length === 0;
+    }
+
+    clear(): void {
+        this._aq = [];
+    }
+
+    print(): void {
         console.log(this._aq);
     }
  }

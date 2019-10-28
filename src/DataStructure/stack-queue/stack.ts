@@ -26,7 +26,7 @@ export class ArrayStack<T> {
         this._as.push(v);
     }
 
-    public pop(): T {
+    public pop(): T | undefined {
         return this._as.pop();
     }
 
@@ -48,11 +48,11 @@ export class LinkedListStack<T> {
     }
 
     get peek(): T {
-        return this._ls.first;
+        return this._ls.head;
     }
     
     public push(value: T): void {
-        return this._ls.addFirst(value);
+        this._ls.insertFirst(value);
     }
 
     public pop(): T {

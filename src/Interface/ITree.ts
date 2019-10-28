@@ -1,6 +1,6 @@
-import { ICollection } from "./ICollection";
+import { ICollection, IGenericCollection } from "./ICollection";
 
-export interface ITree<T> extends ICollection<T> {
+export interface ITree<T> extends IGenericCollection<T> {
     /**
      * Find a path from the root to the specific tree node. Going to the left returns 0, while going to the right returns 1
      * **
