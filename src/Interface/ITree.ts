@@ -12,6 +12,7 @@ export interface ITree<T> extends IGenericCollection<T> {
      * *    /         /    \
      * *  3         10     12 *   
      * if we're going to find 10 on the tree, it will return [1 1 0];
+     * if we're going to find 15 on the tree, it will return [-1];
      * @param value the value of Tree Node that needs to search 
      */
     findPath(value: T): number[]

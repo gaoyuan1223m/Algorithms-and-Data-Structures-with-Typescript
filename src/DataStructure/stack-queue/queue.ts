@@ -10,7 +10,7 @@ import { IGenericComparable } from "../../Interface/IComparable";
  * Dequeue()
  */
 
-export class ArrayQueue<T extends IGenericComparable<T>> implements IQueue<T> {
+export class ArrayQueue<T> implements IQueue<T> {
     
     private _aq: Array<T>;
 

@@ -29,20 +29,30 @@ BST
 
 Console.Err(`Leaf Node with Max Node`);
 console.log(BST.getMax());
-Console.OK(`**************************************************`);
+console.log(`**************************************************`);
 
+Console.Err(`The Path of 12 should be: [1 1 1]`);
+console.log(BST.findPath(new Number(12)));
+console.log(`**************************************************`);
+
+Console.Err(`Remove value 7`);
+BST.remove(new Number(7));
 const root = BST.root;
-// console.log(root)
+
 Console.Err('Leaf Node: 3')
 console.log(root.left.left.left);
-Console.Warn(`**************************************************`);
+console.log(`**************************************************`);
 
-Console.Err('Leaf Node: 6')
+Console.Err('Leaf Node: [undefined], used to be 6')
 console.log(root.left.right);
 console.log(`**************************************************`);
 
-Console.Err('Leaf Node: 3')
+Console.Warn('Leaf Node: 3')
 console.log(root.left.left.left);
+console.log(`**************************************************`);
+
+Console.Err('Leaf Node: 8')
+console.log(root.right.left);
 console.log(`**************************************************`);
 
 Console.Err(`Leaf Node: 12`);
