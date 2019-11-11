@@ -2,6 +2,8 @@
 
 *keyword*: *Typescript, ts-jest, module-alias*
 
+![***Algorithms & Data Structures***](assets\img\background.png)
+
 ## Getting Started
 
 > - Step 1: git clone https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures.git
