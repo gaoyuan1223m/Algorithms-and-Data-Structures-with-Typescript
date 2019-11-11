@@ -10,3 +10,18 @@
 > - Step 2: npm install
 > - Step 3: npm test
 
+## Detailed Discussion
+
+### Array
+
+### Linked List
+
+### Stack
+
+### Queue
+
+### Tree
+
+### Graph
+
+### Hash
