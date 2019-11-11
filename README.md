@@ -2,7 +2,7 @@
 
 *keyword*: *Typescript, ts-jest, module-alias*
 
-![](assets\img\background.png)
+![](./assets/img/background.png)
 
 ## Getting Started
 
