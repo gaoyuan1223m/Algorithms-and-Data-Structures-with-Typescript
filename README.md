@@ -1,3 +1,3 @@
-# Self-Learn-DS&ALGO
+# Typescript for Algorithms and Data Structure
 ## Typescript
-Learn DS and ALGO by myself
+Learn Algorithms & Data Structures by Typescript
