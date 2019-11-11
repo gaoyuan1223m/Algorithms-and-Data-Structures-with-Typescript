@@ -2,7 +2,7 @@
 
 *keyword*: *Typescript, ts-jest, module-alias*
 
-![***Algorithms & Data Structures***](assets\img\background.png)
+![](assets\img\background.png)
 
 ## Getting Started
 
