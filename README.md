@@ -13,15 +13,47 @@
 ## Detailed Discussion
 
 ### Array
+Array is a kind of data structure that can store a sequential collection of elements of the same type. An array is used to store a collection of data, but it's often more useful to think of an array as a collection of variables of the same type.
+- [Static Array](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures.git)
+
+ <img src="assets/img/array/static-arrays.jpg">
+
+- Dynamic Array
+
+
 
 ### Linked List
 
+- Singly Linked List
+
+- Doubly Linked List
+
+- Circular Linked List
+
+- Skip Linked List
+
 ### Stack
+
+- Stack by Linked List
+
+- Stack by Dynamic Array
 
 ### Queue
 
+- Queue by Linked List
+
+- Queue by Dynamic Array
+
 ### Tree
 
-### Graph
+- Binary Search Tree (BST)
+
+- AVL
+
+- Red-Black
 
 ### Hash
+
+- Dictionary
+
+### Graph
