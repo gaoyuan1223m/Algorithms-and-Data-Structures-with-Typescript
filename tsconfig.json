@@ -39,7 +39,6 @@
       "jest"
     ],
     "esModuleInterop": true,
-    "inlineSourceMap": true,
     "inlineSources": true,
     "sourceMap": true
   },
