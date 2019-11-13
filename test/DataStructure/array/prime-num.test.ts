@@ -1,5 +1,5 @@
 import 'module-alias/register';
-import { filterOutCompositeNumbers, generateArrWithUpperLimit } from '@DataStructure/dynamic-array/question/prime-num';
+import { filterOutCompositeNumbers, generateArrWithUpperLimit } from '@DataStructure/array/question/prime-num';
 
 
 

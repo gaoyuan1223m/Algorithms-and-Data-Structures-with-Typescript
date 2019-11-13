@@ -1,5 +1,5 @@
-import { DynamicArray } from "@DataStructure/dynamic-array/dynamic-array";
-import { IArray } from "@DataStructure/dynamic-array/dynamic-array-interface";
+import { DynamicArray } from "@DataStructure/array/dynamic-array";
+import { IArray } from "@Interface/IArray";
 
 
 describe(`Test for Dynamic Array`, () => {
@@ -26,9 +26,4 @@ describe(`Test for Dynamic Array`, () => {
         expect(dynamicArray.get(-1)).toBe(15);
         expect(dynamicArray.get(-7)).toBe(7);
     });
-})
-
-// console.log(dynamicArray.size);
-// console.log(dynamicArray.get(-4));
-
-// dynamicArray.print();
+});

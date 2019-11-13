@@ -1,11 +1,12 @@
-import { IArray } from "./dynamic-array-interface";
-
+import { IArray } from "../../Interface/IArray";
 
 export class DynamicArray<T> implements IArray<T> {
 
     private _size: number;
     private _capacity: number;
     private _array: Array<T>;
+
+    [idx: number]: T;
 
     constructor(capacity: number) {
         this._capacity = capacity;
@@ -15,7 +16,7 @@ export class DynamicArray<T> implements IArray<T> {
 
     get size(): number {
         return this._size;
-    }
+    };
     
     get(index: number): T {
         return this._array[this._getValidIndex(index)];
@@ -66,6 +67,10 @@ export class DynamicArray<T> implements IArray<T> {
 
         this._size -= 1;
         return this;
+    }
+    
+    contains(value: T): boolean {
+        throw new Error("Method not implemented.");
     }
 
     isEmpty(): boolean {
