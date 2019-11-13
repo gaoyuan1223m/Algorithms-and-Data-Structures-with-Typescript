@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Learn DS and Algo",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "commit": "git-cz"
   },
   "keywords": [
     "DS",
@@ -16,6 +17,8 @@
     "@types/jest": "^24.0.22",
     "@types/node": "^12.12.7",
     "chalk": "^2.4.2",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
     "jest": "^24.9.0",
     "module-alias": "^2.2.2",
     "node": "^13.1.0",
@@ -29,5 +32,10 @@
     "@Entity": "src/Entity",
     "@Interface": "src/Interface",
     "@Utils": "src/Utils"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
