@@ -18,6 +18,9 @@ export class StaticArray<T> implements IArray<T> {
 
 
     insert = (value: T, index?: number): this => {
+        if(this._size === this._capacity || index >= this._capacity) {
+            throw new Error("Out of the Capacity!");
+        }
         this[index ? index : this._size] = value;
         this._size += 1;
         return this;
@@ -37,11 +40,11 @@ export class StaticArray<T> implements IArray<T> {
 
     isEmpty = (): boolean => this._size === 0;
 
-    print(): void {
+    print = (): void => {
         throw new Error("Method not implemented.");
     }
 
-    clear(): void {
+    clear = (): void => {
         throw new Error("Method not implemented.");
     }
 
