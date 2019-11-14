@@ -1,18 +1,20 @@
 {
-  "name": "ds_algo",
+  "name": "ts_for_algorithms_and_data_structure",
   "version": "1.0.0",
-  "description": "Learn DS and Algo",
+  "description": "Typescripts for Algorithms and Data Structure",
   "scripts": {
     "test": "jest",
     "commit": "git-cz"
   },
   "keywords": [
-    "DS",
-    "Algo",
-    "TS"
+    "Data Structures",
+    "Algorithms",
+    "Typescript",
+    "Jest"
   ],
   "author": "RYAN",
-  "license": "MIT",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures",
   "devDependencies": {
     "@types/jest": "^24.0.22",
     "@types/node": "^12.12.7",

@@ -16,11 +16,11 @@
 Array is a kind of data structure that can store a sequential collection of elements of the same type. An array is used to store a collection of data, but it's often more useful to think of an array as a collection of variables of the same type.
 - [Static Array](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures.git)
 
- <img src="assets/img/array/static-arrays.jpg">
+<img src="assets/img/array/static-arrays.jpg">
 
-- Dynamic Array
+- [Dynamic Array](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures.git)
 
-
+<img src="assets/img/array/dynamic-array.png">
 
 ### Linked List
 
