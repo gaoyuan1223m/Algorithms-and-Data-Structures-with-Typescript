@@ -17,6 +17,10 @@ export class DynamicArray<T> implements IArray<T> {
     get size(): number {
         return this._size;
     };
+
+    get length(): number {
+        return this._array.length;
+    }
     
     get(index: number): T {
         return this._array[this._getValidIndex(index)];
@@ -70,7 +74,7 @@ export class DynamicArray<T> implements IArray<T> {
     }
     
     contains(value: T): boolean {
-        throw new Error("Method not implemented.");
+        return false;
     }
 
     isEmpty(): boolean {
