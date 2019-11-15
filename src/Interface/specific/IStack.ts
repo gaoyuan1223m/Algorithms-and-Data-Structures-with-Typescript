@@ -1,4 +1,4 @@
-import { ICollection } from "./ICollection";
+import { ICollection } from "../common/ICollection";
 
 export interface IStack extends ICollection {
 

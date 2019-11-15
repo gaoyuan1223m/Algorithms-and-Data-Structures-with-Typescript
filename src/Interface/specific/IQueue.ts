@@ -1,4 +1,4 @@
-import { IGenericCollection } from "./ICollection";
+import { IGenericCollection } from "../common/ICollection";
 
 export interface IQueue<T> extends IGenericCollection<T> {
 

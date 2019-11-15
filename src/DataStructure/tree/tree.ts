@@ -1,4 +1,4 @@
-import { IComparable } from "../../Interface/IComparable";
+import { IComparable } from "../../Interface/common/IComparable";
 
 /**
  * @BinarySearchTree

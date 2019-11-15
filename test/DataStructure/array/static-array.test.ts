@@ -1,5 +1,5 @@
 import { StaticArray } from "@DataStructure/array/static-array";
-import { IArray } from "@Interface/IArray";
+import { IArray } from "@Interface/specific/IArray";
 
 
 describe(`Test for Dynamic Array`, () => {

@@ -1,4 +1,4 @@
-import { IArray } from "../../Interface/IArray";
+import { IArray } from "../../Interface/specific/IArray";
 
 export class DynamicArray<T> implements IArray<T> {
 

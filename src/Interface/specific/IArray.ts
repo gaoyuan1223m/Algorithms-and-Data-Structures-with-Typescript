@@ -1,4 +1,4 @@
-import { IGenericCollection } from "./ICollection";
+import { IGenericCollection } from "../common/ICollection";
 
 export interface IArray<T> extends IArrayLike<T>, IGenericCollection<T> {
     /**

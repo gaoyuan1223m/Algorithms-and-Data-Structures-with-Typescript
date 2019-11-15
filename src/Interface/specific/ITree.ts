@@ -1,4 +1,4 @@
-import { ICollection, IGenericCollection } from "./ICollection";
+import { ICollection, IGenericCollection } from "../common/ICollection";
 
 export interface ITree<T> extends IGenericCollection<T> {
     /**

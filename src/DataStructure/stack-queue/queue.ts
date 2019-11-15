@@ -1,7 +1,7 @@
 import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
-import { IStack } from "../../Interface/IStack.Generic";
-import { IQueue } from "../../Interface/IQueue";
-import { IGenericComparable } from "../../Interface/IComparable";
+import { IStack } from "../../Interface/specific/IStack.Generic";
+import { IQueue } from "../../Interface/specific/IQueue";
+import { IGenericComparable } from "../../Interface/common/IComparable";
 
 /**
  * @First_In_and_First_Out
