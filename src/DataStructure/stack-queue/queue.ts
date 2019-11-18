@@ -1,4 +1,4 @@
-import { IQueue } from "@Interface/specific/IQueue";
+import { IQueue } from "@Interface/specific/IQueue.Generic";
 import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
 
 /**
@@ -27,8 +27,9 @@ export class ArrayQueue<T> implements IQueue<T> {
         return this._aq.length;
     }
 
-    enqueue(value: T): void {
+    enqueue(value: T): this {
         this._aq.push(value);
+        return this;
     }
 
     dequeue(): T | undefined {
