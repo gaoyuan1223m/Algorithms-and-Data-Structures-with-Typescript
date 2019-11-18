@@ -20,10 +20,12 @@ export class StaticArray<T> implements IArray<T> {
         return this._size;
     }
 
-    get = (index: number): T => this[index];
+    append = (value: T): this => {
+        this[this._size++] = value;
+        return this;
+    }
 
-
-    insert = (value: T, index?: number): this => {
+    insertByIndex = (value: T, index: number): this => {
         const idx = this._getValidIndex(index);
 
         this[idx] = value;
@@ -31,13 +33,17 @@ export class StaticArray<T> implements IArray<T> {
         return this;
     }
 
-    update(value: T, index: number): this {
+    updateByIndex(value: T, index: number): this {
 
         return this;
     }
 
-    remove(index: number): this {
+    removeByIndex(index: number): this {
         throw new Error("Method not implemented.");
+    }
+
+    remove(value: T): this {
+        return this;
     }
 
     contains(value: T): boolean {

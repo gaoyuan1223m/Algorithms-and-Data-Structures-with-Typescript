@@ -21,12 +21,16 @@ export class DynamicArray<T> implements IArray<T> {
     get length(): number {
         return this._array.length;
     }
+
+    append(value: T): this {
+        return this;
+    }
     
-    get(index: number): T {
+    getByIndex(index: number): T {
         return this._array[this._getValidIndex(index)];
     }
 
-    insert(value: T, index: number): this {
+    insertByIndex(value: T, index: number): this {
         const validIdx = this._getValidIndex(index);
 
         if (!this._array[validIdx]) {
@@ -47,7 +51,7 @@ export class DynamicArray<T> implements IArray<T> {
         return this;
     }
 
-    update(value: T, index: number): this {
+    updateByIndex(value: T, index: number): this {
         const validIdx = this._getValidIndex(index);
 
         if (!this._array[validIdx]) {
@@ -58,7 +62,7 @@ export class DynamicArray<T> implements IArray<T> {
         return this;
     }
 
-    remove(index: number): this {
+    removeByIndex(index: number): this {
         const validIdx = this._getValidIndex(index);
 
         for (let i = validIdx; i < this._array.length; i++) {
@@ -70,6 +74,10 @@ export class DynamicArray<T> implements IArray<T> {
         }
 
         this._size -= 1;
+        return this;
+    }
+
+    remove(value: T): this {
         return this;
     }
     

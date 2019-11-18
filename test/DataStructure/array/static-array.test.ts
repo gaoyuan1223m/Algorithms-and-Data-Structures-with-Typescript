@@ -8,8 +8,9 @@ describe(`Test for Dynamic Array`, () => {
 
 
     beforeAll(() => {
-        staticArray.insert(34);
-        staticArray.insert(55);
+        staticArray
+            .append(34)
+            .append(55)
     });
 
     it(`#Get size of the Dynamic Array`, () => {

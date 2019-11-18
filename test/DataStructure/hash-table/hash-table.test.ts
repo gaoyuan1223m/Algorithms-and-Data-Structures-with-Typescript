@@ -1,5 +1,5 @@
-import { HashClassInterface } from "../../../src/DataStructure/hash-table/hash-table-interface";
-import { Dictionary } from "../../../src/DataStructure/hash-table/hash-table";
+import { HashClassInterface } from "@DataStructure/hash-table/hash-table-interface";
+import { Dictionary } from "@DataStructure/hash-table/hash-table";
 
 class Avenger implements HashClassInterface<Avenger>, Object {
 

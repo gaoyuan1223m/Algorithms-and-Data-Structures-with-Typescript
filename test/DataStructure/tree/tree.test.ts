@@ -1,6 +1,6 @@
-import { BinarySearchTree } from "../../../src/DataStructure/tree/tree";
-import { Number } from "../../../src/Entity/comparable-entity";
-import { Console } from "../../../src/Utils/high-light";
+import { BinarySearchTree } from "@DataStructure/tree/tree";
+import { Number } from "@Entity/comparable-entity";
+import { Console } from "@Utils/high-light";
 
 
 const BST = new BinarySearchTree<Number>();

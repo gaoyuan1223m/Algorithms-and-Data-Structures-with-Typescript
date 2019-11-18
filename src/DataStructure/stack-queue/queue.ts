@@ -1,7 +1,5 @@
-import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
-import { IStack } from "../../Interface/specific/IStack.Generic";
-import { IQueue } from "../../Interface/specific/IQueue";
-import { IGenericComparable } from "../../Interface/common/IComparable";
+import { IQueue } from "@Interface/specific/IQueue";
+import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
 
 /**
  * @First_In_and_First_Out
@@ -11,6 +9,13 @@ import { IGenericComparable } from "../../Interface/common/IComparable";
  */
 
 export class ArrayQueue<T> implements IQueue<T> {
+    
+    append(value: T): this {
+        throw new Error("Method not implemented.");
+    }
+    remove(value: T): this {
+        throw new Error("Method not implemented.");
+    }
     
     private _aq: Array<T>;
 

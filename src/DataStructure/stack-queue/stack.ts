@@ -1,10 +1,11 @@
+import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
+
 /**
  * @Last_In_and_First_Out
  * 
  * Push()
  * Pop()
  */
-import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
 
 export class ArrayStack<T> {
 

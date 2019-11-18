@@ -11,16 +11,3 @@ export interface ICollection {
 
     clear(): void;
 }
-
-export interface IGenericCollection<T> {
-
-    readonly size: number;
-
-    contains(value: T): boolean;
-
-    isEmpty():boolean;
-
-    print(): void;
-
-    clear(): void;
-}

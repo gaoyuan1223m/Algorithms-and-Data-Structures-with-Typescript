@@ -9,7 +9,7 @@ describe(`Test for Dynamic Array`, () => {
 
     beforeAll(() => {
         for (const [index, value] of seed.entries()) {
-            dynamicArray.insert(value, index)
+            dynamicArray.insertByIndex(value, index)
         }
     });
 
@@ -18,12 +18,12 @@ describe(`Test for Dynamic Array`, () => {
     });
 
     it(`#Get value by positive index`, () => {
-        expect(dynamicArray.get(0)).toBe(7);
-        expect(dynamicArray.get(6)).toBe(15);
+        expect(dynamicArray[0]).toBe(7);
+        expect(dynamicArray[6]).toBe(15);
     });
 
     it(`#Get value by negative index`, () => {
-        expect(dynamicArray.get(-1)).toBe(15);
-        expect(dynamicArray.get(-7)).toBe(7);
+        expect(dynamicArray[-1]).toBe(15);
+        expect(dynamicArray[-7]).toBe(7);
     });
 });

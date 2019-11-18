@@ -1,4 +1,4 @@
-import { OneWayLinkedList } from "../../../src/DataStructure/linked-list/one-way-linked-list";
+import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
 
 class Avenger implements Object {
     private _name: string;

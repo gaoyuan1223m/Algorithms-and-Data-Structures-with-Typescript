@@ -1,9 +1,9 @@
-import { IGenericCollection } from "../common/ICollection";
+import { ICollection } from "@Interface/common/ICollection";
 
-export interface IQueue<T> extends IGenericCollection<T> {
+export interface IQueue extends ICollection {
 
-    enqueue(value: T): void
+    enqueue(value: number | string | boolean | Object): this;
 
-    dequeue(): T;
+    dequeue(): number | string | boolean | Object;
 
 }
