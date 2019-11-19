@@ -17,7 +17,7 @@ export class StaticArray<T> implements IArray<T> {
     };
 
     get length(): number {
-        return this._size;
+        return this._capacity;
     }
 
 
@@ -28,21 +28,53 @@ export class StaticArray<T> implements IArray<T> {
         return this;
     }
 
+    getByIndex = (index: number): T => {
+        return this[this._getValidIndex(index)];
+    }
+
     insertByIndex = (value: T, index: number): this => {
         const idx = this._getValidIndex(index);
 
+        if (!this[idx]) {
+            this[idx] = value;
+            this[idx - this._capacity] = value;
+            this._size += 1;
+            return this;
+        }
+
+        let tempIdx: number;
+        for (let i = idx + 1; i < this._capacity; i++) {
+            if (this[i]) continue;
+            tempIdx = i;
+            break;
+        }
+
+        if (!tempIdx) {
+            throw new Error('Fail to insert new Element since the Array is Full!');
+        }
+
+        for (let j = tempIdx; j > idx; j--) {
+            this[j] = this[j - 1];
+        }
         this[idx] = value;
+
+        for (let k = tempIdx - this._capacity; k > idx - this._capacity; k--) {
+            this[k] = this[k - 1];
+        }
         this[idx - this._capacity] = value;
+
         this._size += 1;
         return this;
     }
 
     updateByIndex(value: T, index: number): this {
-
+        const idx = this._getValidIndex(index);
+        this[idx] = value;
+        this[idx - this._capacity] = value;
         return this;
     }
 
-    removeByIndex(index: number): this {
+    removeByIndex(index: number): T {
         throw new Error("Method not implemented.");
     }
 
@@ -69,9 +101,6 @@ export class StaticArray<T> implements IArray<T> {
         throw new Error("Method not implemented.");
     }
 
-    private _isOutOfCapacity = (index: number): boolean => {
-        return this._size === this._capacity || index >= this._capacity;
-    }
 
     private _getValidIndex(index: number): number {
         if (!index) {

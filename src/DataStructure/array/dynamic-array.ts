@@ -65,9 +65,9 @@ export class DynamicArray<T> implements IArray<T> {
         return this;
     }
 
-    removeByIndex(index: number): this {
+    removeByIndex(index: number): T {
         const validIdx = this._getValidIndex(index);
-
+        const value = this._array[validIdx];
         for (let i = validIdx; i < this._array.length; i++) {
             if (i === this._array.length - 1) {
                 this._array[i] = undefined;
@@ -77,7 +77,7 @@ export class DynamicArray<T> implements IArray<T> {
         }
 
         this._size -= 1;
-        return this;
+        return value;
     }
 
     remove(value: T): this {
