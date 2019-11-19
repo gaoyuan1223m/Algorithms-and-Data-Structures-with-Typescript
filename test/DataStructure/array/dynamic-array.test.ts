@@ -5,16 +5,20 @@ import { IArray } from "@Interface/specific/IArray";
 describe(`Test for Dynamic Array`, () => {
 
     const dynamicArray: IArray<number> = new DynamicArray<number>(7);
-    const seed: number[] = [7, 6, 8, 4, 11, 9, 15];
 
     beforeAll(() => {
-        for (const [index, value] of seed.entries()) {
-            dynamicArray.insertByIndex(value, index)
-        }
+        dynamicArray
+            .append(7)
+            .append(6)
+            .append(8)
+            .append(4)
+            .append(11)
+            .append(9)
+            .append(15)
     });
 
     it(`#Get size of the Dynamic Array`, () => {
-        expect(dynamicArray.size).toBe(seed.length);
+        expect(dynamicArray.size).toBe(7);
     });
 
     it(`#Get value by positive index`, () => {

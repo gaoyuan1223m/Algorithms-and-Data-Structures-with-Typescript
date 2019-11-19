@@ -20,8 +20,11 @@ export class StaticArray<T> implements IArray<T> {
         return this._size;
     }
 
+
     append = (value: T): this => {
-        this[this._size++] = value;
+        this[this._size] = value;
+        this[this._size - this._capacity] = value;
+        this._size += 1;
         return this;
     }
 
@@ -29,6 +32,7 @@ export class StaticArray<T> implements IArray<T> {
         const idx = this._getValidIndex(index);
 
         this[idx] = value;
+        this[idx - this._capacity] = value;
         this._size += 1;
         return this;
     }
@@ -71,7 +75,7 @@ export class StaticArray<T> implements IArray<T> {
 
     private _getValidIndex(index: number): number {
         if (!index) {
-            return this._size;
+            throw new Error("Index is INVALID!");
         }
 
         if (!Number.isInteger(index)) {

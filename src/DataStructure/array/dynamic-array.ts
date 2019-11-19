@@ -23,9 +23,12 @@ export class DynamicArray<T> implements IArray<T> {
     }
 
     append(value: T): this {
+        this[this._size] = value;
+        this[this._size - this._capacity] = value;
+        this._size += 1;
         return this;
     }
-    
+
     getByIndex(index: number): T {
         return this._array[this._getValidIndex(index)];
     }
@@ -80,7 +83,7 @@ export class DynamicArray<T> implements IArray<T> {
     remove(value: T): this {
         return this;
     }
-    
+
     contains(value: T): boolean {
         return false;
     }
@@ -99,7 +102,7 @@ export class DynamicArray<T> implements IArray<T> {
     }
 
     private _getValidIndex(index: number): number {
-        if(!Number.isInteger(index)) {
+        if (!Number.isInteger(index)) {
             throw new Error("Index should be INTEGER!");
         }
 
