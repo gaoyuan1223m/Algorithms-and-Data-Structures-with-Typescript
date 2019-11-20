@@ -1,4 +1,5 @@
 import { IArray } from "@Interface/specific/IArray";
+import * as Errors from "@Utils/Errors";
 
 export class StaticArray<T> implements IArray<T> {
 
@@ -25,7 +26,7 @@ export class StaticArray<T> implements IArray<T> {
     // O(1)
     append = (value: T): this => {
         if(this._idxOfLastElm + 1 === this._capacity) {
-            throw new Error('Failed to append new element since the Array is full!');
+            throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
 
         this[this._idxOfLastElm + 1] = value;
@@ -60,7 +61,7 @@ export class StaticArray<T> implements IArray<T> {
         }
 
         if (!tempIdx) {
-            throw new Error('Fail to insert new Element since the Array is Full!');
+            throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
 
         this._idxOfLastElm = this._getIdxOfLastElm(tempIdx);
@@ -92,8 +93,6 @@ export class StaticArray<T> implements IArray<T> {
     removeByIndex(index: number): T {
         const idx = this._getValidIndex(index);
         const value = this[idx];
-
-        if(!value) return value;
         
         for (let i = idx + 1; i <= this._idxOfLastElm; i++) {
             this[i - 1] = this[i];            
@@ -142,15 +141,15 @@ export class StaticArray<T> implements IArray<T> {
 
     private _getValidIndex(index: number): number {
         if (!index) {
-            throw new Error("Index is INVALID!");
+            throw new Errors.InvalidIndexOrArg(Errors.Msg.InValidArg);
         }
 
         if (!Number.isInteger(index)) {
-            throw new Error("Index should be INTEGER!");
+            throw new Errors.InvalidIndexOrArg(Errors.Msg.ShouldBeInteger);
         }
 
         if (index >= this._capacity || index + this._capacity < 0) {
-            throw new Error("Index out of Boundary!");
+            throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
 
         if (index < 0) {

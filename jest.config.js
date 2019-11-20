@@ -6,6 +6,6 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
-  // testRegex: 'static-array.test.ts', /**Run Single Unit Test */
+  testRegex: 'static-array.test.ts', /**Run Single Unit Test */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };

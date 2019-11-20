@@ -8,20 +8,20 @@ export interface ICollection<T> {
 
     /**
      * Add an element at the end of the Collection
-     * @param value value of a single element
+     * @param value: value of a single element
      */
     append(value: T): this;
 
     /**
      * Return whether the current Collection contains the element
-     * @param value value of the a single element
+     * @param value: value of the a single element
      */
     contains(value: T): boolean;
 
     /**
      * Remove the element from the current Collection,
      * if the collection doesn't contain the element, no error will be thrown
-     * @param value value of the a single element
+     * @param value: value of the a single element
      */
     remove(value: T): this;
 
