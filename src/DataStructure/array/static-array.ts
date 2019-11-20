@@ -140,7 +140,7 @@ export class StaticArray<T> implements IArray<T> {
     remove(value: T): this {
         const idx = this.indexOf(value);
         if(idx === -1) return this;
-        
+
         this.removeByIndex(idx);
         return this;
     }
@@ -180,6 +180,7 @@ export class StaticArray<T> implements IArray<T> {
         for (let i = 0; i < this._capacity; i++) {
             this[i] = undefined;
         }
+        this._size = 0;
     }
 
     private _getValidIndex(index: number): number {

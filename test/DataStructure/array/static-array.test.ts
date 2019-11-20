@@ -3,7 +3,8 @@ import { IArray } from "@Interface/specific/IArray";
 
 describe(`Test for Static Array`, () => {
 
-    const staticArray: IArray<number> = new StaticArray<number>(7);
+    const capacity: number = 7;
+    const staticArray: IArray<number> = new StaticArray<number>(capacity);
 
     beforeAll(() => {
         staticArray
@@ -68,17 +69,37 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-5]).toBe(26);
     })
 
-    it(`#remove value if it's contained in the Array`, () => {
-
+    it(`#get index of value `, () => {
+        expect(staticArray.indexOf(11)).toBe(-1);
+        expect(staticArray.indexOf(32)).toBe(5);
     })
 
     it(`#contains value?`, () => {
+        expect(staticArray.contains(22)).toBeFalsy()
+        expect(staticArray.contains(100)).toBeTruthy();
+    })
 
-        expect(staticArray.contains(100)).toBe(true);
+    it(`#remove value by searching itself`, () => {
+        staticArray
+            .remove(123)
+            .remove(44);
+
+        expect(staticArray[3]).toBe(2);
+        expect(staticArray[5]).toBe(100);
+        expect(staticArray[6]).toBeUndefined();
+
+        expect(staticArray[-5]).toBe(26);
+        expect(staticArray[-2]).toBe(100);
+        expect(staticArray[-1]).toBeUndefined();
     })
 
     it(`print the array`, () => {
         staticArray.print();
     });
+    
+    it(`clear the array`, () => {
+        staticArray.clear();
+        expect(staticArray.isEmpty()).toBeTruthy();
+    })
 
 });
