@@ -1,8 +1,5 @@
 import { StaticArray } from "@DataStructure/array/static-array";
 import { IArray } from "@Interface/specific/IArray";
-import { IError } from "@Interface/common/IError";
-import { Msg } from "@Utils/Errors";
-
 
 describe(`Test for Static Array`, () => {
 
@@ -54,16 +51,30 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-2]).toBe(2);
     })
 
-    it(`#insert value till the Array is full`, () => {
+    it(`#append value to the empty position`, () => {
         staticArray.append(100);
         expect(staticArray[6]).toBe(100);
         expect(staticArray[-1]).toBe(100);
-        try {
-            staticArray.insertByIndex(32, 5); // cannot be inserted into the Array since it's full
-        } catch (error) {
-            const e : IError = error;
-            expect(e.message).toBe(Msg.NoMoreSpace);
-        }
+        expect(staticArray.size).toBe(6);
+    })
+
+    it(`#insert value to the left`, () => {
+        staticArray.insertByIndex(32, 5);
+        expect(staticArray[0]).toBe(7);
+        expect(staticArray[6]).toBe(100);
+        expect(staticArray[-7]).toBe(7);
+        expect(staticArray[-1]).toBe(100);
+        expect(staticArray[3]).toBe(44);
+        expect(staticArray[-5]).toBe(26);
+    })
+
+    it(`#remove value if it's contained in the Array`, () => {
+
+    })
+
+    it(`#contains value?`, () => {
+
+        expect(staticArray.contains(100)).toBe(true);
     })
 
     it(`print the array`, () => {

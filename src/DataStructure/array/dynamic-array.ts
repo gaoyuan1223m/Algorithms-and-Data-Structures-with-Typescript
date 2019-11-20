@@ -1,6 +1,7 @@
 import { IArray } from "../../Interface/specific/IArray";
 
 export class DynamicArray<T> implements IArray<T> {
+    indexOf: (value: T) => number;
 
     private _size: number;
     private _capacity: number;

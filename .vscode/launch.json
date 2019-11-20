@@ -7,6 +7,50 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Jest All",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": [
+                "--runInBand"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest One",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": [
+                "${fileBasenameNoExtension}",
+                "--config",
+                "jest.config.js"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Static Array",
+            "program": "${workspaceFolder}/test/DataStructure/array/static-array.test.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Tree Tests",
             "program": "${workspaceFolder}/test/DataStructure/tree/tree.test.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",

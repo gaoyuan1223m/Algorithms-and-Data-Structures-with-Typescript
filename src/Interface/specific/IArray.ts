@@ -29,6 +29,12 @@ export interface IArray<T> extends IArrayLike<T>, ICollection<T> {
      */
     removeByIndex: (index: number) => T;
 
+    /**
+     * *return the index of the searched value, if not existed, it returns -1*
+     * @param value: the value that need to be searched on the Array
+     */
+    indexOf: (value: T) => number;
+
 }
 
 interface IArrayLike<T> {
