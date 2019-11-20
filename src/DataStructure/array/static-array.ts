@@ -20,24 +20,27 @@ export class StaticArray<T> implements IArray<T> {
 
     get length(): number {
         return this._capacity;
-    }
+    };
 
-
+    // O(1)
     append = (value: T): this => {
-        if(this._idxOfLastElm === this._capacity) {
+        if(this._idxOfLastElm + 1 === this._capacity) {
             throw new Error('Failed to append new element since the Array is full!');
         }
 
         this[this._idxOfLastElm + 1] = value;
         this[this._idxOfLastElm + 1 - this._capacity] = value;
         this._size += 1;
+        this._idxOfLastElm += 1;
         return this;
     }
 
+    // O(1)
     getByIndex = (index: number): T => {
         return this[this._getValidIndex(index)];
     }
 
+    // O(n)
     insertByIndex = (value: T, index: number): this => {
         const idx = this._getValidIndex(index);
 
@@ -67,6 +70,7 @@ export class StaticArray<T> implements IArray<T> {
         }
         this[idx] = value;
 
+        // for negative idx
         for (let k = tempIdx - this._capacity; k > idx - this._capacity; k--) {
             this[k] = this[k - 1];
         }
@@ -76,6 +80,7 @@ export class StaticArray<T> implements IArray<T> {
         return this;
     }
 
+    // O(1)
     updateByIndex(value: T, index: number): this {
         const idx = this._getValidIndex(index);
         this[idx] = value;
@@ -83,8 +88,29 @@ export class StaticArray<T> implements IArray<T> {
         return this;
     }
 
+    // O(n)
     removeByIndex(index: number): T {
-        throw new Error("Method not implemented.");
+        const idx = this._getValidIndex(index);
+        const value = this[idx];
+
+        if(!value) return value;
+        
+        for (let i = idx + 1; i <= this._idxOfLastElm; i++) {
+            this[i - 1] = this[i];            
+        }
+
+        for (let k = idx + 1 - this._capacity; k <= this._idxOfLastElm - this._capacity; k++) {
+            this[k - 1] = this[k];
+        }
+
+        this[this._idxOfLastElm] = undefined;
+        this[this._idxOfLastElm - this._capacity] = undefined;        
+
+        while(!this[this._idxOfLastElm]) {
+            this._idxOfLastElm -= 1;
+        }
+
+        return value;
     }
 
     remove(value: T): this {
@@ -97,17 +123,21 @@ export class StaticArray<T> implements IArray<T> {
 
     isEmpty = (): boolean => this._size === 0;
 
+    // O(n)
     print = (): void => {
         let str = "["
-        for (let i = 0; i < this._size; i++) {
-            str = `${str} ${this[i]}`;
+        for (let i = 0; i < this._capacity; i++) {
+            str += ` ${this[i]} `;
         }
         str = `${str}]`;
         console.log(str);
     }
 
+    // O(n)
     clear = (): void => {
-        throw new Error("Method not implemented.");
+        for (let i = 0; i < this._capacity; i++) {
+            this[i] = undefined;            
+        }
     }
 
     private _getValidIndex(index: number): number {
