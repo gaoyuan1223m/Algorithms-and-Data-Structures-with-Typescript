@@ -1,5 +1,5 @@
-import { IQueue } from "@Interface/specific/IQueue.Generic";
-import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
+import { IQueue } from "@Interface/specific/IQueue";
+import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 
 /**
  * @First_In_and_First_Out
@@ -55,10 +55,10 @@ export class ArrayQueue<T> implements IQueue<T> {
 
 export class LinkedListQueue<T> {
 
-    private _llq: OneWayLinkedList<T>;
+    private _llq: SinglyLinkedList<T>;
 
     constructor() {
-        this._llq = new OneWayLinkedList<T>()
+        this._llq = new SinglyLinkedList<T>()
     }
 
     get size(): number {

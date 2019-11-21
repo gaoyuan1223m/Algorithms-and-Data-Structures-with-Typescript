@@ -1,4 +1,4 @@
-import { ICollection } from "@Interface/common/ICollection.Generic";
+import { ICollection } from "@Interface/common/ICollection";
 
 
 export interface ITree<T> extends ICollection<T> {
