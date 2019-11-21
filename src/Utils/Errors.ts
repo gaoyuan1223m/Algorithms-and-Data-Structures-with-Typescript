@@ -6,7 +6,7 @@ export class InvalidIndexOrArg implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name: string = `Invalid input index or argument`) {
+    constructor(message: string, name?: string) {
         this.message = message;
         this.name = name;
     }
@@ -19,7 +19,7 @@ export class OutOfBoundary implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name: string = `Out of boundary of the current Collection`) {
+    constructor(message: string, name?: string ) {
         this.message = message;
         this.name = name;
     }
@@ -31,7 +31,7 @@ export class ELementNotExisted implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name: string = `Element you query doesn't exist`) {
+    constructor(message: string, name?: string) {
         this.message = message;
         this.name = name;
     }

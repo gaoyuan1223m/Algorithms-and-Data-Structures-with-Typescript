@@ -131,7 +131,7 @@ export class StaticArray<T> implements IArray<T> {
 
         while (!this[this._idxOfLastElm]) {
             this._idxOfLastElm -= 1;
-        }
+        } // need to refactor!!!
 
         return value;
     }
