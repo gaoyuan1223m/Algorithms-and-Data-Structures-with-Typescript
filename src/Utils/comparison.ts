@@ -1,4 +1,4 @@
-import { IComparable } from "@Interface/common/IComparable.Generic";
+import { IComparable } from "@Interface/common/IComparable";
 
 export type IEqualsFunction<T> = (a: T, b: T) => boolean;
 

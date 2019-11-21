@@ -1,10 +1,22 @@
-export interface IComparable {
 
-    readonly value: number | string | Object;
+export interface IComparable<T> {
 
-    isEqualTo(value: number | string | Object): boolean;
+    /**
+     * *return whether two values are identical or not*
+     * @param value: value you want to compare with
+     */
+    isEqualTo(value: T): boolean;
 
-    isLessThan(value: number | string | Object): boolean;
+    /**
+     * *return whether the value of the current instance is less than the input value*
+     * @param value: value you want to compare with
+     */
+    isLessThan(value: T): boolean;
 
-    isGreaterThan(value: number | string | Object): boolean;
+    /**
+     * *return whether the value of the current instance is greater than the input value*
+     * @param value: value you want to compare with
+     */
+    isGreaterThan(value: T): boolean;
+
 }

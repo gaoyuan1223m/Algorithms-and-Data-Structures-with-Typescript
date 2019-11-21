@@ -1,39 +1,7 @@
-import { ICollection } from "@Interface/common/ICollection.Generic";
+import { ICollection } from "@Interface/common/ICollection";
+import { IList } from "@Interface/common/IList";
 
-
-export interface IArray<T> extends IArrayLike<T>, ICollection<T> {
-    
-    /**
-     * *Get value by its index on the Array*
-     * @param index: the position where the value sits on the Array 
-     */
-    getByIndex: (index: number) => T;
-
-    /**
-     * *Insert value by its index on the Array*
-     * @param value: the value that needs to be inserted on the Array
-     * @param index: the position where the value is insert in the Array, if undefined, insert the value at the end
-     */
-    insertByIndex: (value: T, index: number) => this;
-    
-    /**
-     * *Update value by its index on the Array*
-     * @param value: the value that needs to be updated on the Array
-     * @param index: the position where the old value is located
-     */
-    updateByIndex: (value: T, index: number) => this;
-    
-    /**
-     * *Remove value by its index on the Array*
-     * @param index: the position where the value needs to be removed from the Array
-     */
-    removeByIndex: (index: number) => T;
-
-    /**
-     * *return the index of the searched value, if not existed, it returns -1*
-     * @param value: the value that need to be searched on the Array
-     */
-    indexOf: (value: T) => number;
+export interface IArray<T> extends IArrayLike<T>, IList<T> {    
 
 }
 

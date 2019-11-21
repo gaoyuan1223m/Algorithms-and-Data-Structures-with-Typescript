@@ -1,4 +1,4 @@
-import { IQueue } from "@Interface/specific/IQueue.Generic";
+import { IQueue } from "@Interface/specific/IQueue";
 import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 
 /**
