@@ -131,7 +131,7 @@ export class StaticArray<T> implements IArray<T> {
 
         while (!this[this._idxOfLastElm]) {
             this._idxOfLastElm -= 1;
-        }
+        } // need to refactor!!!
 
         return value;
     }
@@ -184,12 +184,12 @@ export class StaticArray<T> implements IArray<T> {
     }
 
     private _getValidIndex(index: number): number {
-        if (!index) {
-            throw new Errors.InvalidIndexOrArg(Errors.Msg.InValidArg);
+        if (!index && index !== 0) { // bug: passing 0 will throw exception
+            throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
         }
 
         if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndexOrArg(Errors.Msg.ShouldBeInteger);
+            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
         }
 
         if (index >= this._capacity || index + this._capacity < 0) {

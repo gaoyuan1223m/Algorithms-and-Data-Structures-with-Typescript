@@ -13,7 +13,7 @@
  */
 
 const mySqrt = (n: number): number => {
-    n = ~~n;
+    n = ~~n; // 取整数部分
 
     if (n < 0) return NaN;
     if (n === 0) return 0;
