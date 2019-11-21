@@ -1,6 +1,5 @@
 import 'module-alias/register';
-import { filterOutCompositeNumbers, generateArrWithUpperLimit } from '@DataStructure/array/question/prime-num';
-
+import { generateArrWithUpperLimit, filterOutCompositeNumbers } from './prime-num';
 
 
 test('Primes less than 14', () => {
