@@ -36,13 +36,13 @@ Array is a kind of data structure that can store a sequential collection of elem
 
 - Stack by Linked List
 
-- Stack by Dynamic Array
+- Stack by Array
 
 ### Queue
 
 - Queue by Linked List
 
-- Queue by Dynamic Array
+- Queue by Array
 
 ### Tree
 
