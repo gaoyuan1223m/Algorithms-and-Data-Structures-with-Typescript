@@ -2,7 +2,7 @@ import { ICollection } from "@Interface/common/ICollection";
 
 /**
  * *IList provides clients with CRUD methods.*
- * *Element on the IList has a unique Index Signature with which clients can query the element by its Index.*
+ * *Element on the IList has a unique Index Signature by which clients can query the element.*
  * *Generally, Array, LinkedList can implement IList Interface* 
  */
 export interface IList<T> extends ICollection<T> {

@@ -1,6 +1,9 @@
 
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
+ * *Element can be appended on or removed from the ICollection.*
+ * *ICollection also provides 'contains(value: T)', 'isEmpty()', 'print()', 'clear()'*
+ * *Generally, IList can extends ICollection interface*
  */
 export interface ICollection<T> {
 
