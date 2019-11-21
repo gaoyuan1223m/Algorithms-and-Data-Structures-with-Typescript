@@ -3,7 +3,7 @@ import * as Errors from "@Utils/Errors";
 
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
-    addHeadNode: (value: T) => this;
+
     insertByIndex: (value: T, index: number) => this;
     updateByIndex: (value: T, index: number) => this;
     getByIndex: (index: number) => T;
@@ -54,7 +54,21 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._tailSentry.next.value;
     }
 
-    append(value: T): this {
+    addHeadNode = (value: T): this => {
+        if (!value && Number(value) !== 0) {
+            return this;
+        }
+
+        const newNode = new ListNode<T>(value);
+
+        return this;
+    }
+    // O(1)
+    append = (value: T): this => {
+        if (!this._isNodeValueValid(value)) {
+            throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
+        }
+
         const newNode = new ListNode<T>(value);
 
         newNode.next = this._tailSentry;
@@ -192,7 +206,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     private _getInvalidIndex = (index: number): number => {
 
         if (index < 0 && index + this._size < 0) {
-            throw new Errors.InvalidIndexOrArg(Errors.Msg.InValidArg)
+            throw new Errors.InvalidIndex(Errors.Msg.InValidArg)
         }
 
         if (index < 0) {
@@ -206,6 +220,9 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
+    private _isNodeValueValid = (value: T): boolean => {
+        return Boolean(value) || Number(value) === 0;
+    }
 
 }
 
