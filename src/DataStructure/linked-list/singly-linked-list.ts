@@ -1,6 +1,7 @@
-import { ILinkedList } from "./linked-list-interface";
+import { ILinkedList } from "@Interface/specific/ILinkedList";
 
-export class OneWayLinkedList<T> implements ILinkedList<T> {    
+
+export class SinglyLinkedList<T> implements ILinkedList<T> {    
 
     private _head: ListNode<T>;
     private _tail: ListNode<T>;

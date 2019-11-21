@@ -1,4 +1,4 @@
-import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
+import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 
 class Avenger implements Object {
     private _name: string;
@@ -22,7 +22,7 @@ class Avenger implements Object {
     }
 }
 
-const myLinkList = new OneWayLinkedList<Avenger>();
+const myLinkList = new SinglyLinkedList<Avenger>();
 
 myLinkList
     .append(new Avenger('Ryan', 18))

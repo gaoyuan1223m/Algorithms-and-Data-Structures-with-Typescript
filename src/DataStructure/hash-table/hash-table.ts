@@ -1,11 +1,11 @@
-import { OneWayLinkedList } from "../linked-list/one-way-linked-list";
+import { SinglyLinkedList } from "../linked-list/singly-linked-list";
 import { HashInterface } from "./hash-table-interface";
 
 export class Dictionary<K, V> implements HashInterface<K, V> {
 
     private _capacity: number;
     private _size: number;
-    private _array: Array<OneWayLinkedList<V>>;
+    private _array: Array<SinglyLinkedList<V>>;
     private _keys: Array<K>;
     private _values: Array<V>;
 
@@ -18,12 +18,12 @@ export class Dictionary<K, V> implements HashInterface<K, V> {
      */
     constructor(capacity: number) {
         this._capacity = capacity;
-        this._array = new Array<OneWayLinkedList<V>>(capacity);
+        this._array = new Array<SinglyLinkedList<V>>(capacity);
         this._keys = [];
         this._values = [];
 
         for (let i = 0; i < this._capacity; i++) {
-            this._array[i] = new OneWayLinkedList<V>();
+            this._array[i] = new SinglyLinkedList<V>();
         }
     }
 

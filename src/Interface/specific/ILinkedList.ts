@@ -7,12 +7,12 @@ export interface ILinkedList<T> {
     /**
      * Return the value (typeof T) of the HEAD list node 
      */
-    head: T;
+    readonly head: T;
 
     /**
      * Return the value (typeof T) of the TAIL list node
      */
-    tail: T;
+    readonly tail: T;
     
     /**
      * Add a List Node at the end of the Linked List

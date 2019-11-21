@@ -1,4 +1,4 @@
-import { OneWayLinkedList } from "@DataStructure/linked-list/one-way-linked-list";
+import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 
 /**
  * @Last_In_and_First_Out
@@ -38,10 +38,10 @@ export class ArrayStack<T> {
 
 export class LinkedListStack<T> {
 
-    private _ls: OneWayLinkedList<T>;
+    private _ls: SinglyLinkedList<T>;
 
     constructor() {
-        this._ls = new OneWayLinkedList<T>();
+        this._ls = new SinglyLinkedList<T>();
     }
 
     get size(): number {
