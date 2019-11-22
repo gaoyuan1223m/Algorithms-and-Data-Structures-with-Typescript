@@ -39,10 +39,10 @@ export interface ICollection<T> {
     /**
      * *Print all elements on the Collection*
      */
-    print(): void;
+    print(): this;
 
     /**
      * *Clear all elements from the Collection*
      */
-    clear(): void;
+    clear(): this;
 }

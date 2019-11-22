@@ -115,7 +115,7 @@ export class StaticArray<T> implements IArray<T> {
     }
 
     // O(n)
-    removeByIndex(index: number): T {
+    removeByIndex(index: number): this {
         const idx = this._getValidIndex(index);
         const value = this[idx];
 
@@ -134,7 +134,7 @@ export class StaticArray<T> implements IArray<T> {
             this._idxOfLastElm -= 1;
         } // need to refactor!!!
 
-        return value;
+        return this;
     }
 
     // O(n)
@@ -167,21 +167,23 @@ export class StaticArray<T> implements IArray<T> {
     isEmpty = (): boolean => this._size === 0;
 
     // O(n)
-    print = (): void => {
+    print = (): this => {
         let str = "["
         for (let i = 0; i < this._capacity; i++) {
             str += ` ${this[i]} `;
         }
         str = `${str}]`;
         Console.OK(str);
+        return this;
     }
 
     // O(n)
-    clear = (): void => {
+    clear = (): this => {
         for (let i = 0; i < this._capacity; i++) {
             this[i] = undefined;
         }
         this._size = 0;
+        return this;
     }
 
     private _getValidIndex(index: number): number {

@@ -1,7 +1,7 @@
 
 import chalk from "chalk";
 
-const OK = (text: any) => console.log(chalk.bgGreenBright.bold.whiteBright(text.toString()));
+const OK = (text: any) => console.log(chalk.bgGreenBright.bold.redBright(text.toString()));
 
 const Warn = (text: any) => console.log(chalk.bgYellowBright.bold.redBright(text.toString()));
 

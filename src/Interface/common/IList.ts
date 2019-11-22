@@ -18,7 +18,7 @@ export interface IList<T> extends ICollection<T> {
      * Remove a element from the List
      * @param index: index of the element that has to be removed from the List 
      */
-    removeByIndex: (index: number) => T;
+    removeByIndex: (index: number) => this;
 
     /**
      * *Update value on the List by its index*

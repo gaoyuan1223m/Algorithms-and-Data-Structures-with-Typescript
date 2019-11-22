@@ -1,9 +1,10 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { IEqualsFunction, defaultEquals, NOT_EXISTED } from "@Utils/comparison";
 import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
+
 
     /**
      *                                               HeadNode Pointer    
@@ -59,6 +60,10 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     // O(1)
+    addTailNode(value: T): this {
+        return this.append(value);
+    };
+
     append(value: T): this {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
@@ -67,83 +72,100 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._addTailNode(new ListNode<T>(value));
     }
 
+    // O(1) ~ O(n)
+    removeHeadNode(): this {
+        if (this._size === 1) return this.clear();
+
+        return this._removeByValidIndex(0);
+    };
+
+    // O(1) ~ O(n)
+    removeTaiNode(): this {
+        if (this._size === 1) return this.clear();
+
+        return this._removeByValidIndex(this._size - 1);
+    };
+
     // O(n)
     insertByIndex(value: T, index: number): this {
         const idx = this._getInvalidIndex(index);
+        return this._insertByValidIndex(value, idx);
+    }
 
-        if (idx === this._size) {
-            this.append(value);
-            return this;
+    removeByIndex(index: number): this {
+        const idx = this._getInvalidIndex(index);
+        return this._removeByValidIndex(idx);
+    }
+
+    private _removeByValidIndex = (validIndex: number): this => {
+
+        if (this._size === 1) return this.clear();
+
+        const preNode = this._getNodeByValidIndex(validIndex - 1);
+        const delNode = preNode.next;
+
+        preNode.next = preNode.next.next;
+        delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
+        this._headPointer = this._headSentry.next;
+
+        if (!this._tailPointer.next) {
+            let pointer = this._headPointer;
+            while (pointer.next.next) {
+                pointer = pointer.next
+            }
+
+            this._tailPointer = pointer;
         }
 
-        const newNode = new ListNode<T>(value)
+        this._size -= 1;
+        return this;
+    }
 
-        if (index === 0) {
-            newNode.next = this._headSentry;
-            this._headSentry = newNode;
-            this._size += 1;
-            return this;
-        }
+    updateByIndex(value: T, index: number): this {
+        const idx = this._getInvalidIndex(index);
+        return this._updateByValidIndex(value, idx);
+    };
 
-        const preNode = this._getNodeByIndex(index - 1);
-        newNode.next = preNode.next;
-        preNode.next = newNode;
-        this._size += 1;
-
+    private _updateByValidIndex = (value: T, validIndex: number): this => {
+        const pointer = this._getNodeByValidIndex(validIndex);
+        pointer.value = value;
         return this;
     }
 
     // O(n)
     getByIndex(index: number): T {
         const idx = this._getInvalidIndex(index);
-        const pointer = this._getNodeByIndex(idx);
+        const pointer = this._getNodeByValidIndex(idx);
         return pointer.value;
     }
 
     indexOf(value: T): number {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+        }
+
         let i = -1;
-        let nowNode = this._headSentry;
-        while (nowNode) {
+        let p = this._headPointer;
+        while (p) {
             i += 1;
-            if (nowNode.value.toString() === value.toString()) return i;
-            nowNode = nowNode.next;
+            if (this.isEqualsFn(p.value, value)) return i;
+            p = p.next;
         }
         return -1;
     }
 
-    removeByIndex(index: number): T {
-        if (index < 0 || index > this._size) return null;
-
-        let delNode: ListNode<T> = null;
-        if (index === 0) {
-            delNode = this._headSentry;
-            this._headSentry = this._headSentry.next;
-            if (!this.head) this._tailSentry = null;
-            this._size -= 1;
-            return delNode.value;
-        }
-
-        const preNode = this._getNodeByIndex(index - 1);
-        delNode = preNode.next;
-        preNode.next = preNode.next.next;
-
-        if (!delNode.next) this._tailSentry = preNode;
-        this._size -= 1;
-        return delNode.value;
-    }
-
-    updateByIndex: (value: T, index: number) => this;
 
     contains(value: T): boolean {
-        throw new Error("Method not implemented.");
+        return this.indexOf(value) !== NOT_EXISTED;
     }
 
     remove(value: T): this {
-        throw new Error("Method not implemented.");
+        const idx = this.indexOf(value);
+        return this.removeByIndex(idx);
     }
 
 
-    print(): void {
+    print(): this {
         let pointer = this._headPointer
         let str = 'HEAD -> ';
         while (pointer && this._isValid(pointer.value)) {
@@ -152,14 +174,16 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         }
         str += `END`;
         Console.Warn(str);
+        return this;
     }
 
-    clear(): void {
+    clear(): this {
         this._headSentry.next = this._tailSentry;
         this._tailPointer.next = null;
         this._headPointer = this._headSentry;
         this._tailPointer = this._headSentry;
         this._size = 0;
+        return this;
     }
 
     isEmpty = (): boolean => this._size === 0;
@@ -187,7 +211,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         this._tailPointer.next = newNode;
 
         this._tailPointer = newNode;
-        
+
         this._size += 1;
 
         if (this._size === 1) {
@@ -197,10 +221,31 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    private _getNodeByIndex = (index: number): ListNode<T> => {
+    private _insertByValidIndex = (value: T, validIndex: number): this => {
+        if (validIndex === 0) {
+            return this.addHeadNode(value);
+        }
+
+        if (validIndex === this._size) {
+            return this.append(value);
+        }
+
+        const newNode = new ListNode<T>(value);
+
+        const preNode = this._getNodeByValidIndex(validIndex - 1);
+        newNode.next = preNode.next;
+        preNode.next = newNode;
+        this._size += 1;
+
+        return this;
+    }
+
+    private _getNodeByValidIndex = (validIndex: number): ListNode<T> => {
+
+        if (validIndex < 0) return this._headSentry;
 
         let pointer = this._headSentry.next;
-        let i = index;
+        let i = validIndex;
 
         while (i > 0) {
             pointer = pointer.next;
