@@ -16,16 +16,16 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures",
   "devDependencies": {
-    "@types/jest": "^24.0.22",
+    "@types/jest": "^24.0.23",
     "@types/node": "^12.12.7",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.0.2",
     "jest": "^24.9.0",
     "module-alias": "^2.2.2",
     "node": "^13.1.0",
     "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
+    "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   },
   "_moduleAliases": {

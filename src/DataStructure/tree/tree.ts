@@ -1,4 +1,4 @@
-import { IComparable } from "../../Interface/common/IComparable";
+import { ICompareFunction, defaultCompare, Comparison } from "@Utils/comparison";
 
 /**
  * @BinarySearchTree
@@ -19,13 +19,17 @@ class TreeNode<T> {
 /**
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
  */
-export class BinarySearchTree<T extends IComparable> {
+export class BinarySearchTree<T> {
 
     private _root: TreeNode<T>;
 
     get root(): TreeNode<T> {
         return this._root;
     }
+
+    constructor(
+        private compartFn: ICompareFunction<T> = defaultCompare
+    ) { }
 
     insert(node: T): this {
         this._root = this._insertByRecursion(this._root, node);
@@ -43,10 +47,10 @@ export class BinarySearchTree<T extends IComparable> {
         if (!temp) return [-1];
 
         do {
-            if (temp.node.isLessThan(node.value)) {
+            if (defaultCompare(temp.node, node) === Comparison.LESS_THAN) {
                 pathArr.push(1);
                 temp = temp.right;
-            } else if (temp.node.isGreaterThan(node.value)) {
+            } else if (defaultCompare(temp.node, node) === Comparison.BIGGER_THAN) {
                 pathArr.push(0);
                 temp = temp.left;
             } else {
@@ -54,7 +58,7 @@ export class BinarySearchTree<T extends IComparable> {
             }
         } while (temp.left || temp.right)
 
-        if(temp.node.isEqualTo(node.value)) {
+        if (defaultCompare(temp.node, node) === Comparison.EQUALS_TO) {
             return pathArr;
         }
 
@@ -87,9 +91,9 @@ export class BinarySearchTree<T extends IComparable> {
             return new TreeNode<T>(node);
         }
 
-        if (treeNode.node.isEqualTo(node.value)) return;
+        if (defaultCompare(treeNode.node, node) === Comparison.EQUALS_TO) return;
 
-        if (treeNode.node.isLessThan(node.value)) {
+        if (defaultCompare(treeNode.node, node) === Comparison.LESS_THAN) {
             treeNode.right = this._insertByRecursion(treeNode.right, node);
         } else {
             treeNode.left = this._insertByRecursion(treeNode.left, node);
@@ -106,9 +110,9 @@ export class BinarySearchTree<T extends IComparable> {
     private _removeByRecursion(treeNode: TreeNode<T>, node: T): TreeNode<T> {
         if (!treeNode) return;
 
-        if (treeNode.node.isLessThan(node.value)) {
+        if (defaultCompare(treeNode.node, node) === Comparison.LESS_THAN) {
             treeNode.right = this._removeByRecursion(treeNode.right, node);
-        } else if (treeNode.node.isGreaterThan(node.value)) {
+        } else if (defaultCompare(treeNode.node, node) === Comparison.BIGGER_THAN) {
             treeNode.left = this._removeByRecursion(treeNode.left, node);
         } else {
             if (!treeNode.left) {

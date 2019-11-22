@@ -1,12 +1,20 @@
 import { IComparable } from "@Interface/common/IComparable";
 
+export type ICompareFunction<T> = (a: T, b: T) => number;
+
 export type IEqualsFunction<T> = (a: T, b: T) => boolean;
+
+export function defaultCompare<T>(a: T, b: T): number {
+    if (a === b) return Comparison.EQUALS_TO;
+
+    return a < b ? Comparison.LESS_THAN : Comparison.BIGGER_THAN;
+  }
 
 export function defaultEquals<T>(a: T, b: T): boolean {
     return a === b;
 }
 
-export function objectEquals<T extends IComparable<T>>(a: T, b: T): Comparison {
+export function objectCompare<T extends IComparable<T>>(a: T, b: T): Comparison {
     if (a.isEqualTo(b)) {
         return Comparison.EQUALS_TO;
     }
