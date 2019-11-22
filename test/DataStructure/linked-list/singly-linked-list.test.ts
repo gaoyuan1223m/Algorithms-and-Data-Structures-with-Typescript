@@ -1,38 +1,36 @@
 import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
+import { ILinkedList } from "@Interface/specific/ILinkedList";
 
-class Avenger implements Object {
-    private _name: string;
-    private _age: number;
+describe(`Test for SinglyLinkedList`, () => {
 
-    constructor(name: string, age: number) {
-        this._name = name;
-        this._age = age;
-    }
+    const myLinkList: ILinkedList<number> = new SinglyLinkedList<number>();
 
-    get name(): string {
-        return this._name;
-    }
+    it(`#addHeadNode - add 0`, () => {
+        myLinkList.addHeadNode(0);
+        expect(myLinkList.head).toBe(0);
+        expect(myLinkList.tail).toBe(0);
+    });
 
-    get age(): number {
-        return this._age;
-    }
+    it(`#addHeadNode - add 25`, () => {
+        myLinkList.addHeadNode(25);
+        expect(myLinkList.head).toBe(25);
+        expect(myLinkList.tail).toBe(0)
+    });
 
-    toString(): string {
-        return `${this._name}/${this._age}`;
-    }
-}
+    it(`#addHeadNode - add 5`, () => {
+        myLinkList.addHeadNode(5);
+        expect(myLinkList.head).toBe(5);
+        expect(myLinkList.tail).toBe(0)
+    });
 
-const myLinkList = new SinglyLinkedList<Avenger>();
+    it(`#append - append 38`, () => {
+        myLinkList.append(35);
+        expect(myLinkList.head).toBe(5)
+        expect(myLinkList.tail).toBe(35);
+    })
 
-myLinkList
-    .append(new Avenger('Ryan', 18))
-    .insert(new Avenger('Peter', 18), 1)
-    .insertFirst(new Avenger('Steve', 42))
-    .insert(new Avenger('Stark', 55), 1)
-    .insertFirst(new Avenger('T\'Chalelle', 35));
+    it(`#print the linked list`, () => {
+        myLinkList.print();
+    })
+})
 
-console.log(myLinkList.findbyIndex(2));
-
-console.log(`size is: ${myLinkList.size}`);
-
-myLinkList.print();

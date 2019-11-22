@@ -1,5 +1,6 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import * as Errors from "@Utils/Errors";
+import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
 
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
@@ -17,7 +18,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
      *                                             |
      *                                             |
      *                                             V
-     * HeadSentry[value: Null, next: NODE_1] --> NODE_1 --> NODE_2 --> ... --> NODE_n-1 --> NODE_n --> TailSentry[value: Null, next: null]
+     * HeadSentry[value: Null, next: NODE_1] --> NODE_1 --> NODE_2 --> ... --> NODE_n-2 --> NODE_n-1 --> NODE_n --> TailSentry[value: Null, next: null]
      *                                                                                        ^                                                                                       
      *                                                                                        |
      *                                                                                        |
@@ -31,7 +32,9 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     private _tailPointer: ListNode<T>; // Tail Node Pointer 尾元素指针
     private _size: number;
 
-    constructor() {
+    constructor(
+        private isEqualsFn: IEqualsFunction<T> = defaultEquals
+    ) {
         this._headSentry = new ListNode<T>();
         this._tailSentry = new ListNode<T>();
         this._headSentry.next = this._tailSentry;
@@ -52,26 +55,15 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._tailPointer.value;
     }
 
+    // O(1)
     addHeadNode(value: T): this {
         if (!this._isNodeValueValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
-        const newNode = new ListNode<T>(value);
-
-        newNode.next = this._headSentry.next;
-        this._headSentry.next = newNode;
-
-        this._headPointer = this._headSentry.next;
-
-        this._size += 1;
-
-        if (this._size === 1) {
-            this._tailPointer = this._headPointer;
-        }
-
-        return this;
+        return this._addHeadNode(new ListNode<T>(value));
     }
+
     // O(1)
     append(value: T): this {
         if (!this._isNodeValueValid(value)) {
@@ -89,7 +81,6 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         if (this._size === 1) {
             this._headPointer = this._headSentry.next;
         }
-
 
         return this;
     }
@@ -170,9 +161,9 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     print(): void {
-        let pointer = this._headPointer;
+        let pointer = this._headPointer
         let str = 'HEAD -> ';
-        while (pointer) {
+        while (pointer && this._isNodeValueValid(pointer.value)) {
             str += `[${pointer.value.toString()}] -> `
             pointer = pointer.next;
         }
@@ -189,6 +180,23 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     isEmpty = (): boolean => this._size === 0;
+
+
+    private _addHeadNode(newNode: ListNode<T>) {
+
+        newNode.next = this._headSentry.next;
+        this._headSentry.next = newNode;
+
+        this._headPointer = this._headSentry.next;
+
+        this._size += 1;
+
+        if (this._size === 1) {
+            this._tailPointer = this._headPointer;
+        }
+
+        return this;
+    }
 
     private _getNodeByIndex = (index: number): ListNode<T> => {
 
@@ -222,7 +230,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
-    private _isNodeValueValid = (value: T): boolean => Boolean(value) || Number(value) === 0;
+    private _isNodeValueValid = (value: T): boolean => Boolean(value) || (Number(value) === 0 && value !== null);
 
 }
 

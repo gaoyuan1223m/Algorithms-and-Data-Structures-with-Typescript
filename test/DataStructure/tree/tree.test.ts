@@ -1,5 +1,4 @@
 import { BinarySearchTree } from "@DataStructure/tree/tree";
-import { Number } from "@Entity/comparable-entity";
 import { Console } from "@Utils/high-light";
 
 
