@@ -1,6 +1,6 @@
 import { IError } from "@Interface/common/IError";
 
-export class InvalidIndex implements IError {
+class InvalidIndex implements IError {
 
     readonly name: string;
     readonly message: string;
@@ -13,7 +13,7 @@ export class InvalidIndex implements IError {
 
 }
 
-export class InvalidArgument implements IError {
+class InvalidArgument implements IError {
 
     readonly name: string;
     readonly message: string;
@@ -26,7 +26,7 @@ export class InvalidArgument implements IError {
 
 }
 
-export class OutOfBoundary implements IError {
+class OutOfBoundary implements IError {
 
     readonly name: string;
     readonly message: string;
@@ -38,7 +38,7 @@ export class OutOfBoundary implements IError {
     }
 }
 
-export class ELementNotExisted implements IError {
+class ELementNotExisted implements IError {
 
     readonly name: string;
     readonly message: string;
@@ -50,10 +50,18 @@ export class ELementNotExisted implements IError {
     }
 }
 
-export enum Msg {
+enum Msg {
     NoMoreSpace = 'Current Collection is Full!',
     InValidArg = 'Arg cannot be Null, Undefined, or NAN!',
     InValidIdx = 'Index should be INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement queried doesn\'t exist' 
+}
+
+export const Errors = {
+    InvalidIndex,
+    InvalidArgument,
+    OutOfBoundary,
+    ELementNotExisted,
+    Msg
 }

@@ -1,28 +1,22 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
-import * as Errors from "@Utils/Errors";
 import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
-
+import { Console } from "@Utils/high-light";
+import { Errors } from "@Utils/Errors";
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
 
-    updateByIndex: (value: T, index: number) => this;
-    contains(value: T): boolean {
-        throw new Error("Method not implemented.");
-    }
-    remove(value: T): this {
-        throw new Error("Method not implemented.");
-    }
-
     /**
-     *                                      HeadNode Pointer    
-     *                                             |
-     *                                             |
-     *                                             V
-     * HeadSentry[value: Null, next: NODE_1] --> NODE_1 --> NODE_2 --> ... --> NODE_n-2 --> NODE_n-1 --> NODE_n --> TailSentry[value: Null, next: null]
-     *                                                                                        ^                                                                                       
-     *                                                                                        |
-     *                                                                                        |
-     *                                                                                TailNode Pointer 
+     *                                               HeadNode Pointer    
+     *                                                      |
+     *                                                      |
+     *                                                      V
+     *                                          index:      0           1                  n-2          n-1
+     * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
+     *                                          index:     -n         -n+1                 -2           -1          
+     *                                                                                                   ^                                                                                       
+     *                                                                                                   |
+     *                                                                                                   |
+     *                                                                                            TailNode Pointer 
      */
 
 
@@ -57,7 +51,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
 
     // O(1)
     addHeadNode(value: T): this {
-        if (!this._isNodeValueValid(value)) {
+        if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
@@ -66,25 +60,14 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
 
     // O(1)
     append(value: T): this {
-        if (!this._isNodeValueValid(value)) {
+        if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
-        const newNode = new ListNode<T>(value);
-
-        newNode.next = this._tailSentry;
-        this._tailPointer.next = newNode;
-
-        this._tailPointer = newNode;
-        this._size += 1;
-
-        if (this._size === 1) {
-            this._headPointer = this._headSentry.next;
-        }
-
-        return this;
+        return this._addTailNode(new ListNode<T>(value));
     }
 
+    // O(n)
     insertByIndex(value: T, index: number): this {
         const idx = this._getInvalidIndex(index);
 
@@ -110,13 +93,11 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    insertFirst(value: T): this {
-        return this.insertByIndex(value, 0);
-    }
-
+    // O(n)
     getByIndex(index: number): T {
-        const pointer = this._getNodeByIndex(index);
-        return pointer ? pointer.value : null;
+        const idx = this._getInvalidIndex(index);
+        const pointer = this._getNodeByIndex(idx);
+        return pointer.value;
     }
 
     indexOf(value: T): number {
@@ -151,24 +132,26 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return delNode.value;
     }
 
+    updateByIndex: (value: T, index: number) => this;
 
-    removeFirst(): T {
-        return this.removeByIndex(0);
+    contains(value: T): boolean {
+        throw new Error("Method not implemented.");
     }
 
-    removeLast(): T {
-        return this.removeByIndex(this._size - 1);
+    remove(value: T): this {
+        throw new Error("Method not implemented.");
     }
+
 
     print(): void {
         let pointer = this._headPointer
         let str = 'HEAD -> ';
-        while (pointer && this._isNodeValueValid(pointer.value)) {
+        while (pointer && this._isValid(pointer.value)) {
             str += `[${pointer.value.toString()}] -> `
             pointer = pointer.next;
         }
         str += `END`;
-        console.log(str);
+        Console.Warn(str);
     }
 
     clear(): void {
@@ -182,7 +165,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     isEmpty = (): boolean => this._size === 0;
 
 
-    private _addHeadNode(newNode: ListNode<T>) {
+    private _addHeadNode = (newNode: ListNode<T>) => {
 
         newNode.next = this._headSentry.next;
         this._headSentry.next = newNode;
@@ -198,11 +181,25 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
+    private _addTailNode = (newNode: ListNode<T>): this => {
+
+        newNode.next = this._tailSentry;
+        this._tailPointer.next = newNode;
+
+        this._tailPointer = newNode;
+        
+        this._size += 1;
+
+        if (this._size === 1) {
+            this._headPointer = this._headSentry.next;
+        }
+
+        return this;
+    }
+
     private _getNodeByIndex = (index: number): ListNode<T> => {
 
-        if (index < 0 || index >= this._size) return null;
-
-        let pointer = this._headSentry;
+        let pointer = this._headSentry.next;
         let i = index;
 
         while (i > 0) {
@@ -215,22 +212,22 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
 
     private _getInvalidIndex = (index: number): number => {
 
-        if (index < 0 && index + this._size < 0) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidArg)
+        if (!Number.isInteger(index)) {
+            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
+        }
+
+        if (index < 0 && index + this._size < 0 || index >= this._size) {
+            throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
         }
 
         if (index < 0) {
             return index + this._size;
         }
 
-        if (index >= this._size) {
-            return this._size;
-        }
-
         return index;
     }
 
-    private _isNodeValueValid = (value: T): boolean => Boolean(value) || (Number(value) === 0 && value !== null);
+    private _isValid = (value: T): boolean => value !== null && (Boolean(value) || Number(value) === 0)
 
 }
 

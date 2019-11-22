@@ -1,5 +1,6 @@
 import { IArray } from "@Interface/specific/IArray";
-import * as Errors from "@Utils/Errors";
+import { Console } from "@Utils/high-light";
+import { Errors } from "@Utils/Errors";
 import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
 
 export class StaticArray<T> implements IArray<T> {
@@ -172,7 +173,7 @@ export class StaticArray<T> implements IArray<T> {
             str += ` ${this[i]} `;
         }
         str = `${str}]`;
-        console.log(str);
+        Console.OK(str);
     }
 
     // O(n)
