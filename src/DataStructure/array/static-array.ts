@@ -11,10 +11,13 @@ export class StaticArray<T> implements IArray<T> {
     private _capacity: number;
     private _idxOfLastElm: number;
 
-    constructor(capacity: number, protected equalsFunctions: IEqualsFunction<T> = defaultEquals) {
+    constructor(
+        capacity: number,
+        protected equalsFunctions: IEqualsFunction<T> = defaultEquals
+    ) {
         this._size = 0;
         this._idxOfLastElm = this._size;
-        this._capacity = capacity;
+        this._capacity = ~~(capacity < 0 ? 0 : capacity);
     }
 
     get size(): number {
@@ -140,7 +143,7 @@ export class StaticArray<T> implements IArray<T> {
     // O(n)
     remove(value: T): this {
         const idx = this.indexOf(value);
-        if(idx === -1) return this;
+        if (idx === -1) return this;
 
         this.removeByIndex(idx);
         return this;
@@ -184,6 +187,25 @@ export class StaticArray<T> implements IArray<T> {
         }
         this._size = 0;
         return this;
+    }
+
+    // O(n)
+    forEach(callbackfn: (value: T, index: number, current: IArray<T>) => void, thisArg?: any): void {
+        const capacity = this._capacity;
+        for (let idx = 0; idx < capacity; idx++) {
+            callbackfn(this[idx], idx, this);
+        }
+    }
+
+    // O(n)
+    map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, thisArg?: any): IArray<U> {
+        const capacity = this._capacity;
+        const newStaticArray: IArray<U> = new StaticArray<U>(capacity);
+        for (let idx = 0; idx < capacity; idx++) {
+            newStaticArray[idx] = callbackfn(this[idx], idx, this);
+            newStaticArray[idx - capacity] = newStaticArray[idx];
+        }
+        return newStaticArray;
     }
 
     private _getValidIndex(index: number): number {

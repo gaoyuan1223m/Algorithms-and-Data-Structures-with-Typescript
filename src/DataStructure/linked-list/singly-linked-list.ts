@@ -2,10 +2,9 @@ import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IEqualsFunction, defaultEquals, NOT_EXISTED } from "@Utils/comparison";
 import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
+import { IList } from "@Interface/common/IList";
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
-
-
     /**
      *                                               HeadNode Pointer    
      *                                                      |
@@ -28,7 +27,7 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     private _size: number;
 
     constructor(
-        private isEqualsFn: IEqualsFunction<T> = defaultEquals
+        protected isEqualsFn: IEqualsFunction<T> = defaultEquals
     ) {
         this._headSentry = new ListNode<T>();
         this._tailSentry = new ListNode<T>();
@@ -72,65 +71,33 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._addTailNode(new ListNode<T>(value));
     }
 
-    // O(1) ~ O(n)
+    // O(1)
     removeHeadNode(): this {
-        if (this._size === 1) return this.clear();
-
-        return this._removeByValidIndex(0);
+        return this._removeHeadNode();
     };
 
-    // O(1) ~ O(n)
+    // O(n)
     removeTaiNode(): this {
-        if (this._size === 1) return this.clear();
-
-        return this._removeByValidIndex(this._size - 1);
+        return this._removeTailNode();
     };
 
     // O(n)
     insertByIndex(value: T, index: number): this {
         const idx = this._getInvalidIndex(index);
-        return this._insertByValidIndex(value, idx);
+        return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
     }
 
+    // O(n)
     removeByIndex(index: number): this {
         const idx = this._getInvalidIndex(index);
         return this._removeByValidIndex(idx);
     }
 
-    private _removeByValidIndex = (validIndex: number): this => {
-
-        if (this._size === 1) return this.clear();
-
-        const preNode = this._getNodeByValidIndex(validIndex - 1);
-        const delNode = preNode.next;
-
-        preNode.next = preNode.next.next;
-        delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
-        this._headPointer = this._headSentry.next;
-
-        if (!this._tailPointer.next) {
-            let pointer = this._headPointer;
-            while (pointer.next.next) {
-                pointer = pointer.next
-            }
-
-            this._tailPointer = pointer;
-        }
-
-        this._size -= 1;
-        return this;
-    }
-
+    // O(n)
     updateByIndex(value: T, index: number): this {
         const idx = this._getInvalidIndex(index);
         return this._updateByValidIndex(value, idx);
     };
-
-    private _updateByValidIndex = (value: T, validIndex: number): this => {
-        const pointer = this._getNodeByValidIndex(validIndex);
-        pointer.value = value;
-        return this;
-    }
 
     // O(n)
     getByIndex(index: number): T {
@@ -154,23 +121,26 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return -1;
     }
 
-
     contains(value: T): boolean {
         return this.indexOf(value) !== NOT_EXISTED;
     }
 
     remove(value: T): this {
         const idx = this.indexOf(value);
+
+        if (idx === NOT_EXISTED) return this;
+
         return this.removeByIndex(idx);
     }
 
-
     print(): this {
-        let pointer = this._headPointer
+        let pointer = this._headPointer;
+        let idx = 0;
         let str = 'HEAD -> ';
-        while (pointer && this._isValid(pointer.value)) {
+        while (pointer && idx < this._size) {
             str += `[${pointer.value.toString()}] -> `
             pointer = pointer.next;
+            idx++;
         }
         str += `END`;
         Console.Warn(str);
@@ -178,16 +148,27 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     clear(): this {
-        this._headSentry.next = this._tailSentry;
-        this._tailPointer.next = null;
-        this._headPointer = this._headSentry;
-        this._tailPointer = this._headSentry;
-        this._size = 0;
-        return this;
+        return this._clearCurrentList();
     }
 
-    isEmpty = (): boolean => this._size === 0;
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
 
+
+    forEach(callbackfn: (value: T, index: number, current: ILinkedList<T>) => void, thisArg?: any): void {
+        let p = this._headPointer;
+        let idx = 0;
+        while (p && idx < this._size) {
+            callbackfn(p.value, idx, this);
+            p = p.next;
+            idx++;
+        }
+    }
+    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, thisArg?: any): ILinkedList<U> {
+        const newSinglyLinkedList: ILinkedList<U> = new SinglyLinkedList<U>();
+        return newSinglyLinkedList;
+    }
 
     private _addHeadNode = (newNode: ListNode<T>) => {
 
@@ -221,6 +202,54 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
+    private _removeHeadNode = (): this => {
+        if (this._size === 0) return this;
+        if (this._size === 1) return this._clearCurrentList();
+
+        this._headSentry.next = this._headSentry.next.next;
+        this._headPointer.next = null;
+        this._headPointer = this._headSentry.next;
+        this._size -= 1;
+        return this;
+    }
+
+    private _removeTailNode = (): this => {
+        if (this._size === 0) return this;
+        if (this._size === 1) return this._clearCurrentList();
+
+        const preNode = this._getNodeByValidIndex(this._size - 2);
+        const delNode = this._tailPointer;
+
+        preNode.next = preNode.next.next;
+        delNode.next = null;
+
+        let pointer = this._headPointer;
+        while (pointer.next.next) {
+            pointer = pointer.next
+        }
+
+        this._tailPointer = pointer;
+        this._size -= 1;
+        return this;
+    }
+
+    private _removeByValidIndex = (validIndex: number): this => {
+        if (this._size === 1) return this._clearCurrentList();
+
+        if (validIndex === 0) return this._removeHeadNode();
+
+        if (validIndex === this._size - 1) return this._removeTailNode();
+
+        const preNode = this._getNodeByValidIndex(validIndex - 1);
+        const delNode = preNode.next;
+
+        preNode.next = preNode.next.next;
+        delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
+
+        this._size -= 1;
+        return this;
+    }
+
     private _insertByValidIndex = (value: T, validIndex: number): this => {
         if (validIndex === 0) {
             return this.addHeadNode(value);
@@ -237,6 +266,12 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         preNode.next = newNode;
         this._size += 1;
 
+        return this;
+    }
+
+    private _updateByValidIndex = (value: T, validIndex: number): this => {
+        const pointer = this._getNodeByValidIndex(validIndex);
+        pointer.value = value;
         return this;
     }
 
@@ -272,7 +307,16 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
-    private _isValid = (value: T): boolean => value !== null && (Boolean(value) || Number(value) === 0)
+    private _isValid = (value: T): boolean => value !== null && (Boolean(value) || Number(value) === 0);
+
+    private _clearCurrentList = (): this => {
+        this._headSentry.next = this._tailSentry;
+        this._tailPointer.next = null;
+        this._headPointer = this._headSentry;
+        this._tailPointer = this._headSentry;
+        this._size = 0;
+        return this;
+    }
 
 }
 
