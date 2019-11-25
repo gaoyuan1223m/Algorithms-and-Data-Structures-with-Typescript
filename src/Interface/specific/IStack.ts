@@ -3,11 +3,11 @@ import { IArray } from "./IArray";
 import { ILinkedList } from "./ILinkedList";
 
 export interface IStack<T> extends IGroup {
-    
+
     /**
      * Looks at the object at the top of this Stack without removing it from the Stack.
      */
-    readonly peek :T;
+    readonly peek: T;
 
     /**
      * Pushes an item onto the top of this Stack.
@@ -16,13 +16,26 @@ export interface IStack<T> extends IGroup {
     push(value: T): this;
 
     /**
-     * Removes the object at the top of this Stack and returns that object as the value of this function.
+     * *Removes the object at the top of this Stack and returns that object as the value of this function*
      */
     pop(): T;
 
+    /**
+     * @return 
+     *      *the based position from the top of the stack where*
+     *      *the object is located; the return value -1*
+     *      *indicates that the object is not on the stack*.
+     * @param {T} value: the desired object 
+     */
     search(value: T): number;
 
+    /**
+     * *Convert current Stack to Array*
+     */
     toArray(): IArray<T>;
 
+    /**
+     * *Convert current Stack to LinkedList*
+     */
     toList(): ILinkedList<T>;
 }
