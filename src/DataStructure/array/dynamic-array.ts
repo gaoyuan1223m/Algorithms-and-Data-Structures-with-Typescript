@@ -1,6 +1,12 @@
 import { IArray } from "../../Interface/specific/IArray";
 
 export class DynamicArray<T> implements IArray<T> {
+    forEach(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+    map<U>(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => U, thisArg?: any): import("../../Interface/common/IList").IList<U> {
+        throw new Error("Method not implemented.");
+    }
     indexOf: (value: T) => number;
 
     private _size: number;
@@ -63,12 +69,12 @@ export class DynamicArray<T> implements IArray<T> {
         }
 
         this._array[validIdx] = value;
-        return this;
+        return this;this
     }
 
-    removeByIndex(index: number): T {
+    removeByIndex(index: number): this {
         const validIdx = this._getValidIndex(index);
-        const value = this._array[validIdx];
+        const value = this._array[validIdx];this
         for (let i = validIdx; i < this._array.length; i++) {
             if (i === this._array.length - 1) {
                 this._array[i] = undefined;
@@ -78,7 +84,7 @@ export class DynamicArray<T> implements IArray<T> {
         }
 
         this._size -= 1;
-        return value;
+        return this;
     }
 
     remove(value: T): this {
@@ -89,17 +95,19 @@ export class DynamicArray<T> implements IArray<T> {
         return false;
     }
 
-    isEmpty(): boolean {
+    isEmpty(): boolean {this
         return this._size === 0;
     }
 
-    print(): void {
+    print(): this {
         console.log(this._array);
+        return this;
     }
 
-    clear(): void {
+    clear(): this {
         this._array = [];
         this._size = 0;
+        return this;
     }
 
     private _getValidIndex(index: number): number {

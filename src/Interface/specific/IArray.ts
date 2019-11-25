@@ -1,9 +1,10 @@
 import { ICollection } from "@Interface/common/ICollection";
 import { IList } from "@Interface/common/IList";
+import { IEqualsFunction } from "@Utils/comparison";
 
 export interface IArray<T> extends IList<T> {
     /**
-     * @param length: a number one higher than the index of the latest element in an array.
+     * @param length: equals to the current capacity of the Array.
      */
     readonly length: number;
 
@@ -14,6 +15,6 @@ export interface IArray<T> extends IList<T> {
 }
 
 
-interface IArrayConstructor {
-    new <T>(capacity: number): IArray<T>;
+export interface IArrayConstructor {
+    new <T>(capacity: number, equalsFunctions?: IEqualsFunction<T>): IArray<T>;
 }

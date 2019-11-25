@@ -1,6 +1,6 @@
-import { ICollection } from "@Interface/common/ICollection";
+import { IGroup } from "@Interface/common/IGroup";
 
-export interface IQueue<T> extends ICollection<T> {
+export interface IQueue<T> extends IGroup {
 
     enqueue(value: T): this;
 

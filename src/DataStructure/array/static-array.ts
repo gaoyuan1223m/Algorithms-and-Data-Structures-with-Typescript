@@ -1,9 +1,9 @@
-import { IArray } from "@Interface/specific/IArray";
+import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
 import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
 import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
 
-export class StaticArray<T> implements IArray<T> {
+export const StaticArray: IArrayConstructor =  class StaticArray<T> implements IArray<T> {
 
     [n: number]: T;
 
