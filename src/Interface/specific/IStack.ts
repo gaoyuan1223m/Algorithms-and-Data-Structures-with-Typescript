@@ -10,7 +10,7 @@ export interface IStack<T> extends IGroup {
     readonly peek: T;
 
     /**
-     * Pushes an item onto the top of this Stack.
+     * *Pushes an item onto the top of this Stack*.
      * @param value: Object that needs to add at the top of this Stack
      */
     push(value: T): this;
@@ -30,9 +30,14 @@ export interface IStack<T> extends IGroup {
     search(value: T): number;
 
     /**
-     * *Convert current Stack to Array*
+     * *Convert current Stack to Static-Array*
      */
     toArray(): IArray<T>;
+
+    /**
+     * *Convert currect Stack to Dynamic-Array*
+     */
+    toArrayList(): IArray<T>;
 
     /**
      * *Convert current Stack to LinkedList*
