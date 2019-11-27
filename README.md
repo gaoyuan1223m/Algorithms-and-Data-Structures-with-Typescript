@@ -24,13 +24,21 @@ Array is a kind of data structure that can store a sequential collection of elem
 
 ### Linked List
 
-- Singly Linked List
+- [Singly Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
 
-- Doubly Linked List
+<img src="assets/img/linked-list/singly-linked-list.png">
 
-- Circular Linked List
+- [Doubly Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
 
-- Skip Linked List
+<img src="assets/img/linked-list/doubly-linked-list.png">
+
+- [Circular Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+
+<img src="assets/img/linked-list/circular-singly-linked-list.png">
+
+- [Skip Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+
+<img src="assets/img/linked-list/skip-list.png">
 
 ### Stack
 
