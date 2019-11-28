@@ -1,83 +1,23 @@
-import { IQueue } from "@Interface/specific/IQueue";
-import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
+import { IQueue, IQueueConstructor } from "@Interface/specific/IQueue";
+import { DataStructures, ArrayTypes } from "@Utils/data-types";
 
-/**
- * @First_In_and_First_Out
- * 
- * Enqueue()
- * Dequeue()
- */
-
-export class ArrayQueue<T> implements IQueue<T> {
+export const Queue: IQueueConstructor = class Queue<T> implements IQueue<T> {
     
-    append(value: T): this {
-        throw new Error("Method not implemented.");
-    }
-    remove(value: T): this {
-        throw new Error("Method not implemented.");
-    }
+    peek: T;    
     
-    private _aq: Array<T>;
-
-    constructor() {
-        this._aq = [];
-    }
-
-    get size(): number {
-        return this._aq.length;
-    }
+    size: number;
 
     enqueue(value: T): this {
-        this._aq.push(value);
-        return this;
-    }
-
-    dequeue(): T | undefined {
-        return this._aq.shift();
-    }
-
-    contains(value: T): boolean {
         throw new Error("Method not implemented.");
     }
 
-    isEmpty(): boolean {
-        return this._aq.length === 0;
+    dequeue(): T {
+        throw new Error("Method not implemented.");
     }
 
-    clear(): void {
-        this._aq = [];
-    }
-
-    print(): void {
-        console.log(this._aq);
-    }
- }
-
-export class LinkedListQueue<T> {
-
-    private _llq: SinglyLinkedList<T>;
-
-    constructor() {
-        this._llq = new SinglyLinkedList<T>()
-    }
-
-    get size(): number {
-        return this._llq.size;
-    }
-
-    public enqueue(value: T): void {
-        this._llq.append(value);
-    }
-
-    public dequeue(): T {
-        return this._llq.removeFirst();
-    }
-
-    public print(): void {
-        this._llq.print();
+    constructor(type: DataStructures, capacity?: number) {
+        
     }
 
 }
-
-
 
