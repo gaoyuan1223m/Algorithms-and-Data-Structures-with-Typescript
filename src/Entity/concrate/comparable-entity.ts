@@ -1,6 +1,7 @@
-import { IComparable } from "./node_modules/@Interface/common/IComparable";
-import { IObject } from "./node_modules/@Interface/common/IObject";
-import { Comparison } from "./node_modules/@Utils/comparison";
+import { IComparable } from "@Interface/common/IComparable";
+import { IObject } from "@Interface/common/IObject";
+import { Comparison } from "@Utils/comparison";
+
 
 export class Avenger implements IComparable<Avenger>, IObject {
 
