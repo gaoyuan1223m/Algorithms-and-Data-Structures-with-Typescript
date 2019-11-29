@@ -1,7 +1,15 @@
-import { IStack } from "@Interface/specific/IStack";
-import { IQueue } from "@Interface/specific/IQueue";
 
+export interface IDeque<T> {
 
-export interface IDeque<T> extends IStack<T>, IQueue<T> {
+    readonly peek: T;
 
+    readonly tail: T;
+
+    addPeek(value: T): this;
+
+    popPeek(): T;
+
+    addTail(value: T): this;
+
+    popTail(): T;
 }

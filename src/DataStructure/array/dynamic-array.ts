@@ -1,13 +1,32 @@
-import { IArray } from "../../Interface/specific/IArray";
+import { IArray } from "@Interface/specific/IArray";
+import { ILinkedList } from "@Interface/specific/ILinkedList";
+import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/data-types";
+import { ITree } from "@Interface/specific/ITree";
 
 export class DynamicArray<T> implements IArray<T> {
+
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+    toList(listType: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+    toTree(treeType: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    reverse(): this {
+        throw new Error("Method not implemented.");
+    }
     forEach(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => void, thisArg?: any): void {
         throw new Error("Method not implemented.");
     }
     map<U>(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => U, thisArg?: any): import("../../Interface/common/IList").IList<U> {
         throw new Error("Method not implemented.");
     }
-    indexOf: (value: T) => number;
+    indexOf(value: T): number {
+        throw new Error("Method not implemented.");
+    }
 
     private _size: number;
     private _capacity: number;
@@ -69,12 +88,12 @@ export class DynamicArray<T> implements IArray<T> {
         }
 
         this._array[validIdx] = value;
-        return this;this
+        return this; this
     }
 
     removeByIndex(index: number): this {
         const validIdx = this._getValidIndex(index);
-        const value = this._array[validIdx];this
+        const value = this._array[validIdx]; this
         for (let i = validIdx; i < this._array.length; i++) {
             if (i === this._array.length - 1) {
                 this._array[i] = undefined;
@@ -95,7 +114,8 @@ export class DynamicArray<T> implements IArray<T> {
         return false;
     }
 
-    isEmpty(): boolean {this
+    isEmpty(): boolean {
+        this
         return this._size === 0;
     }
 

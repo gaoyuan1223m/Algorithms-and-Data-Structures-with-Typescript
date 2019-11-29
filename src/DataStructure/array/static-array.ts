@@ -2,8 +2,21 @@ import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
 import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
 import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { ILinkedList } from "@Interface/specific/ILinkedList";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
+import { ITree } from "@Interface/specific/ITree";
 
-export const StaticArray: IArrayConstructor =  class StaticArray<T> implements IArray<T> {
+export const StaticArray: IArrayConstructor = class StaticArray<T> implements IArray<T> {
+   
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+    toList(listType: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+    toTree(treeType: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
 
     [n: number]: T;
 
@@ -167,10 +180,33 @@ export const StaticArray: IArrayConstructor =  class StaticArray<T> implements I
         return -1;
     };
 
-    isEmpty = (): boolean => this._size === 0;
+    reverse(): this {
+        let i = 0, j = this._capacity - 1;
+        let ii = i - this._capacity, jj = -1;
+        while (i < j) {
+            let temp = this[j];
+            this[i] = this[j];
+            this[j] = temp;
+
+            temp = this[jj];
+            this[ii] = this[jj];
+            this[jj] = temp;
+
+            i += 1;
+            j -= 1;
+            ii += 1;
+            jj -= 1;
+        }
+
+        return this;
+    }
+
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
 
     // O(n)
-    print = (): this => {
+    print(): this {
         let str = "["
         for (let i = 0; i < this._capacity; i++) {
             str += ` ${this[i]} `;
@@ -181,7 +217,7 @@ export const StaticArray: IArrayConstructor =  class StaticArray<T> implements I
     }
 
     // O(n)
-    clear = (): this => {
+    clear(): this {
         for (let i = 0; i < this._capacity; i++) {
             this[i] = undefined;
         }
@@ -206,6 +242,15 @@ export const StaticArray: IArrayConstructor =  class StaticArray<T> implements I
             newStaticArray[idx - capacity] = newStaticArray[idx];
         }
         return newStaticArray;
+    }
+
+   
+    
+    private _toStaticArray(): IArray<T> {
+        return this;
+    }
+    private _toDynamicArray(): IArray<T> {
+        return this;
     }
 
     private _getValidIndex(index: number): number {

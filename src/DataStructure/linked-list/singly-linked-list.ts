@@ -2,9 +2,27 @@ import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IEqualsFunction, defaultEquals, NOT_EXISTED } from "@Utils/comparison";
 import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
-import { IList } from "@Interface/common/IList";
+import { IArray } from "@Interface/specific/IArray";
+import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
+import { ITree } from "@Interface/specific/ITree";
 
 export class SinglyLinkedList<T> implements ILinkedList<T> {
+
+
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+    toList(listType: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+    toTree(treeType: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+    
+    reverse(): this {
+        throw new Error("Method not implemented.");
+    }
+    
     /**
      *                                               HeadNode Pointer    
      *                                                      |

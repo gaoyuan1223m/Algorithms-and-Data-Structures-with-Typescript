@@ -1,12 +1,16 @@
-import { IGroup } from "./IGroup";
-
+import { ITransformable } from "./ITransformable";
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
  * *Element can be appended on or removed from the ICollection.*
  * *ICollection also provides 'contains(value: T)'*
  * *Generally, IList can extends ICollection interface*
  */
-export interface ICollection<T> extends IGroup {
+export interface ICollection<T> extends ITransformable<T> {
+
+    /**
+     * @param size: the number of elements on the Collection
+     */
+    readonly size: number;
 
     /**
      * *Add an element at the end of the Collection*
@@ -26,5 +30,20 @@ export interface ICollection<T> extends IGroup {
      * @param value: value of the a single element
      */
     remove(value: T): this;
+
+    /**
+     * *Return whether the currect Collection is empty or not*
+     */
+    isEmpty(): boolean;
+
+    /**
+     * *Print all elements on the Collection*
+     */
+    print(): this;
+
+    /**
+     * *Clear all elements from the Collection*
+     */
+    clear(): this;
 
 }
