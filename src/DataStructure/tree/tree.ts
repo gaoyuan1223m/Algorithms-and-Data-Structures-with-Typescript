@@ -1,4 +1,4 @@
-import { ICompareFunction, defaultCompare, Comparison } from "@Utils/comparison";
+import { ICompareFunction, defaultCompare, ComparisonResult } from "@Utils/comparison";
 
 /**
  * @BinarySearchTree
@@ -47,10 +47,10 @@ export class BinarySearchTree<T> {
         if (!temp) return [-1];
 
         do {
-            if (defaultCompare(temp.node, node) === Comparison.LESS_THAN) {
+            if (defaultCompare(temp.node, node) === ComparisonResult.LESS_THAN) {
                 pathArr.push(1);
                 temp = temp.right;
-            } else if (defaultCompare(temp.node, node) === Comparison.BIGGER_THAN) {
+            } else if (defaultCompare(temp.node, node) === ComparisonResult.LARGER_THAN) {
                 pathArr.push(0);
                 temp = temp.left;
             } else {
@@ -58,7 +58,7 @@ export class BinarySearchTree<T> {
             }
         } while (temp.left || temp.right)
 
-        if (defaultCompare(temp.node, node) === Comparison.EQUALS_TO) {
+        if (defaultCompare(temp.node, node) === ComparisonResult.EQUALS_TO) {
             return pathArr;
         }
 
@@ -91,9 +91,9 @@ export class BinarySearchTree<T> {
             return new TreeNode<T>(node);
         }
 
-        if (defaultCompare(treeNode.node, node) === Comparison.EQUALS_TO) return;
+        if (defaultCompare(treeNode.node, node) === ComparisonResult.EQUALS_TO) return;
 
-        if (defaultCompare(treeNode.node, node) === Comparison.LESS_THAN) {
+        if (defaultCompare(treeNode.node, node) === ComparisonResult.LESS_THAN) {
             treeNode.right = this._insertByRecursion(treeNode.right, node);
         } else {
             treeNode.left = this._insertByRecursion(treeNode.left, node);
@@ -110,9 +110,9 @@ export class BinarySearchTree<T> {
     private _removeByRecursion(treeNode: TreeNode<T>, node: T): TreeNode<T> {
         if (!treeNode) return;
 
-        if (defaultCompare(treeNode.node, node) === Comparison.LESS_THAN) {
+        if (defaultCompare(treeNode.node, node) === ComparisonResult.LESS_THAN) {
             treeNode.right = this._removeByRecursion(treeNode.right, node);
-        } else if (defaultCompare(treeNode.node, node) === Comparison.BIGGER_THAN) {
+        } else if (defaultCompare(treeNode.node, node) === ComparisonResult.LARGER_THAN) {
             treeNode.left = this._removeByRecursion(treeNode.left, node);
         } else {
             if (!treeNode.left) {

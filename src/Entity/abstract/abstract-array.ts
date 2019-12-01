@@ -1,79 +1,196 @@
 import { IArray } from "@Interface/specific/IArray";
+import { Console } from "@Utils/high-light";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
+import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { Errors } from "@Utils/Errors";
+import { IList } from "@Interface/common/IList";
+import { SortMethods } from "@Algorithm/sort/sort-methods";
+import { QuickSort } from "@Algorithm/sort/quick-sort";
 
 export abstract class AbstractArray<T> implements IArray<T> {
-    [n: number]: T;    
     
-    length: number;
+    
+    [n: number]: T;
 
-    size: number;
+    protected _capacity: number;
+    protected _incrementals: number;
+    protected _size: number;
+    protected _idxOfLastElm: number;
+
+    get length(): number {
+        return this._capacity;
+    };
+
+    get size(): number {
+        return this._size
+    };
+
+    protected constructor(
+        capacity: number,
+        protected equalsFunc: IEqualsFunction<T> = defaultEquals,
+        incrementals: number = 0,
+    ) {
+        this._size = 0;
+        this._incrementals = incrementals
+        this._idxOfLastElm = -1;
+        this._capacity = ~~(capacity < 0 ? 0 : capacity);
+    }
 
     abstract insertByIndex(value: T, index: number): this
 
-    removeByIndex(index: number): this {
-        throw new Error("Method not implemented.");
-    }
+    abstract append(value: T): this;
     
+    abstract toArray(arrayType: ArrayTypes): IArray<T>;
+
+    abstract toList(listType: ListTypes): ILinkedList<T>;
+
+    abstract toTree(treeType: TreeTypes): ITree<T>;
+
+    abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, IFunc?: IEqualsFunction<U>, thisArg?: any): IList<U>
+
+    removeByIndex(index: number): this {
+        const idx = this._getValidIndex(index);
+
+        for (let i = idx + 1; i <= this._idxOfLastElm; i++) {
+            this[i - 1] = this[i];
+        }
+
+        for (let k = idx + 1 - this._capacity; k <= this._idxOfLastElm - this._capacity; k++) {
+            this[k - 1] = this[k];
+        }
+
+        this[this._idxOfLastElm] = undefined;
+        this[this._idxOfLastElm - this._capacity] = undefined;
+
+        while (!this._isValidValue(this[this._idxOfLastElm])) {
+            this._idxOfLastElm -= 1;
+        } // need to refactor!!!
+
+        return this;
+    }
+
     updateByIndex(value: T, index: number): this {
-        throw new Error("Method not implemented.");
+        const idx = this._getValidIndex(index);
+        this[idx] = value;
+        this[idx - this._capacity] = value;
+        return this;
     }
 
     getByIndex(index: number): T {
-        throw new Error("Method not implemented.");
+        return this[this._getValidIndex(index)]
+    }
+
+    sort(sortMethod: SortMethods = SortMethods.Quick): this {
+        return this._quickSort();
     }
 
     indexOf(value: T): number {
-        throw new Error("Method not implemented.");
+        if (!this._isValidValue(value)) return -1;
+
+        for (let i = 0; i < this._capacity; i++) {
+            if (this.equalsFunc(this[i], value)) {
+                return i
+            }
+        }
+
+        return -1;
     }
 
     reverse(): this {
-        throw new Error("Method not implemented.");
+        let i = 0, j = this._capacity - 1;
+        let ii = i - this._capacity, jj = -1;
+        while (i < j) {
+            let temp = this[i];
+            this[i] = this[j];
+            this[j] = temp;
+
+            temp = this[ii];
+            this[ii] = this[jj];
+            this[jj] = temp;
+
+            i += 1;
+            j -= 1;
+            ii += 1;
+            jj -= 1;
+        }
+
+        return this;
     }
 
-    append(value: T): this {
-        throw new Error("Method not implemented.");
-    }
-    
     contains(value: T): boolean {
-        throw new Error("Method not implemented.");
+        return this.indexOf(value) !== -1;
     }
 
     remove(value: T): this {
-        throw new Error("Method not implemented.");
+        const idx = this.indexOf(value);
+        if (idx === -1) return this;
+
+        return this.removeByIndex(idx);
     }
 
     isEmpty(): boolean {
-        throw new Error("Method not implemented.");
+        return this._size === 0;
     }
 
     print(): this {
-        throw new Error("Method not implemented.");
+        let str = "["
+        for (let i = 0; i < this._capacity; i++) {
+            str += ` ${this[i]} `;
+        }
+        str = `${str}]`;
+        Console.OK(str);
+        return this;
     }
 
     clear(): this {
-        throw new Error("Method not implemented.");
+        for (let i = 0; i < this._idxOfLastElm; i++) {
+            this[i] = undefined;
+        }
+        this._size = 0;
+        return this;
     }
 
-    toArray(arrayType: ArrayTypes): IArray<T> {
-        throw new Error("Method not implemented.");
+    forEach(callbackfn: (value: T, index: number, current: IList<T>) => void, thisArg?: any): void {
+        const capacity = this._capacity;
+        for (let idx = 0; idx < capacity; idx++) {
+            callbackfn(this[idx], idx, this);
+            this[idx - this._capacity] = this[idx];
+        }
     }
 
-    toList(listType: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
+    protected _getValidIndex(index: number): number {
+        if (!index && index !== 0) {
+            throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
+        }
+
+        if (!Number.isInteger(index)) {
+            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
+        }
+
+        if (index >= this._capacity || index + this._capacity < 0) {
+            throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
+        }
+
+        if (index < 0) {
+            index += this._capacity;
+        }
+
+        return index;
     }
 
-    toTree(treeType: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
+    protected _isValidValue(value: T) {
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== ""
     }
 
-    forEach(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => void, thisArg?: any): void {
-        throw new Error("Method not implemented.");
+    protected _quickSort(): this {
+        QuickSort(this, 0, this._capacity - 1);
+        return this;
     }
 
-    map<U>(callbackfn: (value: T, index: number, current: import("../../Interface/common/IList").IList<T>) => U, thisArg?: any): import("../../Interface/common/IList").IList<U> {
-        throw new Error("Method not implemented.");
-    }
-   
 }

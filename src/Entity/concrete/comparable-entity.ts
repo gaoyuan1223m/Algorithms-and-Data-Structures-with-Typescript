@@ -1,6 +1,6 @@
 import { IComparable } from "@Interface/common/IComparable";
 import { IObject } from "@Interface/common/IObject";
-import { Comparison } from "@Utils/comparison";
+import { ComparisonResult } from "@Utils/comparison";
 
 export class Avenger implements IComparable<Avenger>, IObject {
 
@@ -14,9 +14,9 @@ export class Avenger implements IComparable<Avenger>, IObject {
     };
 
     compareWith(value: Avenger): number {
-        if (this.name === value.name && this.age === value.age) return Comparison.EQUALS_TO;
+        if (this.name === value.name && this.age === value.age) return ComparisonResult.EQUALS_TO;
 
-        return this.age < value.age ? Comparison.LESS_THAN : Comparison.BIGGER_THAN;
+        return this.age < value.age ? ComparisonResult.LESS_THAN : ComparisonResult.LARGER_THAN;
     }
 
     toString = (): string => `${this.name} with ${this.age} year${this.age > 1 ? 's' : ''} old`;

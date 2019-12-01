@@ -1,6 +1,7 @@
-import { ICollection } from "@Interface/common/ICollection";
+
 import { IList } from "@Interface/common/IList";
 import { IEqualsFunction } from "@Utils/comparison";
+import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 export interface IArray<T> extends IList<T> {
     /**
@@ -12,9 +13,15 @@ export interface IArray<T> extends IList<T> {
      * *index signature*
      */
     [n: number]: T;
+
+    /**
+     * *Sort curent Array Increaingly or Decreasingly*
+     */
+    sort(sortMethod?: SortMethods): this;
 }
 
 
 export interface IArrayConstructor {
-    new <T>(capacity: number, equalsFunctions?: IEqualsFunction<T>): IArray<T>;
+    new <T>(capacity: number, equalsFunctions?: IEqualsFunction<T>, incrementals?: number): IArray<T>;
 }
+

@@ -1,39 +1,48 @@
 import { IComparable } from "@Interface/common/IComparable";
 
-export type ICompareFunction<T> = (a: T, b: T) => number;
 
 export type IEqualsFunction<T> = (a: T, b: T) => boolean;
-
-export function defaultCompare<T>(a: T, b: T): number {
-    if (a === b) return Comparison.EQUALS_TO;
-
-    return a < b ? Comparison.LESS_THAN : Comparison.BIGGER_THAN;
-  }
 
 export function defaultEquals<T>(a: T, b: T): boolean {
     return a === b;
 }
 
-export function objectCompare<T extends IComparable<T>>(a: T, b: T): Comparison {
+export type ICompareFunction<T> = (a: T, b: T) => ComparisonResult;
+
+export function defaultCompare<T>(a: T, b: T): ComparisonResult {
+    if (a === b) return ComparisonResult.EQUALS_TO;
+
+    return a < b ? ComparisonResult.LESS_THAN : ComparisonResult.LARGER_THAN;
+  }
+
+export function objectCompare<T extends IComparable<T>>(a: T, b: T): ComparisonResult {
     return a.compareWith(b);
 }
 
 export const NOT_EXISTED = -1;
 
-export enum Comparison {
+export enum ComparisonResult {
     LESS_THAN = -1,
-    BIGGER_THAN = 1,
+    LARGER_THAN = 1,
     EQUALS_TO = 0
 }
 
-export function isEqual(result: Comparison): boolean {
-    return result === Comparison.EQUALS_TO;
+export function isEqual(result: ComparisonResult): boolean {
+    return result === ComparisonResult.EQUALS_TO;
 }
 
-export function isLarger(result: Comparison): boolean {
-    return result === Comparison.BIGGER_THAN;
+export function isLarger(result: ComparisonResult): boolean {
+    return result === ComparisonResult.LARGER_THAN;
 }
 
-export function isLess(result: Comparison): boolean {
-    return result === Comparison.LESS_THAN;
+export function isEqualOrLarger(result: ComparisonResult): boolean {
+    return result === ComparisonResult.EQUALS_TO || result === ComparisonResult.LARGER_THAN;
+}
+
+export function isLess(result: ComparisonResult): boolean {
+    return result === ComparisonResult.LESS_THAN;
+}
+
+export function isEqualOrLess(result: ComparisonResult): boolean {
+    return result === ComparisonResult.EQUALS_TO || result === ComparisonResult.LESS_THAN;
 }

@@ -12,7 +12,7 @@ describe(`Test for Static Array`, () => {
             .insertByIndex(6, 3)
             .insertByIndex(2, 5)
             .insertByIndex(16, 3)
-            .updateByIndex(26, 4)
+            .updateByIndex(26, 4);
     });
 
     it(`#Get size/length of the array`, () => {
@@ -93,9 +93,17 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-1]).toBeUndefined();
     })
 
+    it(`#reverse current array`, () => {
+        staticArray.reverse();
+        expect(staticArray[0]).toBe(undefined);
+        expect(staticArray[6]).toBe(7);
+        expect(staticArray[-2]).toBe(16);
+        expect(staticArray[-4]).toBe(2);
+    })
+
     it(`print the array`, () => {
         staticArray.print();
-    });
+    })
     
     it(`clear the array`, () => {
         staticArray.clear();

@@ -1,52 +1,30 @@
 import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
-import { Console } from "@Utils/high-light";
 import { Errors } from "@Utils/Errors";
-import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";
+import { AbstractArray } from "@Entity/abstract/abstract-array";
+import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
 
-export const StaticArray: IArrayConstructor = class StaticArray<T> implements IArray<T> {
-   
-    toArray(arrayType: ArrayTypes): IArray<T> {
-        throw new Error("Method not implemented.");
-    }
-    toList(listType: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-    toTree(treeType: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    [n: number]: T;
-
-    private _size: number;
-    private _capacity: number;
-    private _idxOfLastElm: number;
+export const StaticArray: IArrayConstructor = class StaticArray<T> extends AbstractArray<T> {
 
     constructor(
         capacity: number,
-        protected equalsFunctions: IEqualsFunction<T> = defaultEquals
+        private equalsFunction: IEqualsFunction<T>
     ) {
-        this._size = 0;
-        this._idxOfLastElm = this._size;
-        this._capacity = ~~(capacity < 0 ? 0 : capacity);
+        super(capacity, equalsFunction)
     }
 
-    get size(): number {
-        return this._size;
-    };
-
-    get length(): number {
-        return this._capacity;
-    };
-
     // O(1)
-    append = (value: T): this => {
+    append(value: T): this {
+        if(!this._isValidValue(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+        }
+
         if (this._idxOfLastElm + 1 === this._capacity) {
             throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
-
+        
         this[this._idxOfLastElm + 1] = value;
         this[this._idxOfLastElm + 1 - this._capacity] = value;
         this._size += 1;
@@ -54,16 +32,15 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> implements IA
         return this;
     }
 
-    // O(1)
-    getByIndex = (index: number): T => {
-        return this[this._getValidIndex(index)];
-    }
-
     // O(n)
-    insertByIndex = (value: T, index: number): this => {
+    insertByIndex(value: T, index: number): this {
+        if(!this._isValidValue(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+        }
+
         const idx = this._getValidIndex(index);
 
-        if (!this[idx]) {
+        if (!this._isValidValue(this[idx])) {
             this._idxOfLastElm = this._getIdxOfLastElm(idx);
             this[idx] = value;
             this[idx - this._capacity] = value;
@@ -71,7 +48,7 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> implements IA
             return this;
         }
 
-        let tempIdx: number; // the cloest empty position to the idx on the right
+        let tempIdx: number; // the empty position cloest to the idx on the right
 
         for (let i = idx + 1; i < this._capacity; i++) {
             if (this[i]) continue;
@@ -122,121 +99,10 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> implements IA
         return this;
     }
 
-    // O(1)
-    updateByIndex(value: T, index: number): this {
-        const idx = this._getValidIndex(index);
-        this[idx] = value;
-        this[idx - this._capacity] = value;
-        return this;
-    }
-
     // O(n)
-    removeByIndex(index: number): this {
-        const idx = this._getValidIndex(index);
-        const value = this[idx];
-
-        for (let i = idx + 1; i <= this._idxOfLastElm; i++) {
-            this[i - 1] = this[i];
-        }
-
-        for (let k = idx + 1 - this._capacity; k <= this._idxOfLastElm - this._capacity; k++) {
-            this[k - 1] = this[k];
-        }
-
-        this[this._idxOfLastElm] = undefined;
-        this[this._idxOfLastElm - this._capacity] = undefined;
-
-        while (!this[this._idxOfLastElm]) {
-            this._idxOfLastElm -= 1;
-        } // need to refactor!!!
-
-        return this;
-    }
-
-    // O(n)
-    remove(value: T): this {
-        const idx = this.indexOf(value);
-        if (idx === -1) return this;
-
-        this.removeByIndex(idx);
-        return this;
-    }
-
-    // O(n)
-    contains(value: T): boolean {
-        return this.indexOf(value) !== -1;
-    }
-
-    // O(n)
-    indexOf(value: T): number {
-        if (!value) return -1;
-
-        for (let i = 0; i < this._capacity; i++) {
-            if (this.equalsFunctions(this[i], value)) {
-                return i
-            }
-        }
-
-        return -1;
-    };
-
-    reverse(): this {
-        let i = 0, j = this._capacity - 1;
-        let ii = i - this._capacity, jj = -1;
-        while (i < j) {
-            let temp = this[j];
-            this[i] = this[j];
-            this[j] = temp;
-
-            temp = this[jj];
-            this[ii] = this[jj];
-            this[jj] = temp;
-
-            i += 1;
-            j -= 1;
-            ii += 1;
-            jj -= 1;
-        }
-
-        return this;
-    }
-
-    isEmpty(): boolean {
-        return this._size === 0;
-    }
-
-    // O(n)
-    print(): this {
-        let str = "["
-        for (let i = 0; i < this._capacity; i++) {
-            str += ` ${this[i]} `;
-        }
-        str = `${str}]`;
-        Console.OK(str);
-        return this;
-    }
-
-    // O(n)
-    clear(): this {
-        for (let i = 0; i < this._capacity; i++) {
-            this[i] = undefined;
-        }
-        this._size = 0;
-        return this;
-    }
-
-    // O(n)
-    forEach(callbackfn: (value: T, index: number, current: IArray<T>) => void, thisArg?: any): void {
+    map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, IFunc: IEqualsFunction<U> = defaultEquals, thisArg?: any): IArray<U> {
         const capacity = this._capacity;
-        for (let idx = 0; idx < capacity; idx++) {
-            callbackfn(this[idx], idx, this);
-        }
-    }
-
-    // O(n)
-    map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, thisArg?: any): IArray<U> {
-        const capacity = this._capacity;
-        const newStaticArray: IArray<U> = new StaticArray<U>(capacity);
+        const newStaticArray: IArray<U> = new StaticArray<U>(capacity, IFunc);
         for (let idx = 0; idx < capacity; idx++) {
             newStaticArray[idx] = callbackfn(this[idx], idx, this);
             newStaticArray[idx - capacity] = newStaticArray[idx];
@@ -244,37 +110,64 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> implements IA
         return newStaticArray;
     }
 
-   
-    
-    private _toStaticArray(): IArray<T> {
-        return this;
-    }
-    private _toDynamicArray(): IArray<T> {
-        return this;
+    toArray(arrayType: ArrayTypes = ArrayTypes.Dynamic): IArray<T> {
+        if (arrayType = ArrayTypes.Static) return this;
+
+        return this._toDynamicArray();
     }
 
-    private _getValidIndex(index: number): number {
-        if (!index && index !== 0) { // bug: passing 0 will throw exception
-            throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
-        }
+    toList(listType: ListTypes = ListTypes.Singly): ILinkedList<T> {
+        if (listType === ListTypes.Doubly) return this._toDoublyLinkedList();
 
-        if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
-        }
+        if (listType === ListTypes.Circular) return this._toCircularLinkedList();
 
-        if (index >= this._capacity || index + this._capacity < 0) {
-            throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
-        }
+        if (listType === ListTypes.Skip) return this._toSkipLinkedList();
 
-        if (index < 0) {
-            index += this._capacity;
-        }
+        return this._toSinglyLinkedList();
+    }
 
-        return index;
+    toTree(treeType: TreeTypes = TreeTypes.BST): ITree<T> {
+        if (treeType === TreeTypes.AVL) return this._toAVL();
+
+        if (treeType === TreeTypes.R_B) return this._toRedBlack();
+
+        return this._toBST();
     }
 
     private _getIdxOfLastElm(index: number): number {
         return index > this._idxOfLastElm ? index : this._idxOfLastElm;
+    }
+
+    private _toDynamicArray(): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toSinglyLinkedList(): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toDoublyLinkedList(): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toCircularLinkedList(): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toSkipLinkedList(): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toBST(): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toAVL(): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _toRedBlack(): ITree<T> {
+        throw new Error("Method not implemented.");
     }
 
 }
