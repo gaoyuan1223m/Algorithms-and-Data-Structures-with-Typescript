@@ -10,8 +10,8 @@ import { SortMethods } from "@Algorithm/sort/sort-methods";
 import { QuickSort } from "@Algorithm/sort/quick-sort";
 
 export abstract class AbstractArray<T> implements IArray<T> {
-    
-    
+
+
     [n: number]: T;
 
     protected _capacity: number;
@@ -41,7 +41,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
     abstract insertByIndex(value: T, index: number): this
 
     abstract append(value: T): this;
-    
+
     abstract toArray(arrayType: ArrayTypes): IArray<T>;
 
     abstract toList(listType: ListTypes): ILinkedList<T>;
@@ -190,6 +190,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     protected _quickSort(): this {
         QuickSort(this, 0, this._capacity - 1);
+        QuickSort(this, 0 - this._capacity, -1);
         return this;
     }
 

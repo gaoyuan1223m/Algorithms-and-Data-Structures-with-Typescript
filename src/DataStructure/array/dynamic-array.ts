@@ -4,6 +4,9 @@ import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";
 
 export class DynamicArray<T> implements IArray<T> {
+    sort(sortMethod?: import("../../Algorithm/sort/sort-methods").SortMethods): this {
+        throw new Error("Method not implemented.");
+    }
 
     toArray(arrayType: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");

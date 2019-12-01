@@ -13,14 +13,14 @@ describe(`#Test for Quick-Sort`, () => {
             .append(10)
             .append(2)
             .append(9)
-            .append(0)
+            .append(1)
             .append(11)
             .append(7)
             .append(5)
             .append(4)
             .append(6)
             .append(8)
-            .append(1);
+            .append(0);
         sa2
             .append(1)
             .append(8)
@@ -37,13 +37,15 @@ describe(`#Test for Quick-Sort`, () => {
     })
 
     it(`Test 1`, () => {
-        QuickSort(sa1, 0, sa1.length - 1);
-        sa1.print();
+        sa1.sort().print();
+        expect(sa1[-1]).toBe(sa1[sa1.length - 1]);
+        expect(sa1[0]).toBe(sa1[0 - sa1.length]);
     })
 
     it(`Test 2`, () => {
-        QuickSort(sa2, 0, sa2.length - 1);
-        sa2.print();
+        sa2.sort().print();
+        expect(sa2[-1]).toBe(sa2[sa1.length - 1]);
+        expect(sa2[0]).toBe(sa2[0 - sa1.length]);
     })
 
 })
