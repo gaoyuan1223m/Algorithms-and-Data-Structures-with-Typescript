@@ -55,7 +55,8 @@ enum Msg {
     InValidArg = 'Arg cannot be Null, Undefined, or NAN!',
     InValidIdx = 'Index should be INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     BeyondBoundary = 'Index is out of boundary',
-    NotExisted = 'ELement queried doesn\'t exist' 
+    NotExisted = 'ELement queried doesn\'t exist',
+    NoElements ='No elements in current collection'
 }
 
 export const Errors = {

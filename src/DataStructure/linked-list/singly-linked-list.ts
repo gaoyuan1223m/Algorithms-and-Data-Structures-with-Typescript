@@ -1,7 +1,7 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IEqualsFunction, defaultEquals, NOT_EXISTED } from "@Utils/comparison";
 import { Console } from "@Utils/high-light";
-import { Errors } from "@Utils/Errors";
+import { Errors } from "@Utils/errors";
 import { IArray } from "@Interface/specific/IArray";
 import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";

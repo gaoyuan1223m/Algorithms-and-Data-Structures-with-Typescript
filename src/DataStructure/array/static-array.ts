@@ -1,5 +1,5 @@
 import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
-import { Errors } from "@Utils/Errors";
+import { Errors } from "@Utils/errors";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";

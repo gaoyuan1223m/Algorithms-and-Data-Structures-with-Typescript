@@ -9,7 +9,7 @@ describe(`#Test for Quick-Sort`, () => {
 
     beforeAll(() => {
         sa1
-            .append(3)
+            .append(0)
             .append(10)
             .append(2)
             .append(9)
@@ -20,20 +20,20 @@ describe(`#Test for Quick-Sort`, () => {
             .append(4)
             .append(6)
             .append(8)
-            .append(0);
+            .append(3);
         sa2
-            .append(1)
+            .append(11)
             .append(8)
             .append(6)
             .append(4)
             .append(5)
-            .append(0)
-            .append(7)
             .append(3)
+            .append(7)
+            .append(1)
             .append(9)
             .append(2)
             .append(10)
-            .append(11);
+            .append(0);
     })
 
     it(`Test 1`, () => {

@@ -23,8 +23,18 @@ export interface IStack<T> {
      */
     pop(): T;
 
+    /**
+     * *Whether current Stack contains any object, return a boolen value*
+     */
+    isEmpty(): boolean;
+
+    /**
+     * *Remove all objects from current Stack*
+     */
+    clear(): this;
+
 }
 
 export interface IStackConstructor {
-    new <T>(type: DataStructures, capacity: number): IStack<T>;
+    new <T>(capacity?: number, type?: DataStructures): IStack<T>;
 }

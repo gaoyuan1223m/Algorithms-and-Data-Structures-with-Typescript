@@ -4,7 +4,7 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
 import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
-import { Errors } from "@Utils/Errors";
+import { Errors } from "@Utils/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 import { QuickSort } from "@Algorithm/sort/quick-sort";
@@ -53,6 +53,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
     removeByIndex(index: number): this {
         const idx = this._getValidIndex(index);
 
+        const isValidValue = this._isValidValue(this[idx]);
+
         for (let i = idx + 1; i <= this._idxOfLastElm; i++) {
             this[i - 1] = this[i];
         }
@@ -67,6 +69,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
         while (!this._isValidValue(this[this._idxOfLastElm])) {
             this._idxOfLastElm -= 1;
         } // need to refactor!!!
+
+        if (isValidValue) {
+            this._size -= 1
+        };
 
         return this;
     }
