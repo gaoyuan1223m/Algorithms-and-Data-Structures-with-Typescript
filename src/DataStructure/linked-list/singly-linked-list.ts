@@ -1,28 +1,12 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { IEqualsFunction, defaultEquals, NOT_EXISTED } from "@Utils/comparison";
-import { Console } from "@Utils/high-light";
-import { Errors } from "@Utils/errors";
 import { IArray } from "@Interface/specific/IArray";
-import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";
+import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
+import { AbstractSinglyLinkedList } from "@Entity/abstract/abstract-singly-linked-list";
 
-export class SinglyLinkedList<T> implements ILinkedList<T> {
+export class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
-
-    toArray(arrayType: ArrayTypes): IArray<T> {
-        throw new Error("Method not implemented.");
-    }
-    toList(listType: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-    toTree(treeType: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-    
-    reverse(): this {
-        throw new Error("Method not implemented.");
-    }
-    
     /**
      *                                               HeadNode Pointer    
      *                                                      |
@@ -37,316 +21,67 @@ export class SinglyLinkedList<T> implements ILinkedList<T> {
      *                                                                                            TailNode Pointer 
      */
 
-
-    private _headSentry: ListNode<T>; // Head Sentry Node 头哨兵节点
-    private _tailSentry: ListNode<T>; // Tail Sentry Node 尾哨兵节点
-    private _headPointer: ListNode<T>; // Head Node Pointer 头元素指针
-    private _tailPointer: ListNode<T>; // Tail Node Pointer 尾元素指针
-    private _size: number;
-
     constructor(
         protected isEqualsFn: IEqualsFunction<T> = defaultEquals
     ) {
-        this._headSentry = new ListNode<T>();
-        this._tailSentry = new ListNode<T>();
-        this._headSentry.next = this._tailSentry;
-        this._headPointer = this._headSentry;
-        this._tailPointer = this._headSentry
-        this._size = 0;
+        super(isEqualsFn)
     }
 
-    get size(): number {
-        return this._size;
+    toArray(arrayType?: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
     }
-
-    get head(): T {
-        return this._headPointer.value;
+    toTree(treeType?: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
     }
-
-    get tail(): T {
-        return this._tailPointer.value;
+    reverse(): this {
+        throw new Error("Method not implemented.");
     }
-
-    // O(1)
-    addHeadNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        return this._addHeadNode(new ListNode<T>(value));
-    }
-
-    // O(1)
-    addTailNode(value: T): this {
-        return this.append(value);
-    };
-
-    append(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        return this._addTailNode(new ListNode<T>(value));
-    }
-
-    // O(1)
-    removeHeadNode(): this {
-        return this._removeHeadNode();
-    };
-
-    // O(n)
-    removeTaiNode(): this {
-        return this._removeTailNode();
-    };
-
-    // O(n)
-    insertByIndex(value: T, index: number): this {
-        const idx = this._getInvalidIndex(index);
-        return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
-    }
-
-    // O(n)
-    removeByIndex(index: number): this {
-        const idx = this._getInvalidIndex(index);
-        return this._removeByValidIndex(idx);
-    }
-
-    // O(n)
-    updateByIndex(value: T, index: number): this {
-        const idx = this._getInvalidIndex(index);
-        return this._updateByValidIndex(value, idx);
-    };
-
-    // O(n)
-    getByIndex(index: number): T {
-        const idx = this._getInvalidIndex(index);
-        const pointer = this._getNodeByValidIndex(idx);
-        return pointer.value;
-    }
-
-    indexOf(value: T): number {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        let i = -1;
-        let p = this._headPointer;
-        while (p) {
-            i += 1;
-            if (this.isEqualsFn(p.value, value)) return i;
-            p = p.next;
-        }
-        return -1;
-    }
-
-    contains(value: T): boolean {
-        return this.indexOf(value) !== NOT_EXISTED;
-    }
-
-    remove(value: T): this {
-        const idx = this.indexOf(value);
-
-        if (idx === NOT_EXISTED) return this;
-
-        return this.removeByIndex(idx);
-    }
-
-    print(): this {
-        let pointer = this._headPointer;
-        let idx = 0;
-        let str = 'HEAD -> ';
-        while (pointer && idx < this._size) {
-            str += `[${pointer.value.toString()}] -> `
-            pointer = pointer.next;
-            idx++;
-        }
-        str += `END`;
-        Console.Warn(str);
-        return this;
-    }
-
-    clear(): this {
-        return this._clearCurrentList();
-    }
-
-    isEmpty(): boolean {
-        return this._size === 0;
-    }
-
-
-    forEach(callbackfn: (value: T, index: number, current: ILinkedList<T>) => void, thisArg?: any): void {
-        let p = this._headPointer;
-        let idx = 0;
-        while (p && idx < this._size) {
-            callbackfn(p.value, idx, this);
-            p = p.next;
-            idx++;
-        }
-    }
-    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, thisArg?: any): ILinkedList<U> {
-        const newSinglyLinkedList: ILinkedList<U> = new SinglyLinkedList<U>();
-        return newSinglyLinkedList;
-    }
-
-    private _addHeadNode = (newNode: ListNode<T>) => {
-
-        newNode.next = this._headSentry.next;
-        this._headSentry.next = newNode;
-
-        this._headPointer = this._headSentry.next;
-
-        this._size += 1;
-
-        if (this._size === 1) {
-            this._tailPointer = this._headPointer;
-        }
-
-        return this;
-    }
-
-    private _addTailNode = (newNode: ListNode<T>): this => {
-
-        newNode.next = this._tailSentry;
-        this._tailPointer.next = newNode;
-
-        this._tailPointer = newNode;
-
-        this._size += 1;
-
-        if (this._size === 1) {
-            this._headPointer = this._headSentry.next;
-        }
-
-        return this;
-    }
-
-    private _removeHeadNode = (): this => {
-        if (this._size === 0) return this;
-        if (this._size === 1) return this._clearCurrentList();
-
-        this._headSentry.next = this._headSentry.next.next;
-        this._headPointer.next = null;
-        this._headPointer = this._headSentry.next;
-        this._size -= 1;
-        return this;
-    }
-
-    private _removeTailNode = (): this => {
-        if (this._size === 0) return this;
-        if (this._size === 1) return this._clearCurrentList();
-
-        const preNode = this._getNodeByValidIndex(this._size - 2);
-        const delNode = this._tailPointer;
-
-        preNode.next = preNode.next.next;
-        delNode.next = null;
-
-        let pointer = this._headPointer;
-        while (pointer.next.next) {
-            pointer = pointer.next
-        }
-
-        this._tailPointer = pointer;
-        this._size -= 1;
-        return this;
-    }
-
-    private _removeByValidIndex = (validIndex: number): this => {
-        if (this._size === 1) return this._clearCurrentList();
-
-        if (validIndex === 0) return this._removeHeadNode();
-
-        if (validIndex === this._size - 1) return this._removeTailNode();
-
-        const preNode = this._getNodeByValidIndex(validIndex - 1);
-        const delNode = preNode.next;
-
-        preNode.next = preNode.next.next;
-        delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
-
-        this._size -= 1;
-        return this;
-    }
-
-    private _insertByValidIndex = (value: T, validIndex: number): this => {
-        if (validIndex === 0) {
-            return this.addHeadNode(value);
-        }
-
-        if (validIndex === this._size) {
-            return this.append(value);
-        }
-
-        const newNode = new ListNode<T>(value);
-
-        const preNode = this._getNodeByValidIndex(validIndex - 1);
-        newNode.next = preNode.next;
-        preNode.next = newNode;
-        this._size += 1;
-
-        return this;
-    }
-
-    private _updateByValidIndex = (value: T, validIndex: number): this => {
-        const pointer = this._getNodeByValidIndex(validIndex);
-        pointer.value = value;
-        return this;
-    }
-
-    private _getNodeByValidIndex = (validIndex: number): ListNode<T> => {
-
-        if (validIndex < 0) return this._headSentry;
-
-        let pointer = this._headSentry.next;
-        let i = validIndex;
-
-        while (i > 0) {
-            pointer = pointer.next;
-            i--;
-        }
-
-        return pointer;
-    }
-
-    private _getInvalidIndex = (index: number): number => {
-
-        if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
-        }
-
-        if (index < 0 && index + this._size < 0 || index >= this._size) {
-            throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
-        }
-
-        if (index < 0) {
-            return index + this._size;
-        }
-
-        return index;
-    }
-
-    private _isValid = (value: T): boolean => value !== null && (Boolean(value) || Number(value) === 0);
-
-    private _clearCurrentList = (): this => {
-        this._headSentry.next = this._tailSentry;
-        this._tailPointer.next = null;
-        this._headPointer = this._headSentry;
-        this._tailPointer = this._headSentry;
-        this._size = 0;
-        return this;
+    toList(listType?: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
     }
 
 }
 
-class ListNode<T> {
+export class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
-    public value: T;
-    public next: ListNode<T>;
-
-    constructor(value: T = null, next: ListNode<T> = null) {
-        this.value = value;
-        this.next = next;
+    /**
+     *                                               HeadNode Pointer    
+     *                                                      |
+     *                                                      |
+     *                                                      V
+     *                                          index:      0           1                  n-2          n-1
+     * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
+     *      ^                                    index:     -n         -n+1                 -2           -1             |
+     *      |                                                                                             ^             |                                                                          
+     *      |                                                                                             |             |
+     *      |                                                                                             |             |
+     *      |                                                                                     TailNode Pointer      |
+     *      |___________________________________________________________________________________________________________|
+     *
+     */
+    constructor(
+        protected isEqualsFn: IEqualsFunction<T> = defaultEquals
+    ) {
+        super(isEqualsFn)
+        this._tailSentry.next = this._headSentry;
     }
+
+    reverse(): this {
+        throw new Error("Method not implemented.");
+    }
+
+    toArray(arrayType?: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    toList(listType?: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    toTree(treeType?: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
 }
 
 

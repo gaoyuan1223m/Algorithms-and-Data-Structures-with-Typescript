@@ -1,11 +1,11 @@
-import { SinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
+import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IError } from "@Interface/common/IError";
 import { Errors } from "@Utils/errors";
 
 describe(`Test for SinglyLinkedList`, () => {
 
-    const sll: ILinkedList<number> = new SinglyLinkedList<number>();
+    const sll: ILinkedList<number> = new SimpleSinglyLinkedList<number>();
 
     it(`#addHeadNode - add 0`, () => {
         sll.addHeadNode(0);
