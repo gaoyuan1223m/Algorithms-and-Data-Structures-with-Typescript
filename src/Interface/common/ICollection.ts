@@ -1,4 +1,5 @@
 import { ITransformable } from "./ITransformable";
+import { SortMethods } from "@Algorithm/sort/sort-methods";
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
  * *Element can be appended on or removed from the ICollection.*
@@ -30,6 +31,11 @@ export interface ICollection<T> extends ITransformable<T> {
      * @param value: value of the a single element
      */
     remove(value: T): this;
+
+    /**
+     * *Sort curent Array Increaingly or Decreasingly*
+     */
+    sort(method?: SortMethods): this;
 
     /**
      * *Return whether the currect Collection is empty or not*

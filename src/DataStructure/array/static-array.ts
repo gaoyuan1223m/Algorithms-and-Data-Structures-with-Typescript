@@ -4,27 +4,27 @@ import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ITree } from "@Interface/specific/ITree";
 import { AbstractArray } from "@Entity/abstract/abstract-array";
-import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
 
 export const StaticArray: IArrayConstructor = class StaticArray<T> extends AbstractArray<T> {
 
     constructor(
         capacity: number,
-        private equalsFunction: IEqualsFunction<T>
+        compare: ICompareFunc<T> = valueTypeComparison
     ) {
-        super(capacity, equalsFunction)
+        super(capacity, compare, 0)
     }
 
     // O(1)
     append(value: T): this {
-        if(!this._isValidValue(value)) {
+        if (!this._isValidValue(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
         if (this._idxOfLastElm + 1 === this._capacity) {
             throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
-        
+
         this[this._idxOfLastElm + 1] = value;
         this[this._idxOfLastElm + 1 - this._capacity] = value;
         this._size += 1;
@@ -34,7 +34,7 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> extends Abstr
 
     // O(n)
     insertByIndex(value: T, index: number): this {
-        if(!this._isValidValue(value)) {
+        if (!this._isValidValue(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
@@ -100,9 +100,9 @@ export const StaticArray: IArrayConstructor = class StaticArray<T> extends Abstr
     }
 
     // O(n)
-    map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, IFunc: IEqualsFunction<U> = defaultEquals, thisArg?: any): IArray<U> {
+    map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IArray<U> {
         const capacity = this._capacity;
-        const newStaticArray: IArray<U> = new StaticArray<U>(capacity, IFunc);
+        const newStaticArray: IArray<U> = new StaticArray<U>(capacity, ICompareFunc);
         for (let idx = 0; idx < capacity; idx++) {
             newStaticArray[idx] = callbackfn(this[idx], idx, this);
             newStaticArray[idx - capacity] = newStaticArray[idx];

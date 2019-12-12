@@ -1,6 +1,6 @@
 
 import { IList } from "@Interface/common/IList";
-import { IEqualsFunction } from "@Utils/comparison";
+import { ICompareFunc } from "@Utils/comparison";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 export interface IArray<T> extends IList<T> {
@@ -13,15 +13,16 @@ export interface IArray<T> extends IList<T> {
      * *index signature*
      */
     [n: number]: T;
-
-    /**
-     * *Sort curent Array Increaingly or Decreasingly*
-     */
-    sort(sortMethod?: SortMethods): this;
+    
 }
 
-
 export interface IArrayConstructor {
-    new <T>(capacity: number, equalsFunctions?: IEqualsFunction<T>, incrementals?: number): IArray<T>;
+
+    /**
+     * @param capacity: initial capacity of the Array
+     * @param compare: comparison function
+     * @param incrementals: increment of capacity when the dynamic array is full of valid elements
+     */
+    new <T>(capacity: number, compare?: ICompareFunc<T>, incrementals?: number): IArray<T>;
 }
 

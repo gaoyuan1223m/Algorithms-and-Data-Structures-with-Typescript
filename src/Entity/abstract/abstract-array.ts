@@ -3,14 +3,13 @@ import { Console } from "@Utils/high-light";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
-import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
 import { Errors } from "@Utils/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 import { QuickSort } from "@Algorithm/sort/quick-sort";
 
 export abstract class AbstractArray<T> implements IArray<T> {
-
 
     [n: number]: T;
 
@@ -29,8 +28,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     protected constructor(
         capacity: number,
-        protected equalsFunc: IEqualsFunction<T> = defaultEquals,
-        incrementals: number = 0,
+        protected compare: ICompareFunc<T>,
+        incrementals: number,
     ) {
         this._size = 0;
         this._incrementals = incrementals
@@ -48,7 +47,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract toTree(treeType: TreeTypes): ITree<T>;
 
-    abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, IFunc?: IEqualsFunction<U>, thisArg?: any): IList<U>
+    abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IList<U>
 
     removeByIndex(index: number): T {
         const idx = this._getValidIndex(index);
@@ -98,7 +97,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
         if (!this._isValidValue(value)) return -1;
 
         for (let i = 0; i < this._capacity; i++) {
-            if (this.equalsFunc(this[i], value)) {
+            if (this.compare(this[i]).isEqualTo(value)) {
                 return i
             }
         }
@@ -156,7 +155,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     clear(): this {
-        for (let i = 0; i < this._idxOfLastElm; i++) {
+        for (let i = 0; i <= this._idxOfLastElm; i++) {
             this[i] = undefined;
         }
         this._size = 0;
