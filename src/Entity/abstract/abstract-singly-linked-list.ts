@@ -11,10 +11,10 @@ import { Console } from "@Utils/high-light";
 export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     abstract reverse(): this;
-    
+
     abstract toArray(arrayType?: ArrayTypes): IArray<T>;
     abstract toList(listType?: ListTypes): ILinkedList<T>;
-    abstract toTree(treeType?: TreeTypes): ITree<T>;    
+    abstract toTree(treeType?: TreeTypes): ITree<T>;
 
     protected _headSentry: SinglyListNode<T>; // Head Sentry Node 头哨兵节点
     protected _tailSentry: SinglyListNode<T>; // Tail Sentry Node 尾哨兵节点
@@ -74,16 +74,17 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
     }
 
-    removeHeadNode(): this {
+    removeHeadNode(): T {
         return this._removeHeadNode();
     }
 
-    removeTaiNode(): this {
+    removeTaiNode(): T {
         return this._removeTailNode();
     }
 
-    removeByIndex(index: number): this {
+    removeByIndex(index: number): T {
         const idx = this._getInvalidIndex(index);
+
         return this._removeByValidIndex(idx);
     }
 
@@ -109,8 +110,6 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._indexOf(value);
     }
 
-
-
     contains(value: T): boolean {
         return this.indexOf(value) !== NOT_EXISTED;
     }
@@ -120,7 +119,9 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
         if (idx === NOT_EXISTED) return this;
 
-        return this.removeByIndex(idx);
+        this.removeByIndex(idx);
+
+        return this;
     }
 
     isEmpty(): boolean {
@@ -210,24 +211,38 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    protected _removeHeadNode(): this {
-        if (this._size === 0) return this;
+    protected _removeHeadNode(): T {
+        if (this._size === 0) return null;
 
-        if (this._size === 1) return this._clearCurrentList();
+        if (this._size === 1) {
+            const value = this._headPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
+
+        const value = this._headPointer.value;
 
         this._headSentry.next = this._headSentry.next.next;
         this._headPointer.next = null;
         this._headPointer = this._headSentry.next;
         this._size -= 1;
-        return this;
+
+        return value;
     }
 
-    protected _removeTailNode(): this {
-        if (this._size === 0) return this;
-        if (this._size === 1) return this._clearCurrentList();
+    protected _removeTailNode(): T {
+        if (this._size === 0) return null;
+
+        if (this._size === 1) {
+            const value = this._tailPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
 
         const preNode = this._getNodeByValidIndex(this._size - 2);
         const delNode = this._tailPointer;
+
+        const value = delNode.value;
 
         preNode.next = preNode.next.next;
         delNode.next = null;
@@ -239,11 +254,15 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
         this._tailPointer = pointer;
         this._size -= 1;
-        return this;
+        return value;
     }
 
-    protected _removeByValidIndex(validIndex: number): this {
-        if (this._size === 1) return this._clearCurrentList();
+    protected _removeByValidIndex(validIndex: number): T {
+        if (this._size === 1) {
+            const value = this._headPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
 
         if (validIndex === 0) return this._removeHeadNode();
 
@@ -252,11 +271,14 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         const preNode = this._getNodeByValidIndex(validIndex - 1);
         const delNode = preNode.next;
 
+        const value = delNode.value;
+
         preNode.next = preNode.next.next;
         delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
 
         this._size -= 1;
-        return this;
+
+        return value;
     }
 
     protected _updateByValidIndex(value: T, validIndex: number): this {
@@ -312,12 +334,13 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _clearCurrentList(): this {
+        if (this._size === 0) return this;
+
         this._headSentry.next = this._tailSentry;
-        if (this._size !== 0) {
-            this._tailPointer.next = null;
-        }
+        this._tailPointer.next = null;
         this._headPointer = this._headSentry;
         this._tailPointer = this._headSentry;
+
         this._size = 0;
         return this;
     }

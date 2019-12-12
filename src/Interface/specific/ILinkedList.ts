@@ -27,11 +27,11 @@ export interface ILinkedList<T> extends IList<T> {
     /**
      * *Remove a HeadNode from the current Linked List*
      */
-    removeHeadNode(): this;
+    removeHeadNode(): T;
 
     /**
      * *Remove a TailNode from the current Linked List*
      */
-    removeTaiNode(): this;
+    removeTaiNode(): T;
 
 }

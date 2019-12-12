@@ -20,7 +20,7 @@ export interface IList<T> extends ICollection<T>, ITraversable<T> {
      * *Remove a element by its index from the List*
      * @param index: index of the element that has to be removed from the List 
      */
-    removeByIndex(index: number): this;
+    removeByIndex(index: number): T;
 
     /**
      * *Update value of the Object by its index on the List*

@@ -33,7 +33,7 @@ describe(`Test for Static Array`, () => {
     });
 
     it(`#remove value by positive index`, () => {
-        staticArray.removeByIndex(2);
+        expect(staticArray.removeByIndex(2)).toBe(undefined);
         expect(staticArray[2]).toBe(16);
     });
 
@@ -104,7 +104,7 @@ describe(`Test for Static Array`, () => {
     it(`print the array`, () => {
         staticArray.print();
     })
-    
+
     it(`clear the array`, () => {
         staticArray.clear();
         expect(staticArray.isEmpty()).toBeTruthy();

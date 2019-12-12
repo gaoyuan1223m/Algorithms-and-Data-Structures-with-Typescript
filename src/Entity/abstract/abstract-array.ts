@@ -50,8 +50,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, IFunc?: IEqualsFunction<U>, thisArg?: any): IList<U>
 
-    removeByIndex(index: number): this {
+    removeByIndex(index: number): T {
         const idx = this._getValidIndex(index);
+
+        const value = this[idx];
 
         const isValidValue = this._isValidValue(this[idx]);
 
@@ -74,7 +76,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             this._size -= 1
         };
 
-        return this;
+        return value;
     }
 
     updateByIndex(value: T, index: number): this {
@@ -131,9 +133,12 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     remove(value: T): this {
         const idx = this.indexOf(value);
+
         if (idx === -1) return this;
 
-        return this.removeByIndex(idx);
+        this.removeByIndex(idx);
+
+        return this;
     }
 
     isEmpty(): boolean {
