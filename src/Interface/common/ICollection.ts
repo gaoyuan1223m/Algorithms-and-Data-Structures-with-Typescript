@@ -1,6 +1,7 @@
 import { ITransformable } from "./ITransformable";
 import { ITraversable } from "./ITraversable";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
+
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
  * *Element can be appended on or removed from the ICollection.*

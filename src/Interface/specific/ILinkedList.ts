@@ -1,4 +1,5 @@
 import { IList } from "@Interface/common/IList";
+import { ICompareFunc } from "@Utils/comparison";
 
 export interface ILinkedList<T> extends IList<T> {
 
@@ -34,4 +35,8 @@ export interface ILinkedList<T> extends IList<T> {
      */
     removeTaiNode(): T;
 
+}
+
+export interface ILinkedListConstructor {
+    new <T>(compare?: ICompareFunc<T>): ILinkedList<T>
 }

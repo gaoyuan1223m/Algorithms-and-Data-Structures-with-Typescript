@@ -3,7 +3,7 @@ import { Console } from "@Utils/high-light";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
+import { ICompareFunc } from "@Utils/comparison";
 import { Errors } from "@Utils/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";

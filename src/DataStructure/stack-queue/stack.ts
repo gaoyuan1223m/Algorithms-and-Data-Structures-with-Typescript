@@ -1,10 +1,11 @@
 import { IStack, IStackConstructor } from "@Interface/specific/IStack";
 import { DataStructures, ArrayTypes } from "@Utils/data-types";
-import { IArray } from "@Interface/specific/IArray";
+import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
 import { StaticArray } from "@DataStructure/array/static-array";
 import { DynamicArray } from "@DataStructure/array/dynamic-array";
 import { Errors } from "@Utils/errors";
-import { ICollection } from "@Interface/common/ICollection";
+import { ILinkedListConstructor } from "@Interface/specific/ILinkedList";
+import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
 
 export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
 
@@ -23,6 +24,7 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
     constructor(capacity: number = 10, private type: DataStructures = ArrayTypes.Static) {
         this._buildStack(capacity, type);
     }
+   
 
     push(value: T): this {
         return this._pushValueToStack(value);
@@ -85,7 +87,7 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
     }
 }
 
-export const StatcksFactory: IFactoryConstructor = class StacksFactory{
+export const StatcksFactory: IFactoryConstructor = class StacksFactory {
 
     static create<T>(): IStack<T> {
         throw new Error("Method not implemented.");

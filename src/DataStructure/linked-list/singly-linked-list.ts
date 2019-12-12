@@ -1,11 +1,11 @@
-import { ILinkedList } from "@Interface/specific/ILinkedList";
+import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
 import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
 import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
 import { AbstractSinglyLinkedList } from "@Entity/abstract/abstract-singly-linked-list";
 
-export class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+export const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     /**
      *                                               HeadNode Pointer    
@@ -42,7 +42,7 @@ export class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
 }
 
-export class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+export const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     /**
      *                                               HeadNode Pointer    

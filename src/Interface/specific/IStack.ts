@@ -1,4 +1,7 @@
 import { DataStructures } from "@Utils/data-types";
+import { IArrayConstructor } from "./IArray";
+import { ILinkedListConstructor } from "./ILinkedList";
+import { ICompareFunc } from "@Utils/comparison";
 
 export interface IStack<T> {
 
@@ -36,5 +39,9 @@ export interface IStack<T> {
 }
 
 export interface IStackConstructor {
-    new <T>(capacity?: number, type?: DataStructures): IStack<T>;
+
+    new <T>(ctor: IArrayConstructor, capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>;
+
+    new <T>(ctor: ILinkedListConstructor, ICompareFn?: ICompareFunc<T>): IStack<T>;
+
 }

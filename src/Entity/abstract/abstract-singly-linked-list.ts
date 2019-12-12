@@ -1,14 +1,16 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { IEqualsFunction, NOT_EXISTED } from "@Utils/comparison";
+import { NOT_EXISTED, ICompareFunc } from "@Utils/comparison";
 import { SinglyListNode } from "@Entity/concrete/list-node";
 import { Errors } from "@Utils/errors";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
 import { Console } from "@Utils/high-light";
+import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 
 export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
+    
 
     abstract reverse(): this;
 
@@ -23,7 +25,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     protected _size: number;
 
     constructor(
-        protected isEqualsFn: IEqualsFunction<T>
+        protected compare: ICompareFunc<T>
     ) {
         this._headSentry = new SinglyListNode<T>();
         this._tailSentry = new SinglyListNode<T>();
@@ -128,6 +130,10 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
+    sort(method?: SortMethods): this {
+        throw new Error("Method not implemented.");
+    }
+
     print(): this {
         let pointer = this._headPointer;
         let idx = 0;
@@ -156,7 +162,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         }
     }
 
-    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, IFunc?: IEqualsFunction<U>, thisArg?: any): ILinkedList<U> {
+    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): ILinkedList<U> {
         throw new Error("Method not implemented.");
     }
 
@@ -308,7 +314,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         let p = this._headPointer;
         while (p && i < this._size) {
             i += 1;
-            if (this.isEqualsFn(p.value, validValue)) return i;
+            if (this.compare(p.value).isEqualTo(validValue)) return i;
             p = p.next;
         }
         return -1;
