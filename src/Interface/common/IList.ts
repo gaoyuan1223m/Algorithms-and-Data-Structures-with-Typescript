@@ -1,12 +1,11 @@
 import { ICollection } from "@Interface/common/ICollection";
-import { ITraversable } from "./ITraversable";
 
 /**
  * *IList provides clients with CRUD methods.*
  * *Element on the IList has a unique Index Signature by which clients can query the element.*
  * *Generally, Array, LinkedList can implement IList Interface* 
  */
-export interface IList<T> extends ICollection<T>, ITraversable<T> {
+export interface IList<T> extends ICollection<T> {
 
     readonly size: number;
     /**

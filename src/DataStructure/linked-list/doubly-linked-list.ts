@@ -3,8 +3,13 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
 import { IList } from "@Interface/common/IList";
+import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 export class DoublyLinkedList<T> implements ILinkedList<T> {
+    
+    sort(method?: SortMethods): this {
+        throw new Error("Method not implemented.");
+    }
 
     private _headPointer: ListNode<T>;
     private _tailPointer: ListNode<T>;
@@ -32,16 +37,16 @@ export class DoublyLinkedList<T> implements ILinkedList<T> {
     addTailNode(value: T): this {
         throw new Error("Method not implemented.");
     }
-    removeHeadNode(): this {
+    removeHeadNode(): T {
         throw new Error("Method not implemented.");
     }
-    removeTaiNode(): this {
+    removeTaiNode(): T {
         throw new Error("Method not implemented.");
     }
     insertByIndex(value: T, index: number): this {
         throw new Error("Method not implemented.");
     }
-    removeByIndex(index: number): this {
+    removeByIndex(index: number): T {
         throw new Error("Method not implemented.");
     }
     updateByIndex(value: T, index: number): this {

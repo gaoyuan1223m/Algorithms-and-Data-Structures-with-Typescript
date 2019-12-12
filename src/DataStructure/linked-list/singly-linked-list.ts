@@ -1,7 +1,7 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
-import { IEqualsFunction, defaultEquals } from "@Utils/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
 import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
 import { AbstractSinglyLinkedList } from "@Entity/abstract/abstract-singly-linked-list";
 
@@ -22,9 +22,9 @@ export class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
      */
 
     constructor(
-        protected isEqualsFn: IEqualsFunction<T> = defaultEquals
+        protected compare: ICompareFunc<T> = valueTypeComparison
     ) {
-        super(isEqualsFn)
+        super(compare)
     }
 
     toArray(arrayType?: ArrayTypes): IArray<T> {
@@ -60,9 +60,9 @@ export class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
      *
      */
     constructor(
-        protected isEqualsFn: IEqualsFunction<T> = defaultEquals
+        protected compare: ICompareFunc<T> = valueTypeComparison
     ) {
-        super(isEqualsFn)
+        super(compare)
         this._tailSentry.next = this._headSentry;
     }
 

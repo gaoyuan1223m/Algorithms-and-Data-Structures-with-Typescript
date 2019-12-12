@@ -1,4 +1,5 @@
 import { ITransformable } from "./ITransformable";
+import { ITraversable } from "./ITraversable";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
@@ -6,7 +7,7 @@ import { SortMethods } from "@Algorithm/sort/sort-methods";
  * *ICollection also provides 'contains(value: T)'*
  * *Generally, IList can extends ICollection interface*
  */
-export interface ICollection<T> extends ITransformable<T> {
+export interface ICollection<T> extends ITransformable<T>, ITraversable<T> {
 
     /**
      * @param size: the number of elements on the Collection

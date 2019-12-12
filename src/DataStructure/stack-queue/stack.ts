@@ -4,6 +4,7 @@ import { IArray } from "@Interface/specific/IArray";
 import { StaticArray } from "@DataStructure/array/static-array";
 import { DynamicArray } from "@DataStructure/array/dynamic-array";
 import { Errors } from "@Utils/errors";
+import { ICollection } from "@Interface/common/ICollection";
 
 export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
 
@@ -19,8 +20,8 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
         return this._size;
     };
 
-    constructor(capacity: number = 10, protected type: DataStructures = ArrayTypes.Static) {
-        this._buildStack(type, capacity);
+    constructor(capacity: number = 10, private type: DataStructures = ArrayTypes.Static) {
+        this._buildStack(capacity, type);
     }
 
     push(value: T): this {
@@ -40,7 +41,7 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
     }
 
 
-    protected _buildStack(type: DataStructures, capacity: number) {
+    protected _buildStack(capacity: number, type: DataStructures) {
         this._size = 0;
         switch (type) {
             case ArrayTypes.Static:
@@ -57,7 +58,7 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
         }
     }
 
-        private _pushValueToStack(value: T): this {
+    private _pushValueToStack(value: T): this {
         this._staticArray.append(value);
         this._size += 1;
         return this;
@@ -84,3 +85,14 @@ export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
     }
 }
 
+export const StatcksFactory: IFactoryConstructor = class StacksFactory{
+
+    static create<T>(): IStack<T> {
+        throw new Error("Method not implemented.");
+    }
+
+}
+
+export interface IFactoryConstructor {
+    create(): any;
+}
