@@ -1,100 +1,111 @@
-import { IStack, IStackConstructor } from "@Interface/specific/IStack";
-import { DataStructures, ArrayTypes } from "@Utils/data-types";
+import { IStack, IArrayStackConstructor, ILinkedListStackConstructor } from "@Interface/specific/IStack";
 import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
-import { StaticArray } from "@DataStructure/array/static-array";
 import { DynamicArray } from "@DataStructure/array/dynamic-array";
 import { Errors } from "@Utils/errors";
-import { ILinkedListConstructor } from "@Interface/specific/ILinkedList";
 import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
+import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
+import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
+import { ICollectionFactory } from "@Interface/common/ICollectionFactory";
 
-export const Stack: IStackConstructor = class Stack<T> implements IStack<T> {
+export const StackFactory: AbstactStackFactory = class StackFactory {
 
-    protected _size: number;
-    protected _staticArray: IArray<T>;
-    protected _dynamicArray: IArray<T>;
+    static create<T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T> {
+        if (!capacity) return new LinkedListStack(SimpleSinglyLinkedList, ICompareFn);
+
+        return new ArrayStack(DynamicArray, capacity, ICompareFn, incrementals);
+    }
+
+}
+
+abstract class AbstactStackFactory implements ICollectionFactory {
+    abstract create<T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>
+}
+
+const ArrayStack: IArrayStackConstructor = class Stack<T> implements IStack<T> {
+
+    private _array: IArray<T>
 
     get peek(): T {
-        return this._staticArray[this._size - 1];
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        return this._array[this._array.size - 1];
     }
 
     get size(): number {
-        return this._size;
+        return this._array.size;
     };
 
-    constructor(capacity: number = 10, private type: DataStructures = ArrayTypes.Static) {
-        this._buildStack(capacity, type);
+    constructor(ctor: IArrayConstructor, capacity: number, ICompareFn: ICompareFunc<T> = valueTypeComparison, incrementals: number = 0) {
+        this._array = new ctor(capacity, ICompareFn, incrementals)
     }
-   
+
 
     push(value: T): this {
-        return this._pushValueToStack(value);
+        this._array.append(value);
+        return this;
     }
 
     pop(): T {
-        return this._popValueFromStack();
+        if (this.isEmpty()) {
+            throw new Errors.OutOfBoundary(Errors.Msg.NoElements);
+        }
+        return this._array.removeByIndex(this._array.size - 1);
     }
 
     isEmpty(): boolean {
-        return this._isCurrentStackEmpty();
+        return this._array.size === 0;
     }
 
     clear(): this {
-        return this._removeAllValuesFromStack();
-    }
-
-
-    protected _buildStack(capacity: number, type: DataStructures) {
-        this._size = 0;
-        switch (type) {
-            case ArrayTypes.Static:
-                this._staticArray = new StaticArray<T>(capacity);
-                break;
-
-            case ArrayTypes.Dynamic:
-                this._dynamicArray = new DynamicArray<T>(capacity);
-                break;
-
-            default:
-                this._staticArray = new StaticArray<T>(capacity);
-                break;
-        }
-    }
-
-    private _pushValueToStack(value: T): this {
-        this._staticArray.append(value);
-        this._size += 1;
+        this._array.clear();
         return this;
     }
 
-    private _popValueFromStack(): T {
-        if (this._isCurrentStackEmpty()) {
+}
+
+const LinkedListStack: ILinkedListStackConstructor = class Stack<T> implements IStack<T> {
+
+    protected _linkedList: ILinkedList<T>
+
+    get peek(): T {
+        if (this.isEmpty()) {
+            return null;
+        }
+
+        return this._linkedList.head;
+    }
+
+    get size(): number {
+        return this._linkedList.size;
+    };
+
+    constructor(ctor: ILinkedListConstructor, ICompareFn: ICompareFunc<T> = valueTypeComparison) {
+        this._linkedList = new ctor(ICompareFn);
+    }
+
+
+    push(value: T): this {
+        this._linkedList.append(value);
+        return this;
+    }
+
+    pop(): T {
+        if (this.isEmpty()) {
             throw new Errors.OutOfBoundary(Errors.Msg.NoElements);
         }
-        const value = this._staticArray[this._size - 1];
-        this._staticArray.removeByIndex(this._size - 1);
-        this._size -= 1;
-        return value;
+
+        return this._linkedList.removeHeadNode();
     }
 
-    private _removeAllValuesFromStack(): this {
-        this._staticArray.clear();
-        this._size = 0;
+    isEmpty(): boolean {
+        return this._linkedList.size === 0;
+    }
+
+    clear(): this {
+        this._linkedList.clear();
         return this;
     }
-
-    private _isCurrentStackEmpty() {
-        return this._size === 0;
-    }
 }
 
-export const StatcksFactory: IFactoryConstructor = class StacksFactory {
-
-    static create<T>(): IStack<T> {
-        throw new Error("Method not implemented.");
-    }
-
-}
-
-export interface IFactoryConstructor {
-    create(): any;
-}
