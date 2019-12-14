@@ -1,4 +1,4 @@
-import { DataStructures } from "@Utils/data-types";
+import { DataStructures } from "@Utils/types/data-types";
 
 export interface IQueue<T> {
 

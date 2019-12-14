@@ -1,25 +1,18 @@
 import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
-import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/data-types";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
+import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/types/data-types";
 import { AbstractSinglyLinkedList } from "@Entity/abstract/abstract-singly-linked-list";
+import { ICollectionFactory } from "@Interface/common";
+
+// abstract class AbstractLinkedListFactory implements ICollectionFactory {
+//     abstract create<T>(ICompareFn?: ICompareFunc<T>, capacity?: number): ILinkedList<T>;
+
+// }
 
 export const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
-    /**
-     *                                               HeadNode Pointer    
-     *                                                      |
-     *                                                      |
-     *                                                      V
-     *                                          index:      0           1                  n-2          n-1
-     * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
-     *                                          index:     -n         -n+1                 -2           -1          
-     *                                                                                                   ^                                                                                       
-     *                                                                                                   |
-     *                                                                                                   |
-     *                                                                                            TailNode Pointer 
-     */
 
     constructor(
         protected compare: ICompareFunc<T> = valueTypeComparison
@@ -40,6 +33,19 @@ export const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSingly
         throw new Error("Method not implemented.");
     }
 
+    /**
+     *                                               HeadNode Pointer    
+     *                                                      |
+     *                                                      |
+     *                                                      V
+     *                                          index:      0           1                  n-2          n-1
+     * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
+     *                                          index:     -n         -n+1                 -2           -1          
+     *                                                                                                   ^                                                                                       
+     *                                                                                                   |
+     *                                                                                                   |
+     *                                                                                            TailNode Pointer 
+     */
 }
 
 export const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {

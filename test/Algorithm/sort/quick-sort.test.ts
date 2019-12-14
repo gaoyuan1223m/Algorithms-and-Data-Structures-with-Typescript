@@ -1,11 +1,11 @@
-import { IArray } from "@Interface/specific/IArray"
-import { StaticArray } from "@DataStructure/array/static-array"
-import { QuickSort } from "@Algorithm/sort/quick-sort";
+import { IArray } from "@Interface/specific/IArray";
+import { ArrayFactory } from "@DataStructure/array";
+import { valueTypeComparison } from "@Utils/compare";
 
 describe(`#Test for Quick-Sort`, () => {
 
-    const sa1: IArray<number> = new StaticArray<number>(12);
-    const sa2: IArray<number> = new StaticArray<number>(12);
+    const sa1: IArray<number> = ArrayFactory.create<number>(12, valueTypeComparison, 0);
+    const sa2: IArray<number> = ArrayFactory.create<number>(12, valueTypeComparison, 0);
 
     beforeAll(() => {
         sa1

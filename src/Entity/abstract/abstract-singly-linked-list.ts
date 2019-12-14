@@ -1,11 +1,11 @@
 import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { NOT_EXISTED, ICompareFunc } from "@Utils/comparison";
+import { NOT_EXISTED, ICompareFunc } from "@Utils/compare/comparison";
 import { SinglyListNode } from "@Entity/concrete/list-node";
-import { Errors } from "@Utils/errors";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
+import { Errors } from "@Utils/error-handling/errors";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
-import { Console } from "@Utils/high-light";
+import { Console } from "@Utils/emphasiz/high-light";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 

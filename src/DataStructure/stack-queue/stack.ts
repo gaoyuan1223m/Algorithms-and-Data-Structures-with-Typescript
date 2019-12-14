@@ -1,18 +1,18 @@
 import { IStack, IArrayStackConstructor, ILinkedListStackConstructor } from "@Interface/specific/IStack";
 import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
-import { DynamicArray } from "@DataStructure/array/dynamic-array";
-import { Errors } from "@Utils/errors";
-import { ICompareFunc, valueTypeComparison } from "@Utils/comparison";
+import { Errors } from "@Utils/error-handling/errors";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
 import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
 import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 import { ICollectionFactory } from "@Interface/common/ICollectionFactory";
+import { ArrayFactory } from "@DataStructure/array";
 
 export const StackFactory: AbstactStackFactory = class StackFactory {
 
     static create<T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T> {
         if (!capacity) return new LinkedListStack(SimpleSinglyLinkedList, ICompareFn);
 
-        return new ArrayStack(DynamicArray, capacity, ICompareFn, incrementals);
+        return new ArrayStack(capacity, ICompareFn, incrementals)
     }
 
 }
@@ -37,8 +37,8 @@ const ArrayStack: IArrayStackConstructor = class Stack<T> implements IStack<T> {
         return this._array.size;
     };
 
-    constructor(ctor: IArrayConstructor, capacity: number, ICompareFn: ICompareFunc<T> = valueTypeComparison, incrementals: number = 0) {
-        this._array = new ctor(capacity, ICompareFn, incrementals)
+    constructor(capacity: number, ICompareFn: ICompareFunc<T> = valueTypeComparison, incrementals: number = 0) {
+        this._array = ArrayFactory.create<T>(capacity, ICompareFn, incrementals)
     }
 
 

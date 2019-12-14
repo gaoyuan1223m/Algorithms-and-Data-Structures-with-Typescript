@@ -1,5 +1,5 @@
 import { IArray } from "@Interface/specific/IArray";
-import { ICompareFunction, defaultCompare, isLess, isLarger } from "@Utils/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
 
 /**
  * *Sort Array by Quick-Sort*
@@ -9,29 +9,29 @@ import { ICompareFunction, defaultCompare, isLess, isLarger } from "@Utils/compa
  * @param right Ending index of the Array, it's normally (array.length - 1)
  * @param ICompareFunc Methods that compares two element
  */
-export function QuickSort<T>(arr: IArray<T>, left: number, right: number, ICompareFunc: ICompareFunction<T> = defaultCompare): void {
+export function QuickSort<T>(arr: IArray<T>, left: number, right: number, compare: ICompareFunc<T> = valueTypeComparison): void {
 
-    if (left >= right) return;    
+    if (left >= right) return;
 
-    const idx = Partition(arr, left, right, ICompareFunc);
+    const idx = Partition(arr, left, right, compare);
 
-    QuickSort(arr, left, idx - 1, ICompareFunc);
+    QuickSort(arr, left, idx - 1, compare);
 
-    QuickSort(arr, idx, right, ICompareFunc);
+    QuickSort(arr, idx, right, compare);
 
 }
 
 
-function Partition<T>(arr: IArray<T>, left: number, right: number, ICompareFunc: ICompareFunction<T>): number {
+function Partition<T>(arr: IArray<T>, left: number, right: number, compare: ICompareFunc<T>): number {
     const pivot = arr[Math.floor((left + right) / 2)];
 
     while (left <= right) {
 
-        while (isLess(ICompareFunc(arr[left], pivot))) {
+        while (compare(arr[left]).isLessThan(pivot)) {
             left++;
         }
 
-        while (isLarger(ICompareFunc(arr[right], pivot))) {
+        while (compare(arr[right]).isLargerThan(pivot)) {
             right--;
         }
 

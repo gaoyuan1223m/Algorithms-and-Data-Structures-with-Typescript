@@ -1,6 +1,6 @@
 
 import { IList } from "@Interface/common/IList";
-import { ICompareFunc } from "@Utils/comparison";
+import { ICompareFunc } from "@Utils/compare/comparison";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 export interface IArray<T> extends IList<T> {

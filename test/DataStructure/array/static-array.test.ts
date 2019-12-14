@@ -1,10 +1,12 @@
-import { StaticArray } from "@DataStructure/array/static-array";
-import { IArray } from "@Interface/specific/IArray";
+import { ArrayFactory } from "@DataStructure/array";
+import { IArray } from "@Interface/specific";
+import { valueTypeComparison } from "@Utils/compare";
+
 
 describe(`Test for Static Array`, () => {
 
     const capacity: number = 7;
-    const staticArray: IArray<number> = new StaticArray<number>(capacity)
+    const staticArray: IArray<number> = ArrayFactory.createStaticArray<number>(capacity, valueTypeComparison);
 
     beforeAll(() => {
         staticArray

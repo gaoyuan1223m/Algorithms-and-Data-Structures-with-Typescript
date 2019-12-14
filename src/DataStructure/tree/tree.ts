@@ -1,4 +1,4 @@
-import { ICompareFunction, defaultCompare, ComparisonResult } from "@Utils/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 
 /**
  * @BinarySearchTree
@@ -28,7 +28,7 @@ export class BinarySearchTree<T> {
     }
 
     constructor(
-        private compartFn: ICompareFunction<T> = defaultCompare
+        private compare: ICompareFunc<T> = valueTypeComparison
     ) { }
 
     insert(node: T): this {

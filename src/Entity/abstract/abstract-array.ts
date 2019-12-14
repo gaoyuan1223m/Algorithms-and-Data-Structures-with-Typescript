@@ -1,10 +1,10 @@
 import { IArray } from "@Interface/specific/IArray";
-import { Console } from "@Utils/high-light";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/data-types";
+import { Console } from "@Utils/emphasiz/high-light";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc } from "@Utils/comparison";
-import { Errors } from "@Utils/errors";
+import { ICompareFunc } from "@Utils/compare/comparison";
+import { Errors } from "@Utils/error-handling/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 import { QuickSort } from "@Algorithm/sort/quick-sort";
@@ -145,11 +145,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     print(): this {
-        let str = "["
+        let str = "[ "
         for (let i = 0; i < this._capacity; i++) {
-            str += ` ${this[i]} `;
+            str += `${this[i]}`;
+            if((i + 1) === this._capacity) continue;
+            str += `, `
         }
-        str = `${str}]`;
+        str += ` ]`;
         Console.OK(str);
         return this;
     }

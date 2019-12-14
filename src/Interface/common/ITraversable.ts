@@ -1,5 +1,5 @@
 import { IList } from "./IList";
-import { ICompareFunc } from "@Utils/comparison";
+import { ICompareFunc } from "@Utils/compare/comparison";
 
 export interface ITraversable<T> {
     /**

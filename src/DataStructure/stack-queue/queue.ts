@@ -1,5 +1,5 @@
 import { IQueue, IQueueConstructor } from "@Interface/specific/IQueue";
-import { DataStructures, ArrayTypes } from "@Utils/data-types";
+import { DataStructures, ArrayTypes } from "@Utils/types/data-types";
 
 export const Queue: IQueueConstructor = class Queue<T> implements IQueue<T> {
     

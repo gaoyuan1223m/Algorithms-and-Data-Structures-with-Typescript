@@ -1,0 +1,6 @@
+export * from './IArray'
+export * from './IDeque'
+export * from './ILinkedList'
+export * from './IQueue'
+export * from './IStack'
+export * from './ITree'

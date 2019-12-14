@@ -1,7 +1,7 @@
 import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { IError } from "@Interface/common/IError";
-import { Errors } from "@Utils/errors";
+import { Errors } from "@Utils/error-handling/errors";
 
 describe(`Test for SinglyLinkedList`, () => {
 

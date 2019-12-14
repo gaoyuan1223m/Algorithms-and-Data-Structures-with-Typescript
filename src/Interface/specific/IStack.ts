@@ -1,6 +1,6 @@
 import { IArrayConstructor } from "@Interface/specific/IArray";
 import { ILinkedListConstructor } from "@Interface/specific/ILinkedList";
-import { ICompareFunc } from "@Utils/comparison";
+import { ICompareFunc } from "@Utils/compare/comparison";
 
 export interface IStack<T> {
 
@@ -38,7 +38,7 @@ export interface IStack<T> {
 }
 
 export interface IArrayStackConstructor {
-    new <T>(ctor: IArrayConstructor, capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>;
+    new <T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>;
 }
 
 export interface ILinkedListStackConstructor {

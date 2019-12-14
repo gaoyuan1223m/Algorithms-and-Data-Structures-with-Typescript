@@ -1,6 +1,6 @@
 import { IComparable } from "@Interface/common/IComparable";
 import { IObject } from "@Interface/common/IObject";
-import { ComparisonResult } from "@Utils/comparison";
+import { ComparisonResult } from "@Utils/compare/comparison";
 
 export class Avenger implements IComparable<Avenger>, IObject {
 

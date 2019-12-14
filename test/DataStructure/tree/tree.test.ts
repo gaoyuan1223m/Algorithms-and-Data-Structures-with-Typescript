@@ -1,5 +1,5 @@
 import { BinarySearchTree } from "@DataStructure/tree/tree";
-import { Console } from "@Utils/high-light";
+import { Console } from "@Utils/emphasiz/high-light";
 
 
 const BST = new BinarySearchTree<Number>();
