@@ -1,4 +1,4 @@
-import { ICollectionFactory, IArrayFactory } from "@Interface/common";
+import { IArrayFactory } from "@Interface/common";
 import { IArray, IArrayConstructor, ILinkedList, ITree } from "@Interface/specific";
 import { AbstractArray } from "@Entity/abstract";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
