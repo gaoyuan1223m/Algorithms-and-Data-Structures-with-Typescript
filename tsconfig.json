@@ -40,7 +40,8 @@
     ],
     "esModuleInterop": true,
     "inlineSources": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",
