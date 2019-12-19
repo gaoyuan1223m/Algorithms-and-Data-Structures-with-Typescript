@@ -6,7 +6,7 @@ import { valueTypeComparison } from "@Utils/compare";
 describe(`Test for Static Array`, () => {
 
     const capacity: number = 7;
-    const staticArray: IArray<number> = ArrayFactory.createStaticArray<number>(capacity, valueTypeComparison);
+    const staticArray: IArray<number> = ArrayFactory.createStaticArray<number>(capacity);
 
     beforeAll(() => {
         staticArray

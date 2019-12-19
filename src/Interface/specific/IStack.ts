@@ -38,9 +38,9 @@ export interface IStack<T> {
 }
 
 export interface IArrayStackConstructor {
-    new <T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>;
+    new <T>(capacity?: number, incrementals?: number): IStack<T>;
 }
 
 export interface ILinkedListStackConstructor {
-    new <T>(ctor: ILinkedListConstructor, ICompareFn?: ICompareFunc<T>): IStack<T>;
+    new <T>(ctor: ILinkedListConstructor): IStack<T>;
 }

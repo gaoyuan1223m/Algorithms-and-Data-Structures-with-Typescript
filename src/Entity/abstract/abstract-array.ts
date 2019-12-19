@@ -3,7 +3,7 @@ import { Console } from "@Utils/emphasiz/high-light";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc } from "@Utils/compare/comparison";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
 import { Errors } from "@Utils/error-handling/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
@@ -26,11 +26,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this._size
     };
 
-    protected constructor(
-        capacity: number,
-        protected compare: ICompareFunc<T>,
-        incrementals: number,
-    ) {
+    protected constructor(capacity: number, incrementals: number, ) {
         this._size = 0;
         this._incrementals = incrementals
         this._idxOfLastElm = -1;
@@ -89,15 +85,15 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this[this._getValidIndex(index)]
     }
 
-    sort(sortMethod: SortMethods = SortMethods.Quick): this {
-        return this._quickSort();
+    sort(compare: ICompareFunc<T> = valueTypeComparison, sortMethod: SortMethods = SortMethods.Quick): this {
+        return this._quickSort(compare);
     }
 
-    indexOf(value: T): number {
+    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
         if (!this._isValidValue(value)) return -1;
 
         for (let i = 0; i < this._capacity; i++) {
-            if (this.compare(this[i]).isEqualTo(value)) {
+            if (compare(this[i]).isEqualTo(value)) {
                 return i
             }
         }
@@ -126,12 +122,12 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this;
     }
 
-    contains(value: T): boolean {
-        return this.indexOf(value) !== -1;
+    contains(value: T, compare?: ICompareFunc<T>): boolean {
+        return this.indexOf(value, compare) !== -1;
     }
 
-    remove(value: T): this {
-        const idx = this.indexOf(value);
+    remove(value: T, compare?: ICompareFunc<T>): this {
+        const idx = this.indexOf(value, compare);
 
         if (idx === -1) return this;
 
@@ -148,7 +144,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
         let str = "[ "
         for (let i = 0; i < this._capacity; i++) {
             str += `${this[i]}`;
-            if((i + 1) === this._capacity) continue;
+            if ((i + 1) === this._capacity) continue;
             str += `, `
         }
         str += ` ]`;
@@ -200,9 +196,9 @@ export abstract class AbstractArray<T> implements IArray<T> {
             && String(value) !== ""
     }
 
-    protected _quickSort(): this {
-        QuickSort(this, 0, this._capacity - 1);
-        QuickSort(this, 0 - this._capacity, -1);
+    protected _quickSort(compare?: ICompareFunc<T>): this {
+        QuickSort(this, 0, this._capacity - 1, compare);
+        QuickSort(this, 0 - this._capacity, -1, compare);
         return this;
     }
 

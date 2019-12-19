@@ -38,5 +38,5 @@ export interface ILinkedList<T> extends IList<T> {
 }
 
 export interface ILinkedListConstructor {
-    new <T>(compare?: ICompareFunc<T>): ILinkedList<T>
+    new <T>(): ILinkedList<T>
 }

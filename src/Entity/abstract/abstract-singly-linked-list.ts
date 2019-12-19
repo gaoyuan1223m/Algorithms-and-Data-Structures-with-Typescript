@@ -130,7 +130,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    sort(method?: SortMethods): this {
+    sort(): this {
         throw new Error("Method not implemented.");
     }
 

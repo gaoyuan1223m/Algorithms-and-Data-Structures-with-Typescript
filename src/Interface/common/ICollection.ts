@@ -1,6 +1,7 @@
 import { ITransformable } from "./ITransformable";
 import { ITraversable } from "./ITraversable";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
+import { ICompareFunc } from "@Utils/compare";
 
 /**
  * *ICollection always refers to a group of element with identical properties and attributes.*
@@ -25,19 +26,19 @@ export interface ICollection<T> extends ITransformable<T>, ITraversable<T> {
      * *Return whether the current Collection contains the element*
      * @param value: value of the a single element
      */
-    contains(value: T): boolean;
+    contains(value: T, compare?: ICompareFunc<T>): boolean;
 
     /**
      * *Remove the element from the current Collection*,
      * *if the collection doesn't contain the element, no error will be thrown*
      * @param value: value of the a single element
      */
-    remove(value: T): this;
+    remove(value: T, compare?: ICompareFunc<T>): this;
 
     /**
      * *Sort curent Array Increaingly or Decreasingly*
      */
-    sort(method?: SortMethods): this;
+    sort(compare?: ICompareFunc<T>, method?: SortMethods): this;
 
     /**
      * *Return whether the currect Collection is empty or not*

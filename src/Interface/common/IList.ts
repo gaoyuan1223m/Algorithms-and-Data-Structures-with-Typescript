@@ -1,4 +1,5 @@
 import { ICollection } from "@Interface/common/ICollection";
+import { ICompareFunc } from "@Utils/compare";
 
 /**
  * *IList provides clients with CRUD methods.*
@@ -38,7 +39,7 @@ export interface IList<T> extends ICollection<T> {
      * *Look up the index of the element, if it's not there, return -1*
      * @param value: value of the element that has to be searched on the List 
      */
-    indexOf(value: T): number;
+    indexOf(value: T, compare?: ICompareFunc<T>): number;
 
     /**
      * *Reverse the whole list*

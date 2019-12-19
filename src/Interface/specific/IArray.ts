@@ -23,6 +23,6 @@ export interface IArrayConstructor {
      * @param compare: comparison function
      * @param incrementals: increment of capacity when the dynamic array is full of valid elements
      */
-    new <T>(capacity: number, compare?: ICompareFunc<T>, incrementals?: number): IArray<T>;
+    new <T>(capacity: number, incrementals?: number): IArray<T>;
 }
 
