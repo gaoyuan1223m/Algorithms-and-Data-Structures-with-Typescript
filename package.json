@@ -1,7 +1,7 @@
 {
   "name": "ts_for_algorithms_and_data_structure",
   "version": "1.0.0",
-  "description": "Typescripts for Algorithms and Data Structure",
+  "description": "Typescripts for Algorithms and Data Structures",
   "scripts": {
     "test": "jest",
     "commit": "git-cz"
