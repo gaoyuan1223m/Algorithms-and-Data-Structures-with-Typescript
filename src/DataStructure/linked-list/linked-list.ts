@@ -1,29 +1,40 @@
-import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
-import { IArray } from "@Interface/specific/IArray";
-import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
-import { TreeTypes, ListTypes, ArrayTypes } from "@Utils/types/data-types";
-import { AbstractSinglyLinkedList } from "@Entity/abstract/abstract-singly-linked-list";
-import { ICollectionFactory } from "@Interface/common";
+import { ILinkedListConstructor, IArray, ILinkedList, ITree } from "@Interface/specific";
+import { AbstractDoublyLinkedList, AbstractSinglyLinkedList } from "@Entity/abstract";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 
-// abstract class AbstractLinkedListFactory implements ICollectionFactory {
-//     abstract create<T>(ICompareFn?: ICompareFunc<T>, capacity?: number): ILinkedList<T>;
 
-// }
+export class LinkedListFactory {
 
-export const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+    static create<T>(type?: ListTypes): ILinkedList<T> {
+        switch (type) {
+            case ListTypes.Singly: 
+                return new SimpleSinglyLinkedList();
+            
+            case ListTypes.Circular:
+                return new CircularSinglyLinkedList();
+                
+            default: 
+                return new SimpleDoublyLinkedList()
+        }
+    }
+}
+
+const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");
     }
+
     toTree(treeType?: TreeTypes): ITree<T> {
         throw new Error("Method not implemented.");
     }
+
     reverse(): this {
         throw new Error("Method not implemented.");
     }
+
     toList(listType?: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
+       return this;
     }
 
     /**
@@ -41,7 +52,24 @@ export const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSingly
      */
 }
 
-export const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+const SimpleDoublyLinkedList: ILinkedListConstructor = class DoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
+    
+    
+    toArray(arrayType?: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }    
+    
+    toList(listType?: ListTypes): ILinkedList<T> {
+        return this;
+    }
+
+    toTree(treeType?: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
+}
+
+const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     /**
      *                                               HeadNode Pointer    
@@ -81,26 +109,3 @@ export const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSi
 
 }
 
-
-// function createSinglyListNode<T>(ctor: ISinglyListNodeConstructor<T>, value: T = null, next: ISinglyListNode<T> = null) {
-//     return new ctor(value, next);
-// }
-
-
-// interface ISinglyListNode<T> {
-//     value: T;
-//     next: ISinglyListNode<T>;
-// }
-
-// interface ISinglyListNodeConstructor<T> {
-//     new(value: T, next: ISinglyListNode<T>): ISinglyListNode<T>
-// }
-
-// No Sentry Linked List
-// if (this._headSentry) {
-//     this._tailSentry.next = newNode;
-//     this._tailSentry = newNode
-// } else {
-//     this._headSentry = newNode;
-//     this._tailSentry = this._headSentry;
-// }

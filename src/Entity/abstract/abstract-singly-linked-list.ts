@@ -1,16 +1,16 @@
-import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { NOT_EXISTED, ICompareFunc } from "@Utils/compare/comparison";
-import { SinglyListNode } from "@Entity/concrete/list-node";
-import { Errors } from "@Utils/error-handling/errors";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
-import { IArray } from "@Interface/specific/IArray";
-import { ITree } from "@Interface/specific/ITree";
-import { Console } from "@Utils/emphasize/high-light";
-import { SortMethods } from "@Algorithm/sort/sort-methods";
+import { ILinkedList } from "@Interface/specific";
+import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { SinglyListNode } from "@Entity/concrete";
+import { Errors } from "@Utils/error-handling";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { IArray } from "@Interface/specific";
+import { ITree } from "@Interface/specific";
+import { Console } from "@Utils/emphasize";
+import { SortMethods } from "@Algorithm/sort";
 
 
 export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
-    
+
 
     abstract reverse(): this;
 
@@ -24,9 +24,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     protected _tailPointer: SinglyListNode<T>; // Tail Node Pointer 尾元素指针
     protected _size: number;
 
-    constructor(
-        protected compare: ICompareFunc<T>
-    ) {
+    constructor() {
         this._headSentry = new SinglyListNode<T>();
         this._tailSentry = new SinglyListNode<T>();
         this._headSentry.next = this._tailSentry;
@@ -104,12 +102,12 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return pointer.value;
     }
 
-    indexOf(value: T): number {
+    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
-        return this._indexOf(value);
+        return this._indexOf(value, compare);
     }
 
     contains(value: T): boolean {
@@ -130,7 +128,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    sort(): this {
+    sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
         throw new Error("Method not implemented.");
     }
 
@@ -309,12 +307,12 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
-    protected _indexOf(validValue: T): number {
+    protected _indexOf(validValue: T, compare: ICompareFunc<T>): number {
         let i = -1;
         let p = this._headPointer;
         while (p && i < this._size) {
             i += 1;
-            if (this.compare(p.value).isEqualTo(validValue)) return i;
+            if (compare(p.value).isEqualTo(validValue)) return i;
             p = p.next;
         }
         return -1;

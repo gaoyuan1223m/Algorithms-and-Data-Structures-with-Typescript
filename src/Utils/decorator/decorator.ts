@@ -1,10 +1,56 @@
 class Person1 {
 
+    @Emoji()
+    public greet: string;
+
+    private _salary: number;
+
+
+    @reduce()
+    get salary() {
+        return this._salary
+    }
+
     @logTime()
     @parseFn(168)
-    get(id: string, name: string, age: number = 25): string {
+    get(id: string, name: string, @typeInt() age: number): string {
         return `id: ${id}, name is: ${name} with ${age} years old`;
     }
+}
+
+function typeInt() {
+    return (target: Object, key: string, index: number) {
+
+        return ...
+    }
+}
+
+function reduce() {
+    return (target: Object, key: string, descriptor: PropertyDescriptor) => {
+
+        return descriptor
+    }
+}
+
+export function Emoji() {
+    return (target: any, key: string) => {
+        let val = target[key];
+
+        const getter = () => {
+            return val;
+        };
+
+        const setter = (value: any) => {
+            val = `😂 ${value} 😂`;
+        };
+
+        Object.defineProperty(target, key, {
+            get: getter,
+            set: setter,
+            enumerable: true,
+            configurable: true
+        });
+    };
 }
 
 export function logTime(): Function {
@@ -79,3 +125,51 @@ console.log(`msg: ${msg}`)
 // }
 //#endregion
 
+
+@ClassDecorator()
+export class ClassExample {
+
+    @FieldDecorater() private _field1: string;
+
+    @PropertyDecorator()
+    public get field1(): string {
+        return this._field1
+    }
+
+    @MethodDecorator()
+    public method1(): string {
+        return this._field1;
+    }
+
+    public method2(@ParamsDecorator("param1") param1: string): string {
+        return param1;
+    }
+
+}
+
+function Component(config: IComponentConfig) {
+    return (constructor: Function) => {
+
+        return ...
+    }
+}
+
+function memorization() {
+    return (
+        target: Object,
+        key: string,
+        descriptor: PropertyDescriptor
+    ): PropertyDescriptor => {
+
+        const originalFn = descriptor.value.bind(target);
+        const dict: any = {};
+
+        descriptor.value = function (...args: any[]) {
+            let dictKey = args.toString();
+            if (dict[dictKey]) return dict[dictKey];
+            return dict[dictKey] = originalFn(...args);
+        }
+
+        return descriptor;
+    }
+}
