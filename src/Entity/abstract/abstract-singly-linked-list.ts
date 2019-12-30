@@ -5,7 +5,7 @@ import { Errors } from "@Utils/error-handling/errors";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
 import { IArray } from "@Interface/specific/IArray";
 import { ITree } from "@Interface/specific/ITree";
-import { Console } from "@Utils/emphasiz/high-light";
+import { Console } from "@Utils/emphasize/high-light";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 
 
