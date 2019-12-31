@@ -58,7 +58,8 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     insertByIndex(value: T, index: number): this {
-        throw new Error("Method not implemented.");
+        const idx = this._getInvalidIndex(index);
+        return this._insertByValidIndex(value, idx);
     }
 
     removeByIndex(index: number): T {
@@ -212,7 +213,52 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    protected _updateByValidIndex(value: T, validIndex: number): this {        
+    protected _insertByValidIndex(value: T, validIndex: number): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+        }
+
+        const newNode = new DoublyListNode<T>(value);
+
+        if (validIndex === 0) {
+            return this._addHeadNode(newNode);
+        }
+
+        if (validIndex === this._size - 1) {
+            return this._addTailNode(newNode);
+        }
+
+        const pointer = this._getNodeByValidIndex(validIndex);
+        const prevPointer = pointer.prev;
+
+        newNode.next = pointer;
+        pointer.prev = newNode;
+
+        prevPointer.next = newNode;
+        newNode.prev = prevPointer;
+
+        this._size += 1;
+
+        return this;
+    }
+
+    protected _removeByValidIndex(validIndex: number): T {
+
+        if (validIndex === 0) {
+            return this._removeHeadNode();
+        }
+
+        if(validIndex === this._size - 1) {
+            return this._removeTailNode();
+        }
+
+        const pointer = this._getNodeByValidIndex(validIndex);
+
+        
+
+    }
+
+    protected _updateByValidIndex(value: T, validIndex: number): this {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
@@ -265,14 +311,14 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
                 pointer = pointer.next;
                 idx -= 1;
             }
-            
+
         } else {
             idx = this._size - 1;
             pointer = this._tailPointer;
 
-            while(idx !== validIndex){
+            while (idx !== validIndex) {
                 pointer = pointer.prev;
-                idx -=1;
+                idx -= 1;
             }
         }
 
