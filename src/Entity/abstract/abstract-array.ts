@@ -1,5 +1,5 @@
 import { IArray } from "@Interface/specific/IArray";
-import { Console } from "@Utils/emphasiz/high-light";
+import { Console } from "@Utils/emphasize/high-light";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
 import { ILinkedList } from "@Interface/specific/ILinkedList";
 import { ITree } from "@Interface/specific/ITree";
