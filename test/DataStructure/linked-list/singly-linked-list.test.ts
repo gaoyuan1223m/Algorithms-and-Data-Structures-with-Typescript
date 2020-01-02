@@ -1,11 +1,12 @@
-import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
-import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { IError } from "@Interface/common/IError";
-import { Errors } from "@Utils/error-handling/errors";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { ILinkedList } from "@Interface/specific";
+import { IError } from "@Interface/common";
+import { Errors } from "@Utils/error-handling";
+import { ListTypes } from "@Utils/types";
 
 describe(`Test for SinglyLinkedList`, () => {
 
-    const sll: ILinkedList<number> = new SimpleSinglyLinkedList<number>();
+    const sll: ILinkedList<number> = LinkedListFactory.create<number>(ListTypes.Singly);
 
     it(`#addHeadNode - add 0`, () => {
         sll.addHeadNode(0);

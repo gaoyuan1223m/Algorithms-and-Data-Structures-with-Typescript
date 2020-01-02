@@ -1,6 +1,5 @@
 import { ArrayFactory } from "@DataStructure/array";
 import { IArray } from "@Interface/specific";
-import { valueTypeComparison } from "@Utils/compare";
 
 
 describe(`Test for Static Array`, () => {
