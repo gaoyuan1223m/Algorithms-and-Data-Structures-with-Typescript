@@ -8,7 +8,7 @@ import { Errors } from "@Utils/error-handling/errors";
 import { IList } from "@Interface/common/IList";
 import { SortMethods } from "@Algorithm/sort/sort-methods";
 import { QuickSort } from "@Algorithm/sort/quick-sort";
-
+import { validate, validateIndex, validateValue } from "@Utils/decorator";
 export abstract class AbstractArray<T> implements IArray<T> {
 
     [n: number]: T;
@@ -74,7 +74,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return value;
     }
 
-    updateByIndex(value: T, index: number): this {
+    @validate()
+    updateByIndex(@validateValue() value: T, @validateIndex() index: number): this {
         const idx = this._getValidIndex(index);
         this[idx] = value;
         this[idx - this._capacity] = value;
@@ -169,13 +170,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _getValidIndex(index: number): number {
-        if (!index && index !== 0) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
-        }
+        // if (!index && index !== 0) {
+        //     throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
+        // }
 
-        if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
-        }
+        // if (!Number.isSafeInteger(index)) {
+        //     throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
+        // }
 
         if (index >= this._capacity || index + this._capacity < 0) {
             throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);

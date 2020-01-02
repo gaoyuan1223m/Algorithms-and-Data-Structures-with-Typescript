@@ -69,7 +69,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
-        const idx = this._getInvalidIndex(index);
+        const idx = this._getValidIndex(index);
 
         return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
     }
@@ -83,7 +83,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     removeByIndex(index: number): T {
-        const idx = this._getInvalidIndex(index);
+        const idx = this._getValidIndex(index);
 
         return this._removeByValidIndex(idx);
     }
@@ -92,12 +92,12 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
-        const idx = this._getInvalidIndex(index);
+        const idx = this._getValidIndex(index);
         return this._updateByValidIndex(value, idx);
     }
 
     getByIndex(index: number): T {
-        const idx = this._getInvalidIndex(index);
+        const idx = this._getValidIndex(index);
         const pointer = this._getNodeByValidIndex(idx);
         return pointer.value;
     }
@@ -291,7 +291,11 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    protected _getInvalidIndex(index: number): number {
+    protected _getValidIndex(index: number): number {
+        if(!index && index !== 0) {
+            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+        }
+
         if (!Number.isInteger(index)) {
             throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
         }
@@ -334,7 +338,11 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _isValid(value: T) {
-        return value !== null && (Boolean(value) || Number(value) === 0);
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== ""
     }
 
     protected _clearCurrentList(): this {

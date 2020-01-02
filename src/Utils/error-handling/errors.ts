@@ -52,8 +52,8 @@ class ELementNotExisted implements IError {
 
 enum Msg {
     NoMoreSpace = 'Current Collection is Full!',
-    InValidArg = 'Arg cannot be Null, Undefined, or NAN!',
-    InValidIdx = 'Index should be INTEGER, both POSITIVE or NEGATIVE are acceptable!',
+    InValidArg = 'Arg cannot be Null, Undefined, NAN, INFINITY or Empty String!',
+    InValidIdx = 'Index should be safe INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement queried doesn\'t exist',
     NoElements ='No elements in current collection'

@@ -17,6 +17,7 @@ function validate(target: any, propertyKey: string, descriptor: PropertyDescript
     }
 }
 
+
 class Validator {
     private static notNullValidatorMap: Map<any, Map<string, number[]>> = new Map();
 

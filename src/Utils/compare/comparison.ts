@@ -59,7 +59,3 @@ export function referenceTypeComparison<T extends IComparable<T>>(value1: T): IC
         isLessOrEqualTo: (value2: T) => isLessOrEqual(value1.compareWith(value2))
     }
 }
-
-/**Examples */
-const func: ICompareFunc<number> = valueTypeComparison
-console.log(func(4).isLargerOrEqualTo(2))
