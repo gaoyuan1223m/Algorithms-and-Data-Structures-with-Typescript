@@ -1,1 +1,2 @@
-export * from './high-light'
+export * from './console.highlight'
+export * from './string.highlight'

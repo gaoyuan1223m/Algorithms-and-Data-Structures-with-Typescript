@@ -1,14 +1,12 @@
-import { IArray } from "@Interface/specific/IArray";
-import { Console } from "@Utils/emphasize/high-light";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types/data-types";
-import { ILinkedList } from "@Interface/specific/ILinkedList";
-import { ITree } from "@Interface/specific/ITree";
-import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
-import { Errors } from "@Utils/error-handling/errors";
-import { IList } from "@Interface/common/IList";
-import { SortMethods } from "@Algorithm/sort/sort-methods";
-import { QuickSort } from "@Algorithm/sort/quick-sort";
+import { IArray, ILinkedList, ITree } from "@Interface/specific";
+import { Console } from "@Utils/emphasize";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { Errors } from "@Utils/error-handling";
+import { IList } from "@Interface/common";
+import { QuickSort, SortMethods } from "@Algorithm/sort";
 import { validate, validateIndex, validateValue } from "@Utils/decorator";
+
 export abstract class AbstractArray<T> implements IArray<T> {
 
     [n: number]: T;

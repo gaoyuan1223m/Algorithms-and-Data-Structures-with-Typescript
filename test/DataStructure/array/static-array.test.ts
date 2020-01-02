@@ -18,7 +18,7 @@ describe(`Test for Static Array`, () => {
 
     it(`#update with validator`, () => {
         staticArray.print();
-        staticArray.updateByIndex(4, 2);
+        staticArray.updateByIndex(undefined, 2.5);
         staticArray.print();
     })
     // it(`#Get size/length of the array`, () => {

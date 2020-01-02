@@ -45,15 +45,17 @@ export class Validator {
 
             if (!paramIndexes.includes(index)) continue;
 
-            if(index === 0) {
-                const msg = isValidValue(paramValue);
-                msg && errMsgArr.push(msg);
+            let msg: string = undefined;
+
+            if (index === 0) {
+                msg = isValidValue(paramValue);
             }
 
-            if(index === 1) {
-                const msg = isValidIndex(paramValue);
-                msg && errMsgArr.push(msg);
-            }            
+            if (index === 1) {
+                msg = isValidIndex(paramValue);
+            }
+
+            msg && errMsgArr.push(`${msg} (at params-index "${index}" in method "${methodName}")`);
         }
 
         return errMsgArr
@@ -62,11 +64,11 @@ export class Validator {
 }
 
 function isValidValue(value: any): string | null {
-    if(value === null ||  value === undefined || Number(value) === NaN || Number(value) === Infinity || String(value) === "") {
+    if (value === null || value === undefined || Number(value) === NaN || Number(value) === Infinity || String(value) === "") {
         return Errors.Msg.InValidArg;
     }
 
-    return null 
+    return null
 }
 
 function isValidIndex(index: number): string | null {
