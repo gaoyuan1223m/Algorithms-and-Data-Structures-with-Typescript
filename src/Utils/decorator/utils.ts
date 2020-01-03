@@ -25,20 +25,74 @@ export class Validator {
         paramIndexes.push(paramIndex);
     }
 
-    static perform(target: any, methodName: string, paramValues: any[]): string[] {
+    static performValueValidation(target: any, methodName: string, paramValues: any[]): string[] {
+        const errMsgArr: string[] = [];
+
+        const paramMap: Map<string, number[]> = this.validationMap.get(target);
+
+        if (!paramMap) {
+            return errMsgArr;
+        }
+
+        const paramIndexes: number[] = paramMap.get(methodName);
+
+        if (!paramIndexes) {
+            return errMsgArr;
+        }
+
+        for (const [index, paramValue] of paramValues.entries()) {
+
+            if (!paramIndexes.includes(index)) continue;
+
+            const msg = isValidValue(paramValue);
+
+            msg && errMsgArr.push(`${msg} (at params-index "${index}" in method "${methodName}")`);
+        }
+
+        return errMsgArr
+    }
+
+    static performIndexValidation(target: any, methodName: string, paramValues: any[]): string[] {
+        const errMsgArr: string[] = [];
+
+        const paramMap: Map<string, number[]> = this.validationMap.get(target);
+
+        if (!paramMap) {
+            return errMsgArr;
+        }
+
+        const paramIndexes: number[] = paramMap.get(methodName);
+
+        if (!paramIndexes) {
+            return errMsgArr;
+        }
+
+        for (const [index, paramValue] of paramValues.entries()) {
+
+            if (!paramIndexes.includes(index)) continue;
+
+            const msg = isValidIndex(paramValue);
+
+            msg && errMsgArr.push(`${msg} (at params-index "${index}" in method "${methodName}")`);
+        }
+
+        return errMsgArr
+    }
+
+    static performAllValidation(target: any, methodName: string, paramValues: any[]): string[] {
 
         const errMsgArr: string[] = [];
 
         const paramMap: Map<string, number[]> = this.validationMap.get(target);
 
         if (!paramMap) {
-            return null;
+            return errMsgArr;
         }
 
-        let paramIndexes: number[] = paramMap.get(methodName);
+        const paramIndexes: number[] = paramMap.get(methodName);
 
         if (!paramIndexes) {
-            return null;
+            return errMsgArr;
         }
 
         for (const [index, paramValue] of paramValues.entries()) {
@@ -82,3 +136,4 @@ function isValidIndex(index: number): string | null {
 
     return null;
 }
+

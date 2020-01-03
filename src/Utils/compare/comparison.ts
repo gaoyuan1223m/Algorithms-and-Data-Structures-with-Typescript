@@ -1,4 +1,4 @@
-import { IComparable } from "@Interface/common/IComparable";
+import { IComparable } from "@Interface/common";
 
 export const NOT_EXISTED = -1;
 

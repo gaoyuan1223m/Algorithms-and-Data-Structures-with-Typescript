@@ -1,4 +1,4 @@
-import { IError } from "@Interface/common/IError";
+import { IError } from "@Interface/common";
 
 class InvalidIndex implements IError {
 
@@ -56,7 +56,8 @@ enum Msg {
     InValidIdx = 'Index should be safe INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement queried doesn\'t exist',
-    NoElements ='No elements in current collection'
+    NoElements ='No elements in current collection',
+    NotSafeInteger = 'is NOT an INTEGER, or it is BUT UNSAFE'
 }
 
 export const Errors = {

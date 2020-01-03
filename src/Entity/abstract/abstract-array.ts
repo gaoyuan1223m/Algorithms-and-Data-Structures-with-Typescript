@@ -1,19 +1,26 @@
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
+import { IList } from "@Interface/common";
 import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
-import { IList } from "@Interface/common";
 import { QuickSort, SortMethods } from "@Algorithm/sort";
-import { validate, validateIndex, validateValue } from "@Utils/decorator";
+import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
 
 export abstract class AbstractArray<T> implements IArray<T> {
 
     [n: number]: T;
 
+    @PositiveSaftInt()
     protected _capacity: number;
+
+    @PositiveSaftInt()
     protected _incrementals: number;
+
+    @PositiveSaftInt()
     protected _size: number;
+
+    @SafeInt()
     protected _idxOfLastElm: number;
 
     get length(): number {
@@ -28,7 +35,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
         this._size = 0;
         this._incrementals = incrementals
         this._idxOfLastElm = -1;
-        this._capacity = ~~(capacity < 0 ? 0 : capacity);
+        this._capacity = capacity;
     }
 
     abstract insertByIndex(value: T, index: number): this
@@ -43,7 +50,9 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IList<U>
 
-    removeByIndex(index: number): T {
+    @Validation('index')
+    removeByIndex(@ValidateParams() index: number): T {
+
         const idx = this._getValidIndex(index);
 
         const value = this[idx];
@@ -72,15 +81,17 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return value;
     }
 
-    @validate()
-    updateByIndex(@validateValue() value: T, @validateIndex() index: number): this {
+    @Validation()
+    updateByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
+
         const idx = this._getValidIndex(index);
         this[idx] = value;
         this[idx - this._capacity] = value;
         return this;
     }
 
-    getByIndex(index: number): T {
+    @Validation('index')
+    getByIndex(@ValidateParams() index: number): T {
         return this[this._getValidIndex(index)]
     }
 
@@ -88,8 +99,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this._quickSort(compare);
     }
 
-    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
-        if (!this._isValidValue(value)) return -1;
+    @Validation('value')
+    indexOf(@ValidateParams() value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
 
         for (let i = 0; i < this._capacity; i++) {
             if (compare(this[i]).isEqualTo(value)) {
@@ -121,11 +132,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this;
     }
 
-    contains(value: T, compare?: ICompareFunc<T>): boolean {
+    @Validation('value')
+    contains(@ValidateParams() value: T, compare?: ICompareFunc<T>): boolean {
         return this.indexOf(value, compare) !== -1;
     }
 
-    remove(value: T, compare?: ICompareFunc<T>): this {
+    @Validation('value')
+    remove(@ValidateParams() value: T, compare?: ICompareFunc<T>): this {
         const idx = this.indexOf(value, compare);
 
         if (idx === -1) return this;
@@ -154,6 +167,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
     clear(): this {
         for (let i = 0; i <= this._idxOfLastElm; i++) {
             this[i] = undefined;
+            this[i - this._capacity] = undefined;
         }
         this._size = 0;
         return this;
@@ -168,20 +182,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _getValidIndex(index: number): number {
-        // if (!index && index !== 0) {
-        //     throw new Errors.InvalidIndex(Errors.Msg.InValidArg);
-        // }
-
-        // if (!Number.isSafeInteger(index)) {
-        //     throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
-        // }
 
         if (index >= this._capacity || index + this._capacity < 0) {
             throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
         }
 
         if (index < 0) {
-            index += this._capacity;
+            return index + this._capacity;
         }
 
         return index;

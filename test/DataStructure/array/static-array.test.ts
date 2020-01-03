@@ -21,6 +21,10 @@ describe(`Test for Static Array`, () => {
         staticArray.updateByIndex(undefined, 2.5);
         staticArray.print();
     })
+
+    it(`#getByIndex with validator`, () => {
+        staticArray.getByIndex(1.3);
+    })
     // it(`#Get size/length of the array`, () => {
     //     expect(staticArray.size).toBe(4);
     //     expect(staticArray.length).toBe(7);
