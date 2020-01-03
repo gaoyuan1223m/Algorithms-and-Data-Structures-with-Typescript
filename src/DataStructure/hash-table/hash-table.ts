@@ -1,29 +1,31 @@
-import { SinglyLinkedList } from "../linked-list/singly-linked-list";
+import { ILinkedList } from "@Interface/specific";
 import { HashInterface } from "./hash-table-interface";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { ListTypes } from "@Utils/types";
 
 export class Dictionary<K, V> implements HashInterface<K, V> {
 
     private _capacity: number;
     private _size: number;
-    private _array: Array<SinglyLinkedList<V>>;
+    private _array: Array<ILinkedList<V>>;
     private _keys: Array<K>;
     private _values: Array<V>;
 
     get size(): number {
         return this._size;
-    } 
+    }
 
     /** 
      * @param capacity Prime Number would be peferred
      */
     constructor(capacity: number) {
         this._capacity = capacity;
-        this._array = new Array<SinglyLinkedList<V>>(capacity);
+        this._array = new Array<ILinkedList<V>>(capacity);
         this._keys = [];
         this._values = [];
 
         for (let i = 0; i < this._capacity; i++) {
-            this._array[i] = new SinglyLinkedList<V>();
+            this._array[i] = LinkedListFactory.create<V>(ListTypes.Singly);
         }
     }
 
@@ -42,10 +44,10 @@ export class Dictionary<K, V> implements HashInterface<K, V> {
     public get(key: K): V | undefined {
         const i = this._getIndex(key);
 
-        if(this._array[i].isEmpty()) return undefined;
+        if (this._array[i].isEmpty()) return undefined;
 
-        
-        return undefined;        
+
+        return undefined;
     }
 
     public has(key: K): boolean {

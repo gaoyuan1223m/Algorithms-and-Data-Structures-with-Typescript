@@ -2,29 +2,40 @@ import { Validator } from "./utils";
 import { Err } from "@Utils/emphasize";
 
 export function Validation(type?: string) {
-    
+
     return (target: Object, key: string, descriptor: PropertyDescriptor) => {
 
-        const originFn = descriptor.value.bind(target);
+        const originFn = descriptor.value;
+
+        /**
+         * in case: if Class a1 is derived from Class A,
+         * this Method Decorator is applied both for methods in Class a1 and Class A,
+         * Be careful to use: const originFn = descriptor.value.bind(target), 
+         * since target should be Object(a1) rather than Obejct(A)
+         * instead, use const originFn = descriptor.value, and then use return originFn.apply(this, args)
+         */
 
         descriptor.value = function (...args: any[]) {
 
-            let errors: string[]; 
-            
+            let errors: string[];
+
             switch (type) {
                 case 'index':
                     errors = Validator.performIndexValidation(target, key, args);
                     break;
-            
+
                 case 'value':
                     errors = Validator.performValueValidation(target, key, args);
+                    break;
 
                 default:
                     errors = Validator.performAllValidation(target, key, args);
                     break;
             }
 
-            if (errors.length === 0) return originFn(...args);
+            if (errors.length === 0) {
+                return originFn.apply(this, args);
+            }
 
             let msg: string = '';
 

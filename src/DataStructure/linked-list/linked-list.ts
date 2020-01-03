@@ -1,4 +1,4 @@
-import { ILinkedListConstructor, IArray, ILinkedList, ITree } from "@Interface/specific";
+import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { AbstractDoublyLinkedList, AbstractSinglyLinkedList } from "@Entity/abstract";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 
@@ -19,7 +19,7 @@ export class LinkedListFactory {
     }
 }
 
-const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");
@@ -52,7 +52,7 @@ const SimpleSinglyLinkedList: ILinkedListConstructor = class SimpleSinglyLinkedL
      */
 }
 
-const SimpleDoublyLinkedList: ILinkedListConstructor = class DoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
+class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
     
     
     toArray(arrayType?: ArrayTypes): IArray<T> {
@@ -69,7 +69,7 @@ const SimpleDoublyLinkedList: ILinkedListConstructor = class DoublyLinkedList<T>
 
 }
 
-const CircularSinglyLinkedList: ILinkedListConstructor = class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     /**
      *                                               HeadNode Pointer    

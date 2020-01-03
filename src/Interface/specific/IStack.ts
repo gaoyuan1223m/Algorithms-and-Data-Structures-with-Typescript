@@ -42,5 +42,5 @@ export interface IArrayStackConstructor {
 }
 
 export interface ILinkedListStackConstructor {
-    new <T>(ctor: ILinkedListConstructor): IStack<T>;
+    new <T>(): IStack<T>;
 }

@@ -1,27 +1,21 @@
-import { IStack, IArrayStackConstructor, ILinkedListStackConstructor } from "@Interface/specific/IStack";
-import { IArray, IArrayConstructor } from "@Interface/specific/IArray";
-import { Errors } from "@Utils/error-handling/errors";
-import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
-import { ILinkedList, ILinkedListConstructor } from "@Interface/specific/ILinkedList";
-import { SimpleSinglyLinkedList } from "@DataStructure/linked-list/singly-linked-list";
-import { ICollectionFactory } from "@Interface/common/ICollectionFactory";
+import { ILinkedList, IArray, IStack } from "@Interface/specific";
+import { ICollectionFactory } from "@Interface/common";
+import { Errors } from "@Utils/error-handling";
 import { ArrayFactory } from "@DataStructure/array";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { Validation, ValidateParams } from "@Utils/decorator";
 
-export const StackFactory: AbstactStackFactory = class StackFactory {
+export const StackFactory: ICollectionFactory = class StackFactory {
 
-    static create<T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T> {
-        if (!capacity) return new LinkedListStack(SimpleSinglyLinkedList, ICompareFn);
+    static create<T>(capacity?: number, incrementals?: number): IStack<T> {
+        if (!capacity) return new LinkedListStack();
 
-        return new ArrayStack(capacity, ICompareFn, incrementals)
+        return new ArrayStack(capacity, incrementals)
     }
 
 }
 
-abstract class AbstactStackFactory implements ICollectionFactory {
-    abstract create<T>(capacity?: number, ICompareFn?: ICompareFunc<T>, incrementals?: number): IStack<T>
-}
-
-const ArrayStack: IArrayStackConstructor = class Stack<T> implements IStack<T> {
+class ArrayStack<T> implements IStack<T> {
 
     private _array: IArray<T>
 
@@ -37,12 +31,13 @@ const ArrayStack: IArrayStackConstructor = class Stack<T> implements IStack<T> {
         return this._array.size;
     };
 
-    constructor(capacity: number, ICompareFn: ICompareFunc<T> = valueTypeComparison, incrementals: number = 0) {
-        this._array = ArrayFactory.create<T>(capacity, ICompareFn, incrementals)
+    constructor(capacity: number, incrementals: number = 0) {
+        this._array = ArrayFactory.create<T>(capacity, incrementals)
     }
 
 
-    push(value: T): this {
+    @Validation('value')
+    push(@ValidateParams() value: T): this {
         this._array.append(value);
         return this;
     }
@@ -65,7 +60,7 @@ const ArrayStack: IArrayStackConstructor = class Stack<T> implements IStack<T> {
 
 }
 
-const LinkedListStack: ILinkedListStackConstructor = class Stack<T> implements IStack<T> {
+class LinkedListStack<T> implements IStack<T> {
 
     protected _linkedList: ILinkedList<T>
 
@@ -81,8 +76,8 @@ const LinkedListStack: ILinkedListStackConstructor = class Stack<T> implements I
         return this._linkedList.size;
     };
 
-    constructor(ctor: ILinkedListConstructor, ICompareFn: ICompareFunc<T> = valueTypeComparison) {
-        this._linkedList = new ctor(ICompareFn);
+    constructor() {
+        this._linkedList = LinkedListFactory.create<T>();
     }
 
 

@@ -1,5 +1,5 @@
 
-import { ICollection } from "@Interface/common/ICollection";
+import { ICollection } from "@Interface/common";
 import { IArray, ILinkedList } from "@Interface/specific";
 
 export interface ICollectionFactory {
