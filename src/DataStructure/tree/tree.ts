@@ -1,144 +1,166 @@
+import { BinaryTreeNode } from "@Entity/concrete";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 
 /**
  * @BinarySearchTree
- */
-
-class TreeNode<T> {
-
-    public node: T;
-    public left: TreeNode<T>;
-    public right: TreeNode<T>;
-
-    constructor(node: T) {
-        this.node = node;
-    }
-
-}
-
-/**
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
  */
 export class BinarySearchTree<T> {
 
-    private _root: TreeNode<T>;
-
-    get root(): TreeNode<T> {
-        return this._root;
+    private _rootNode: BinaryTreeNode<T>;
+    private _size: number;
+    
+    get size(): number {
+        return this._size;
     }
 
-    constructor(
-        private compare: ICompareFunc<T> = valueTypeComparison
-    ) { }
+    get rootValue(): T {
+        return this._rootNode.value
+    }
 
-    insert(node: T): this {
-        this._root = this._insertByRecursion(this._root, node);
+    get maxValue(): T {
+        return this._getNodeWithMaxValue().value;
+    }
+
+    get minValue(): T {
+        return this._getNodeWithMinValue().value;
+    }
+
+    constructor() {
+        this._size = 0;
+     }
+
+    insert(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+        this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
         return this;
     }
 
-    contains(node: T): boolean {
-
-        return false;
+    insertRange(values: T[], compare: ICompareFunc<T> = valueTypeComparison): this {
+        for (const value of values) {
+            this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
+        }
+        return this;
     }
 
-    findPath(node: T): number[] {
-        let pathArr: number[] = [];
-        let temp = this._root;
-        if (!temp) return [-1];
+    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
+        if(this._size === 0) return false;
+
+        let pointer = this._rootNode;
+
+        if (!pointer) return false;
 
         do {
-            if (defaultCompare(temp.node, node) === ComparisonResult.LESS_THAN) {
+            if (compare(pointer.value).isEqualTo(value)) return true;
+
+            if (compare(pointer.value).isLessThan(value)) {
+                pointer = pointer.right;
+            } else {
+                pointer = pointer.left;
+            }
+        } while (pointer.left || pointer.right);
+
+        return compare(pointer.value).isEqualTo(value);
+    }
+
+    findPath(value: T, compare: ICompareFunc<T> = valueTypeComparison): number[] {
+        let pathArr: number[] = [];
+        let pointer = this._rootNode;
+        if (!pointer) return [-1];
+
+        do {
+            if (compare(pointer.value).isLessThan(value)) {
                 pathArr.push(1);
-                temp = temp.right;
-            } else if (defaultCompare(temp.node, node) === ComparisonResult.LARGER_THAN) {
+                pointer = pointer.right;
+            } else if (compare(pointer.value).isLargerThan(value)) {
                 pathArr.push(0);
-                temp = temp.left;
+                pointer = pointer.left;
             } else {
                 return pathArr;
             }
-        } while (temp.left || temp.right)
+        } while (pointer.left || pointer.right)
 
-        if (defaultCompare(temp.node, node) === ComparisonResult.EQUALS_TO) {
+        if (compare(pointer.value).isEqualTo(value)) {
             return pathArr;
         }
 
         return [-1];
     }
 
-    private _findPathByRecursion(treeNode: TreeNode<T>, node: T): number {
-        return -1;
-    }
-
-    private _findPathByIteration(treeNode: TreeNode<T>, node: T): number {
-        return -1;
-    }
-
-    remove(node: T): this {
-        this._root = this._removeByRecursion(this._root, node);
+    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+        this._rootNode = this._removeByRecursion(this._rootNode, value, compare);
         return this;
     }
 
-    getMax(): TreeNode<T> {
-        return this._getMaxByRecursion(this._root);
+    private _getNodeWithMaxValue(): BinaryTreeNode<T> {
+        return this._getMaxByRecursion(this._rootNode);
     }
 
-    getMin(): TreeNode<T> {
-        return this._getMinByRecursion(this._root);
+    private _getNodeWithMinValue(): BinaryTreeNode<T> {
+        return this._getMinByRecursion(this._rootNode);
     }
 
-    private _insertByRecursion(treeNode: TreeNode<T>, node: T): TreeNode<T> {
+    private _insertByRecursion(treeNode: BinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): BinaryTreeNode<T> {
         if (!treeNode) {
-            return new TreeNode<T>(node);
+            this._size += 1;
+            return new BinaryTreeNode<T>(value);
         }
 
-        if (defaultCompare(treeNode.node, node) === ComparisonResult.EQUALS_TO) return;
+        if (compare(treeNode.value).isEqualTo(value)) return;
 
-        if (defaultCompare(treeNode.node, node) === ComparisonResult.LESS_THAN) {
-            treeNode.right = this._insertByRecursion(treeNode.right, node);
+        if (compare(treeNode.value).isLessThan(value)) {
+            treeNode.right = this._insertByRecursion(treeNode.right, value, compare);
         } else {
-            treeNode.left = this._insertByRecursion(treeNode.left, node);
+            treeNode.left = this._insertByRecursion(treeNode.left, value, compare);
         }
 
         return treeNode;
     }
 
-    private _insertByIteraton(treeNode: TreeNode<T>, node: T): TreeNode<T> {
+    private _insertByIteraton(treeNode: BinaryTreeNode<T>, node: T): BinaryTreeNode<T> {
         return treeNode;
     }
 
     /// replace the deleted node (D_node) with the GetMax() of D_node.left;
-    private _removeByRecursion(treeNode: TreeNode<T>, node: T): TreeNode<T> {
+    private _removeByRecursion(treeNode: BinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): BinaryTreeNode<T> {
         if (!treeNode) return;
 
-        if (defaultCompare(treeNode.node, node) === ComparisonResult.LESS_THAN) {
-            treeNode.right = this._removeByRecursion(treeNode.right, node);
-        } else if (defaultCompare(treeNode.node, node) === ComparisonResult.LARGER_THAN) {
-            treeNode.left = this._removeByRecursion(treeNode.left, node);
+        if (compare(treeNode.value).isLessThan(value)) {
+            treeNode.right = this._removeByRecursion(treeNode.right, value, compare);
+        } else if (compare(treeNode.value).isLargerThan(value)) {
+            treeNode.left = this._removeByRecursion(treeNode.left, value, compare);
         } else {
             if (!treeNode.left) {
                 treeNode = treeNode.right;
             } else if (!treeNode.right) {
                 treeNode = treeNode.left
             } else {
-                treeNode.node = this._getMaxByRecursion(treeNode.left).node;
-                treeNode.left = this._removeByRecursion(treeNode.left, treeNode.node);
+                treeNode.value = this._getMaxByRecursion(treeNode.left).value;
+                treeNode.left = this._removeByRecursion(treeNode.left, treeNode.value, compare);
             }
         }
 
         return treeNode;
     }
 
-    private _removeByIteration(treeNode: TreeNode<T>, node: T): TreeNode<T> {
+    private _removeByIteration(treeNode: BinaryTreeNode<T>, node: T): BinaryTreeNode<T> {
         return treeNode;
     }
 
-    private _getMaxByRecursion(treeNode: TreeNode<T>): TreeNode<T> {
+    private _findPathByRecursion(treeNode: BinaryTreeNode<T>, node: T): number {
+        return -1;
+    }
+
+    private _findPathByIteration(treeNode: BinaryTreeNode<T>, node: T): number {
+        return -1;
+    }
+
+    private _getMaxByRecursion(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
         if (!treeNode.right) return treeNode;
 
         return this._getMaxByRecursion(treeNode.right);
     }
 
-    private _getMaxByIteration(treeNode: TreeNode<T>): TreeNode<T> {
+    private _getMaxByIteration(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
 
         while (treeNode.right) {
             treeNode = treeNode.right;
@@ -146,13 +168,13 @@ export class BinarySearchTree<T> {
         return treeNode;
     }
 
-    private _getMinByRecursion(treeNode: TreeNode<T>): TreeNode<T> {
+    private _getMinByRecursion(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
         if (!treeNode.left) return treeNode;
 
-        return this._getMaxByRecursion(treeNode.left);
+        return this._getMinByRecursion(treeNode.left);
     }
 
-    private _getMinByIteration(treeNode: TreeNode<T>): TreeNode<T> {
+    private _getMinByIteration(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
 
         while (treeNode.left) {
             treeNode = treeNode.left;

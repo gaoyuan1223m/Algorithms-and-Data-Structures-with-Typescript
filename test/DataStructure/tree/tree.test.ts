@@ -1,8 +1,63 @@
 import { BinarySearchTree } from "@DataStructure/tree/tree";
 import { Console } from "@Utils/emphasize";
 
+describe(`Test for Binary Search Tree`, () => {
+    const BST = new BinarySearchTree<number>();
 
-const BST = new BinarySearchTree<Number>();
+    beforeAll(() => {
+        // BST
+        //     .insert(7)
+        //     .insert(5)
+        //     .insert(9)
+        //     .insert(4)
+        //     .insert(6)
+        //     .insert(3)
+        //     .insert(8)
+        //     .insert(11)
+        //     .insert(12)
+        //     .insert(10);
+        BST.insertRange([7, 5, 9, 4, 6, 3, 8, 11, 12, 10]);
+    });
+
+    it(`#Get Size of BST`, () => {
+        expect(BST.size).toBe(10);
+    });
+
+    it(`#Get Max Value on the Tree`, () => {
+        expect(BST.maxValue).toBe(12);
+    });
+
+    it(`#Get Min Value on the Tree`, () => {
+        expect(BST.minValue).toBe(3);
+    });
+
+    it(`#Find a Path of values on the Tree`, () => {
+        expect(BST.findPath(12)).toEqual([1, 1, 1]);
+        expect(BST.findPath(3)).toEqual([0, 0, 0]);
+        expect(BST.findPath(7)).toEqual([]);
+        expect(BST.findPath(9)).toEqual([1]);
+        expect(BST.findPath(5)).toEqual([0]);
+        expect(BST.findPath(4)).toEqual([0, 0]);
+        expect(BST.findPath(6)).toEqual([0, 1]);
+        expect(BST.findPath(8)).toEqual([1, 0]);
+        expect(BST.findPath(11)).toEqual([1, 1]);
+        expect(BST.findPath(10)).toEqual([1, 1, 0]);
+    });
+
+    it(`#Find a Path of values NOT on the Tree`, () => {
+        expect(BST.findPath(13)).toEqual([-1]);
+        expect(BST.findPath(111)).toEqual([-1]);
+    });
+
+    it(`Contains a value`, () => {
+        expect(BST.contains(12)).toBe(true);
+        expect(BST.contains(8)).toBe(true);
+        expect(BST.contains(14)).toBe(false);
+    })
+
+})
+
+
 
 /**
  * *          7            *
@@ -11,54 +66,7 @@ const BST = new BinarySearchTree<Number>();
  *        / \   /   \
  * *     4   6 8    11     *
  *      /         /    \
- * *   3         10     12 *   
+ * *   3         10     12 *
  */
-BST
-    .insert(new Number(7))
-    .insert(new Number(5))
-    .insert(new Number(9))
-    .insert(new Number(4))
-    .insert(new Number(6))
-    .insert(new Number(3))
-    .insert(new Number(8))
-    .insert(new Number(11))
-    .insert(new Number(12))
-    .insert(new Number(10));
 
-
-Console.Err(`Leaf Node with Max Node`);
-console.log(BST.getMax());
-console.log(`**************************************************`);
-
-Console.Err(`The Path of 12 should be: [1 1 1]`);
-console.log(BST.findPath(new Number(12)));
-console.log(`**************************************************`);
-
-Console.Err(`Remove value 7`);
-BST.remove(new Number(7));
-const root = BST.root;
-
-Console.Err('Leaf Node: 3')
-console.log(root.left.left.left);
-console.log(`**************************************************`);
-
-Console.Err('Leaf Node: [undefined], used to be 6')
-console.log(root.left.right);
-console.log(`**************************************************`);
-
-Console.Warn('Leaf Node: 3')
-console.log(root.left.left.left);
-console.log(`**************************************************`);
-
-Console.Err('Leaf Node: 8')
-console.log(root.right.left);
-console.log(`**************************************************`);
-
-Console.Err(`Leaf Node: 12`);
-console.log(root.right.right.right);
-console.log(`**************************************************`);
-
-Console.Err(`Leaf Node: 10`);
-console.log(root.right.right.left);
-console.log(`**************************************************`);
 
