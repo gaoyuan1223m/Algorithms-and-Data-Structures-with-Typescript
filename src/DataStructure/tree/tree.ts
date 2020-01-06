@@ -9,7 +9,7 @@ export class BinarySearchTree<T> {
 
     private _rootNode: BinaryTreeNode<T>;
     private _size: number;
-    
+
     get size(): number {
         return this._size;
     }
@@ -28,7 +28,7 @@ export class BinarySearchTree<T> {
 
     constructor() {
         this._size = 0;
-     }
+    }
 
     insert(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
         this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
@@ -43,11 +43,9 @@ export class BinarySearchTree<T> {
     }
 
     contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
-        if(this._size === 0) return false;
+        if (this._size === 0) return false;
 
         let pointer = this._rootNode;
-
-        if (!pointer) return false;
 
         do {
             if (compare(pointer.value).isEqualTo(value)) return true;
@@ -68,14 +66,14 @@ export class BinarySearchTree<T> {
         if (!pointer) return [-1];
 
         do {
+            if (compare(pointer.value).isEqualTo(value)) return pathArr;
+
             if (compare(pointer.value).isLessThan(value)) {
                 pathArr.push(1);
                 pointer = pointer.right;
-            } else if (compare(pointer.value).isLargerThan(value)) {
+            } else {
                 pathArr.push(0);
                 pointer = pointer.left;
-            } else {
-                return pathArr;
             }
         } while (pointer.left || pointer.right)
 
