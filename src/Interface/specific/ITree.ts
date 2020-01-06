@@ -1,4 +1,5 @@
 import { ICollection } from "@Interface/common/ICollection";
+import { ICompareFunc } from "@Utils/compare";
 
 
 export interface ITree<T> extends ICollection<T> {
@@ -16,5 +17,5 @@ export interface ITree<T> extends ICollection<T> {
      * if we're going to find 15 on the tree, it will return [-1];
      * @param value the value of Tree Node that needs to search 
      */
-    findPath(value: T): number[]
+    findPath(value: T, compare?: ICompareFunc<T>): number[]
 }
