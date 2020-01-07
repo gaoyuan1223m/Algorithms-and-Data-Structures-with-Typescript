@@ -8,7 +8,21 @@ import { ICompareFunc } from "@Utils/compare";
  */
 export interface IList<T> extends ICollection<T> {
 
+    /**
+     * *Return the numbers of element from the List*
+     */
     readonly size: number;
+
+    /**
+     * *Return the first element from the List*
+     */
+    readonly head: T;
+
+    /**
+     * *Return the last element from the list*
+     */
+    readonly tail: T;
+
     /**
      * *Insert a new element at the index on the List*
      * @param value: value of a single element

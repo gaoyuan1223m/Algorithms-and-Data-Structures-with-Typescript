@@ -1,12 +1,15 @@
 import { BinaryTreeNode } from "@Entity/concrete";
+import { ITree, IArray, ILinkedList } from "@Interface/specific";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { SortMethods } from "@Algorithm/sort";
 
 /**
  * @BinarySearchTree
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
  */
-export class BinarySearchTree<T> {
-
+export class BinarySearchTree<T> implements ITree<T> {
+    
     private _rootNode: BinaryTreeNode<T>;
     private _size: number;
 
@@ -30,12 +33,12 @@ export class BinarySearchTree<T> {
         this._size = 0;
     }
 
-    insert(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+    append(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
         this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
         return this;
     }
 
-    insertRange(values: T[], compare: ICompareFunc<T> = valueTypeComparison): this {
+    appendRange(values: T[], compare: ICompareFunc<T> = valueTypeComparison): this {
         for (const value of values) {
             this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
         }
@@ -87,6 +90,44 @@ export class BinarySearchTree<T> {
     remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
         this._rootNode = this._removeByRecursion(this._rootNode, value, compare);
         return this;
+    }
+
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
+
+    sort(compare?: ICompareFunc<T>, method?: SortMethods): this {
+        throw new Error("Method not implemented.");
+    }
+
+    print(): this {
+        throw new Error("Method not implemented.");
+    }
+
+    clear(): this {
+        this._rootNode = undefined;
+        this._size = 0;
+        return this;
+    }
+
+    toArray(arrayType?: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    toList(listType?: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    toTree(treeType?: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    forEach(callbackfn: (value: T, index: number, current: ITree<T>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    map<U>(callbackfn: (value: T, index: number, current: import("../../Interface/common").IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): import("../../Interface/common").IList<U> {
+        throw new Error("Method not implemented.");
     }
 
     private _getNodeWithMaxValue(): BinaryTreeNode<T> {

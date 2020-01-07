@@ -5,7 +5,12 @@ export interface IQueue<T> {
     /**
      * *Looks at the object at the head of this Queue without removing it from the Queue*.
      */
-    readonly peek: T;
+    readonly head: T;
+
+    /**
+     * *Looks at the object at the tail of this Queue without removing it from the Queue*.
+     */
+    readonly tail: T;
 
     /**
      * *The number of the object on the current Queue*.
@@ -13,16 +18,26 @@ export interface IQueue<T> {
     readonly size: number;
 
     /**
-     * *Enqueue an object to the tail of this Queue*
-     * @param value: Object that needs to add at the tail of this Queue 
+     * *Enqueue an object or a sequence of objects to the tail of this Queue*
+     * @param values: Object(s) that needs to add at the tail of this Queue 
      */
-    enqueue(value: T): this;
+    enqueue(...values: T[]): this;
 
     /**
-     * *Dequeue an object from the peek of this Queue*
+     * *Dequeue an object or a sequence of objects from the peek of this Queue*
+     * @param n: the number of Objects that needs to removing from this Queue, n is default to 1;
      */
-    dequeue(): T;
+    dequeue(n?: number): T[];
 
+    /**
+     * *Whether current Queue contains any object, return a boolen value*
+     */
+    isEmpty(): boolean;
+
+    /**
+     * *Remove all objects from current Queue*
+     */
+    clear(): this;
 }
 
 export interface IQueueConstructor {

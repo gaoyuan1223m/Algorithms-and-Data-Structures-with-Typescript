@@ -1,47 +1,39 @@
-// import { IStack } from "@Interface/specific/IStack";
-// import { Stack } from "@DataStructure/stack-queue/stack";
-// import { IError } from "@Interface/common/IError";
-// import { Errors } from "@Utils/errors";
+import { IStack } from "@Interface/specific";
+import { StackFactory } from "@DataStructure/stack-queue";
 
-// describe('Test for Stack', () => {
 
-//     const s: IStack<number> = new Stack<number>();
+describe('Test for Stack', () => {
 
-//     it('Throw Err with no element to pop', () => {
-//         try {
-//             s.pop();
-//         } catch (error) {
-//             const e: IError = error;
-//             expect(e.message).toBe(Errors.Msg.NoElements);
-//         }
-//     })
+    const stack: IStack<number> = StackFactory.create<number>();
 
-//     it('push values to the Stack', () => {
-//         s.push(11).push(2).push(9).push(3).push(8);
-//         expect(s.size).toBe(5);
-//     })
+    beforeAll(() => {
+        stack.push(11, 2, 9, 3, 8);
+    });    
 
-//     it('verify value of Peek element', () => {
-//         expect(s.peek).toBe(8);
-//     })
+    it('push values to the Stack', () => {
+        expect(stack.size).toBe(5);
+    });
 
-//     it('pop element from the Stack', () => {
-//         expect(s.pop()).toBe(8);
-//         expect(s.size).toBe(4);
-//     })
+    it('verify value of Peek element', () => {
+        expect(stack.peek).toBe(8);
+    });
 
-//     it('make Stack pull of elements', () => {
-//         s.push(1).push(5).push(6).push(4).push(7).push(10);
-//         expect(s.size).toBe(10);
-//     })
+    it('pop one element from the Stack', () => {
+        expect(stack.pop()).toBe(8);
+        expect(stack.size).toBe(4);
+    });
 
-//     it('Throw Err when no room for new elements', () => {
-//         try {
-//             s.push(111);
-//         } catch (error) {
-//             const e: IError = error;
-//             expect(e.message).toBe(Errors.Msg.NoMoreSpace);
-//         }
-//     })
+    it('make Stack pull of elements', () => {
+        expect(stack.pop(4)).toEqual([3, 9, 11, 2]);
+        expect(stack.size).toBe(0);
+    });
 
-// })
+    it('current Stack should be empty', ()=>{
+        expect(stack.isEmpty()).toBe(true);
+    });
+
+    it('Throw Err with no element to pop', () => {        
+        expect(stack.pop()).toBe(null);       
+    });
+    
+})

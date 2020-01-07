@@ -1,6 +1,3 @@
-import { IArrayConstructor } from "@Interface/specific/IArray";
-import { ILinkedListConstructor } from "@Interface/specific/ILinkedList";
-import { ICompareFunc } from "@Utils/compare/comparison";
 
 export interface IStack<T> {
 
@@ -15,15 +12,19 @@ export interface IStack<T> {
     readonly size: number;
 
     /**
-     * *Pushes an item onto the top of this Stack*.
-     * @param value: Object that needs to add at the top of this Stack
+     * *Pushes objects onto the top of this Stack*.
+     * @param values: Objects that need to add at the top of this Stack
      */
-    push(value: T): this;
+    push(...values: T[]): this;
 
     /**
-     * *Removes the object at the top of this Stack and returns that object as the value of this function*
+     * *Removes object(s) at the top of this Stack and returns object or object array* 
      */
     pop(): T;
+    /**
+     * @param n: the number of objects that needs to remove
+     */
+    pop(n: number): T[];
 
     /**
      * *Whether current Stack contains any object, return a boolen value*

@@ -1,15 +1,25 @@
 
 export interface IDeque<T> {
 
-    readonly peek: T;
+    readonly head: T;
 
     readonly tail: T;
 
-    addPeek(value: T): this;
+    readonly size: number;
 
-    popPeek(): T;
+    addAtHead(...value: T[]): this;
 
-    addTail(value: T): this;
+    addAtTail(...value: T[]): this;
 
-    popTail(): T;
+    popFromHead(): T;
+
+    popFromHead(n: number): T[];
+
+    popFromTail(): T;
+
+    popFromTail(n: number): T[];
+
+    isEmpty(): boolean;
+
+    clear(): this;
 }

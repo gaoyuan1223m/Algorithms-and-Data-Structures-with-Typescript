@@ -7,14 +7,16 @@ import { Validation, ValidateParams } from "@Utils/decorator";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
 
-    static create<T>(capacity?: number, incrementals?: number): IStack<T> {
+    static create<T>(capacity?: number): IStack<T> {
         if (!capacity) return new LinkedListStack();
 
-        return new ArrayStack(capacity, incrementals)
+        return new ArrayStack(capacity);
     }
 
 }
-
+/**
+ * Implement Stack by Dynamic Array
+ */
 class ArrayStack<T> implements IStack<T> {
 
     private _array: IArray<T>
@@ -31,22 +33,33 @@ class ArrayStack<T> implements IStack<T> {
         return this._array.size;
     };
 
-    constructor(capacity: number, incrementals: number = 0) {
-        this._array = ArrayFactory.create<T>(capacity, incrementals)
+    constructor(capacity: number) {
+        this._array = ArrayFactory.create<T>(capacity, capacity)
     }
 
 
     @Validation('value')
-    push(@ValidateParams() value: T): this {
-        this._array.append(value);
+    push(@ValidateParams() ...values: T[]): this {
+        for (const value of values) {
+            this._array.append(value)
+        }
         return this;
     }
 
-    pop(): T {
-        if (this.isEmpty()) {
-            throw new Errors.OutOfBoundary(Errors.Msg.NoElements);
+    pop(): T;
+    pop(n: number): T[];
+    pop(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        const removeLastElementFn = this._array.removeByIndex.bind(this, this._array.size - 1);
+
+        if (n) {
+            return new Array(n > this._array.size ? this._array.size : ~~n)
+                .fill(0)
+                .map(removeLastElementFn);
         }
-        return this._array.removeByIndex(this._array.size - 1);
+
+        return removeLastElementFn();
     }
 
     isEmpty(): boolean {
@@ -80,20 +93,31 @@ class LinkedListStack<T> implements IStack<T> {
         this._linkedList = LinkedListFactory.create<T>();
     }
 
-
-    push(value: T): this {
-        this._linkedList.append(value);
+    push(...values: T[]): this {
+        for (const value of values) {
+            this._linkedList.addHeadNode(value)
+        }
         return this;
     }
 
-    pop(): T {
-        if (this.isEmpty()) {
-            throw new Errors.OutOfBoundary(Errors.Msg.NoElements);
+
+    pop(): T;
+    pop(n: number): T[];
+    pop(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        const removeLastElementFn = this._linkedList.removeHeadNode.bind(this)
+
+        if (n) {
+            return new Array(n > this._linkedList.size ? this._linkedList.size : ~~n)
+                .fill(0)
+                .map(removeLastElementFn);
         }
 
-        return this._linkedList.removeHeadNode();
-    }
+        return removeLastElementFn();
 
+    }
+    
     isEmpty(): boolean {
         return this._linkedList.size === 0;
     }

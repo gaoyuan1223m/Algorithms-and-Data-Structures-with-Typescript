@@ -31,6 +31,14 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this._size
     };
 
+    get head(): T {
+        return this[0];
+    }
+
+    get tail(): T {
+        return this[this._capacity - 1];
+    }
+
     protected constructor(capacity: number, incrementals: number, ) {
         this._size = 0;
         this._incrementals = incrementals

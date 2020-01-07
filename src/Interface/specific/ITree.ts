@@ -1,8 +1,24 @@
-import { ICollection } from "@Interface/common/ICollection";
+import { ICollection } from "@Interface/common";
 import { ICompareFunc } from "@Utils/compare";
 
 
 export interface ITree<T> extends ICollection<T> {
+
+    /**
+     * The value of the Root Node. O(1)
+     */
+    readonly rootValue: T;
+
+    /**
+     * The maximum value on the Tree. Best O(1), Average O(lg(n)), Worst O(n)
+     */
+    readonly maxValue: T;
+
+    /**
+     * The minimum value on the Tree. Best O(1), Average O(lg(n)), Worst O(n)
+     */
+    readonly minValue: T;
+
     /**
      * Find a path from the root to the specific tree node. Going to the left returns 0, while going to the right returns 1
      * **
@@ -17,5 +33,12 @@ export interface ITree<T> extends ICollection<T> {
      * if we're going to find 15 on the tree, it will return [-1];
      * @param value the value of Tree Node that needs to search 
      */
-    findPath(value: T, compare?: ICompareFunc<T>): number[]
+    findPath(value: T, compare?: ICompareFunc<T>): number[];
+
+    /**
+     * Insert a number of element (T[]) on the Tree 
+     * @param values [Necessary]
+     * @param compare [Optional]
+     */
+    appendRange(values: T[], compare?: ICompareFunc<T>): this;
 }

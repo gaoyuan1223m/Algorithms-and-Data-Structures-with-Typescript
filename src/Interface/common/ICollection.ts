@@ -20,7 +20,7 @@ export interface ICollection<T> extends ITransformable<T>, ITraversable<T> {
      * *Add an element at the end of the Collection*
      * @param value: value of a single element
      */
-    append(value: T): this;
+    append(value: T, compare?: ICompareFunc<T>): this;
 
     /**
      * *Return whether the current Collection contains the element*

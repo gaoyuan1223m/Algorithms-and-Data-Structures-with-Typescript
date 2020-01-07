@@ -1,22 +1,11 @@
-import { BinarySearchTree } from "@DataStructure/tree/tree";
-import { Console } from "@Utils/emphasize";
+import { BinarySearchTree } from "@DataStructure/tree";
+import { ITree } from "@Interface/specific";
 
 describe(`Test for Binary Search Tree`, () => {
-    const BST = new BinarySearchTree<number>();
+    const BST: ITree<number> = new BinarySearchTree<number>();
 
     beforeAll(() => {
-        // BST
-        //     .insert(7)
-        //     .insert(5)
-        //     .insert(9)
-        //     .insert(4)
-        //     .insert(6)
-        //     .insert(3)
-        //     .insert(8)
-        //     .insert(11)
-        //     .insert(12)
-        //     .insert(10);
-        BST.insertRange([7, 5, 9, 4, 6, 3, 8, 11, 12, 10]);
+        BST.appendRange([7, 5, 9, 4, 6, 3, 8, 11, 12, 10]);
     });
 
     it(`#Get Size of BST`, () => {

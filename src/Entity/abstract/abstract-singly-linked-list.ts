@@ -11,7 +11,6 @@ import { SortMethods } from "@Algorithm/sort";
 
 export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
-
     abstract reverse(): this;
 
     abstract toArray(arrayType?: ArrayTypes): IArray<T>;
