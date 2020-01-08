@@ -1,16 +1,16 @@
 import { ILinkedList, IArray, IStack } from "@Interface/specific";
 import { ICollectionFactory } from "@Interface/common";
-import { Errors } from "@Utils/error-handling";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { Validation, ValidateParams } from "@Utils/decorator";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
 
+    /**Recommend implementing Stack by Linked List, so no parameter needs to pass */
     static create<T>(capacity?: number): IStack<T> {
-        if (!capacity) return new LinkedListStack();
+        if (!capacity) return new LinkedListStack<T>();
 
-        return new ArrayStack(capacity);
+        return new ArrayStack<T>(capacity);
     }
 
 }
@@ -51,15 +51,14 @@ class ArrayStack<T> implements IStack<T> {
     pop(n?: any): any {
         if (this.isEmpty() || n <= 0) return null;
 
-        const removeLastElementFn = this._array.removeByIndex.bind(this, this._array.size - 1);
 
         if (n) {
             return new Array(n > this._array.size ? this._array.size : ~~n)
                 .fill(0)
-                .map(removeLastElementFn);
+                .map(() => this._array.removeByIndex(this._array.size - 1));
         }
 
-        return removeLastElementFn();
+        return this._array.removeByIndex(this._array.size - 1);
     }
 
     isEmpty(): boolean {
@@ -73,6 +72,9 @@ class ArrayStack<T> implements IStack<T> {
 
 }
 
+/**
+ * Implements Stack by Singly Linked List
+ */
 class LinkedListStack<T> implements IStack<T> {
 
     protected _linkedList: ILinkedList<T>
@@ -106,18 +108,16 @@ class LinkedListStack<T> implements IStack<T> {
     pop(n?: any): any {
         if (this.isEmpty() || n <= 0) return null;
 
-        const removeLastElementFn = this._linkedList.removeHeadNode.bind(this)
-
         if (n) {
             return new Array(n > this._linkedList.size ? this._linkedList.size : ~~n)
                 .fill(0)
-                .map(removeLastElementFn);
+                .map(() => this._linkedList.removeHeadNode());
         }
 
-        return removeLastElementFn();
+        return this._linkedList.removeHeadNode();
 
     }
-    
+
     isEmpty(): boolean {
         return this._linkedList.size === 0;
     }

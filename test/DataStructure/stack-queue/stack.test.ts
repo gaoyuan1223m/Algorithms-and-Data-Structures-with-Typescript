@@ -6,6 +6,13 @@ describe('Test for Stack', () => {
 
     const stack: IStack<number> = StackFactory.create<number>();
 
+    /** Stack
+     *  Bottom <-------Peek 
+     * -------------------------------------
+     * | 11, 2, 9, 3, 8 ...
+     * -------------------------------------
+     */
+
     beforeAll(() => {
         stack.push(11, 2, 9, 3, 8);
     });    
@@ -21,18 +28,23 @@ describe('Test for Stack', () => {
     it('pop one element from the Stack', () => {
         expect(stack.pop()).toBe(8);
         expect(stack.size).toBe(4);
+        expect(stack.peek).toBe(9);
     });
 
     it('make Stack pull of elements', () => {
-        expect(stack.pop(4)).toEqual([3, 9, 11, 2]);
+        expect(stack.pop(4)).toEqual([3, 9, 2, 11]);
         expect(stack.size).toBe(0);
     });
+
+    it('Null will be observed when no elements on the Stack', () => {
+        expect(stack.peek).toBe(null);
+    })
 
     it('current Stack should be empty', ()=>{
         expect(stack.isEmpty()).toBe(true);
     });
 
-    it('Throw Err with no element to pop', () => {        
+    it('Don\'t Throw Err with no element to pop', () => {        
         expect(stack.pop()).toBe(null);       
     });
     

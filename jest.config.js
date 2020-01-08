@@ -14,6 +14,6 @@ module.exports = {
       statements: 100
     }
   },
-  testRegex: 'tree.test.ts', /**Run Single Unit Test */
+  testRegex: 'stack.test.ts', /**Run Single Unit Test */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };

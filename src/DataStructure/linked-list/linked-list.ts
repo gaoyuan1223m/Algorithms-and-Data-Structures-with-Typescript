@@ -21,6 +21,9 @@ export class LinkedListFactory {
 
 class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
+    constructor() {
+        super();     
+    }
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");
     }
@@ -54,6 +57,9 @@ class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
 class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
     
+    constructor() {
+        super();    
+    }
     
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");

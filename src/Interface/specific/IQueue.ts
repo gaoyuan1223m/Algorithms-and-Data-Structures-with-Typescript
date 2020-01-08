@@ -24,10 +24,13 @@ export interface IQueue<T> {
     enqueue(...values: T[]): this;
 
     /**
-     * *Dequeue an object or a sequence of objects from the peek of this Queue*
-     * @param n: the number of Objects that needs to removing from this Queue, n is default to 1;
+     * *Dequeue object(s) from the Head of this Queue*
      */
-    dequeue(n?: number): T[];
+    dequeue(): T;
+    /** 
+     * @param n: the number of Objects that needs to removing from this Queue;
+     */
+    dequeue(n: number): T[];
 
     /**
      * *Whether current Queue contains any object, return a boolen value*
@@ -40,6 +43,3 @@ export interface IQueue<T> {
     clear(): this;
 }
 
-export interface IQueueConstructor {
-    new <T>(type: DataStructures, capacity?: number): IQueue<T>;
-}
