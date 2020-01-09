@@ -3,14 +3,15 @@ import { ICollectionFactory } from "@Interface/common";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { Validation, ValidateParams } from "@Utils/decorator";
+import { ListTypes } from "@Utils/types";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
 
     /**Recommend implementing Stack by Linked List, so no parameter needs to pass */
     static create<T>(capacity?: number): IStack<T> {
-        if (!capacity) return new LinkedListStack<T>();
+        if (capacity) return new ArrayStack<T>(capacity);
 
-        return new ArrayStack<T>(capacity);
+        return new LinkedListStack<T>();
     }
 
 }
@@ -77,27 +78,27 @@ class ArrayStack<T> implements IStack<T> {
  */
 class LinkedListStack<T> implements IStack<T> {
 
-    protected _linkedList: ILinkedList<T>
+    protected _list: ILinkedList<T>
 
     get peek(): T {
         if (this.isEmpty()) {
             return null;
         }
 
-        return this._linkedList.head;
+        return this._list.head;
     }
 
     get size(): number {
-        return this._linkedList.size;
+        return this._list.size;
     };
 
     constructor() {
-        this._linkedList = LinkedListFactory.create<T>();
+        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
     }
 
     push(...values: T[]): this {
         for (const value of values) {
-            this._linkedList.addHeadNode(value)
+            this._list.addHeadNode(value)
         }
         return this;
     }
@@ -109,21 +110,21 @@ class LinkedListStack<T> implements IStack<T> {
         if (this.isEmpty() || n <= 0) return null;
 
         if (n) {
-            return new Array(n > this._linkedList.size ? this._linkedList.size : ~~n)
+            return new Array(n > this._list.size ? this._list.size : ~~n)
                 .fill(0)
-                .map(() => this._linkedList.removeHeadNode());
+                .map(() => this._list.removeHeadNode());
         }
 
-        return this._linkedList.removeHeadNode();
+        return this._list.removeHeadNode();
 
     }
 
     isEmpty(): boolean {
-        return this._linkedList.size === 0;
+        return this._list.size === 0;
     }
 
     clear(): this {
-        this._linkedList.clear();
+        this._list.clear();
         return this;
     }
 }

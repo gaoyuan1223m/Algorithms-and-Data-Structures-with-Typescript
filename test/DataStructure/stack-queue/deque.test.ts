@@ -5,6 +5,12 @@ describe(`Test for Deque`, () => {
 
     const deque: IDeque<number> = new Deque<number>();
 
+    /**
+     *   HEAD ............... Tail  
+     *   -------------------------
+     *    8, 2, 5, 3, 9, 4, 7, 6
+     *   -------------------------
+     */
     beforeAll(() => {
         deque
             .addAtHead(3, 5, 2, 8)
@@ -40,8 +46,12 @@ describe(`Test for Deque`, () => {
         expect(deque.size).toBe(4);
     });
 
+    it(`#Shoulde return NULL when passing invalid number`, () => {
+        expect(deque.popFromHead(-1.34)).toBe(null);
+    });
+
     it(`#Should return values from Tail`, () => {
-        expect(deque.popFromHead(3)).toEqual([7, 4, 9]);
+        expect(deque.popFromTail(3)).toEqual([7, 4, 9]);
         expect(deque.size).toBe(1);
     });
 
@@ -52,5 +62,11 @@ describe(`Test for Deque`, () => {
     it(`#Is Deque empty after clear()`, () => {
         deque.clear();
         expect(deque.isEmpty()).toBe(true);
-    })
+    });
+
+    it(`#Should return NULL when Deque is empty`, () => {
+        expect(deque.popFromHead()).toBe(null);
+        expect(deque.popFromTail()).toBe(null);
+    });
+    
 })

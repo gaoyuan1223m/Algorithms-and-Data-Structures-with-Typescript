@@ -1,7 +1,8 @@
-import { BinarySearchTree } from "@DataStructure/tree";
 import { ITree } from "@Interface/specific";
+import { BinarySearchTree } from "@DataStructure/tree";
 
 describe(`Test for Binary Search Tree`, () => {
+
     const BST: ITree<number> = new BinarySearchTree<number>();
 
     beforeAll(() => {

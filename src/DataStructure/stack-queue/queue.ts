@@ -5,18 +5,23 @@ import { ListTypes } from "@Utils/types";
 /**Implement common QUEUE by Singly Linked List */
 
 export class Queue<T> implements IQueue<T> {
+    
     protected _list: ILinkedList<T>;
 
     get head(): T {
+        if(this.isEmpty()) return null;
+
         return this._list.head;
     }
 
     get tail(): T {
+        if(this.isEmpty()) return null;
+
         return this._list.tail;
     }
 
     get size(): number {
-        return this.size;
+        return this._list.size;
     };
 
     constructor() {
@@ -54,4 +59,5 @@ export class Queue<T> implements IQueue<T> {
         this._list.clear();
         return this;
     }
+
 }

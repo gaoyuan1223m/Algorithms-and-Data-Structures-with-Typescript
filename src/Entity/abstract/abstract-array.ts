@@ -168,7 +168,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             str += `, `
         }
         str += ` ]`;
-        Console.OK(str);
+        Console.Warn(str);
         return this;
     }
 

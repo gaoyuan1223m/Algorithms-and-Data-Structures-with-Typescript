@@ -5,7 +5,7 @@ import { LinkedListFactory } from "@DataStructure/linked-list";
 
 export class Deque<T> implements IDeque<T> {
     
-    private _deque: ILinkedList<T>;
+    protected _deque: ILinkedList<T>;
     
     get head(): T {
         return this._deque.head;
@@ -20,28 +20,53 @@ export class Deque<T> implements IDeque<T> {
     }
 
     constructor() {
-        this._deque = LinkedListFactory.create();
+        this._deque = LinkedListFactory.create<T>();
     }
 
-    addAtHead(...value: T[]): this {
-        
+    addAtHead(...values: T[]): this {        
+        for (const value of values) {
+            this._deque.addHeadNode(value);
+        }
         return this;
     }
 
-    addAtTail(...value: T[]): this {
+    addAtTail(...values: T[]): this {
+        for (const value of values) {
+            this._deque.addTailNode(value)
+        }
         return this;
     }
 
     popFromHead(): T;
     popFromHead(n: number): T[];
     popFromHead(n?: any): any {
-        throw new Error("Method not implemented.");
+        if (this.isEmpty() || n <= 0) return null;
+
+        let size = this._deque.size;
+
+        if (n) {
+            return new Array(n > size ? size : ~~n)
+                .fill(0)
+                .map(() => this._deque.removeHeadNode())
+        }
+
+        return this._deque.removeHeadNode();
     }
 
     popFromTail(): T;
     popFromTail(n: number): T[];
     popFromTail(n?: any): any {
-        throw new Error("Method not implemented.");
+        if (this.isEmpty() || n <= 0) return null;
+
+        let size = this._deque.size;
+
+        if (n) {
+            return new Array(n > size ? size : ~~n)
+                .fill(0)
+                .map(() => this._deque.removeTaiNode())
+        }
+
+        return this._deque.removeTaiNode();
     }
     
     isEmpty(): boolean {

@@ -1,13 +1,14 @@
 import { IQueue } from "@Interface/specific"
+import { Queue } from "@DataStructure/stack-queue";
 
 describe(`Test for Queue`, () => {
 
-    let queue: IQueue<number>;
+    let queue: IQueue<number> = new Queue<number>();
 
-    /**         Head (dequeue) .... Tail (enqueue)
-     *         ----------------------------------
-     *             5, 4, 6, 7, 8, 1, 2, 9 ....
-     *         ----------------------------------
+    /**         Head (dequeue) ......... Tail (enqueue)
+     *         --------------------------------------
+     *      Dequeue <-- 5, 4, 6, 7, 8, 1, 2, 9 .... <-- Enqueue
+     *         --------------------------------------
      */
     beforeAll(() => {
         queue.enqueue(5, 4, 6, 7, 8, 1, 2, 9);
