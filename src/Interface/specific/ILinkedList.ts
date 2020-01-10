@@ -1,32 +1,87 @@
-import { IList } from "@Interface/common/IList";
-import { ICompareFunc } from "@Utils/compare/comparison";
+import { IList, INode } from "@Interface/common";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { ListTypes } from "@Utils/types";
 
-export interface ILinkedList<T> extends IList<T> {
-
-    /**
-     * *Add a HeadNode to the current Linked List*
-     * @param value: value of a single List Node
-     */
-    addHeadNode(value: T): this;
+export interface ILimitedLinkedList<T> {
 
     /**
-     * *Add a TailNode to the current Linked List*
-     * @param value: value of a single List Node
+     * *Look at the HEAD elements on the List and return it without removing it from the List*
      */
-    addTailNode(value: T): this;
+    readonly head: T;
 
     /**
-     * *Remove a HeadNode from the current Linked List*
+     * *Look at the TAIL elements on the List and return it without removing it from the List*
      */
-    removeHeadNode(): T;
+    readonly tail: T;
 
     /**
-     * *Remove a TailNode from the current Linked List*
+     * *Return the number of elements on the List*
      */
-    removeTaiNode(): T;
+    readonly size: number;
+
+    /**
+     * *Add element(s) to the HEAD of List*
+     * @param values element(s) that need(s) to add to the HEAD of the List
+     */
+    insertAtHead(...values: T[]): this;
+
+    /**
+     * *Add element(s) to the TAIL of List*
+     * @param values element(s) that need(s) to add to the TAIL of the List
+     */
+    insertAtTail(...values: T[]): this;
+
+    /**
+     * *Remove one element from the HEAD of List and return it*
+     */
+    removeFromHead(): T;
+    /**
+     * *Remove multiple elements from the HEAD of List and return in Array*
+     * @param n the number of element(s) that need(s) to remove
+     */
+    removeFromHead(n: number): T[];
+
+    /**
+     * *Remove one element from the TAIL of the List and retun it*
+     */
+    removeFromTail(): T;
+    /**
+     * *Remove multiple elements from the TAIL of the List and return in Array*
+     * @param n the number of element(s) that need(s) to remove
+     */
+    removeFromTail(n: number): T[];
+
+    /**
+     * *Return whether the current List has elements or not*
+     */
+    isEmpty(): boolean;
+
+    /**
+     * *Remove all elements from the List*
+     */
+    clear(): this;
 
 }
 
-export interface ILinkedListConstructor {
-    new <T>(): ILinkedList<T>
+export interface ILinkedList<T> extends ILimitedLinkedList<T>, IList<T> {
+
+
 }
+
+export interface ISinglyListNode<T> extends INode<T> {
+    next: ISinglyListNode<T>;
+}
+
+export interface IDoublyListNode<T> extends INode<T> {
+    next: IDoublyListNode<T>;
+    prev: IDoublyListNode<T>;
+}
+
+export interface IDoublyListNodeConstructor {
+    new <T>(value?: T, next?: IDoublyListNode<T>, prev?: IDoublyListNode<T>): IDoublyListNode<T>;
+}
+
+export interface ISinglyListNodeConstructor {
+    new <T>(value?: T, next?: ISinglyListNode<T>): ISinglyListNode<T>;
+}
+

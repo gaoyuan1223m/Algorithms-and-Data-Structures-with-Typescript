@@ -1,4 +1,4 @@
-import { ILinkedList } from "@Interface/specific";
+import { ILinkedList, ISinglyListNode } from "@Interface/specific";
 import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { SinglyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
@@ -17,10 +17,10 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     abstract toList(listType?: ListTypes): ILinkedList<T>;
     abstract toTree(treeType?: TreeTypes): ITree<T>;
 
-    protected _headSentry: SinglyListNode<T>; // Head Sentry Node 头哨兵节点
-    protected _tailSentry: SinglyListNode<T>; // Tail Sentry Node 尾哨兵节点
-    protected _headPointer: SinglyListNode<T>; // Head Node Pointer 头元素指针
-    protected _tailPointer: SinglyListNode<T>; // Tail Node Pointer 尾元素指针
+    protected _headSentry: ISinglyListNode<T>; // Head Sentry Node 头哨兵节点
+    protected _tailSentry: ISinglyListNode<T>; // Tail Sentry Node 尾哨兵节点
+    protected _headPointer: ISinglyListNode<T>; // Head Node Pointer 头元素指针
+    protected _tailPointer: ISinglyListNode<T>; // Tail Node Pointer 尾元素指针
     protected _size: number;
 
     constructor() {
@@ -31,28 +31,21 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         this._tailPointer = this._headSentry
         this._size = 0;
     }
+    
     get head(): T {
+        if (this.isEmpty()) return null;
+
         return this._headPointer.value;
     }
 
     get tail(): T {
+        if (this.isEmpty()) return null;
+
         return this._tailPointer.value;
     }
 
     get size(): number {
         return this._size;
-    }
-
-    addHeadNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        return this._addHeadNode(new SinglyListNode<T>(value));
-    }
-
-    addTailNode(value: T): this {
-        return this.append(value);
     }
 
     append(value: T): this {
@@ -73,12 +66,44 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
     }
 
-    removeHeadNode(): T {
-        return this._removeHeadNode();
+    insertAtHead(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addHeadNode(new SinglyListNode<T>(value));
+        }
+        return this;
     }
 
-    removeTaiNode(): T {
-        return this._removeTailNode();
+    insertAtTail(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addTailNode(new SinglyListNode<T>(value));
+        }
+        return this;
+    }
+
+    removeFromHead(): T
+    removeFromHead(n: number): T[]
+    removeFromHead(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return this._removeHeadNode();
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeHeadNode.bind(this));
+    }
+
+    removeFromTail(): T
+    removeFromTail(n: number): T[]
+    removeFromTail(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return this._removeTailNode();
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
     }
 
     removeByIndex(index: number): T {
@@ -163,7 +188,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         throw new Error("Method not implemented.");
     }
 
-    protected _addHeadNode(newNode: SinglyListNode<T>): this {
+    protected _addHeadNode(newNode: ISinglyListNode<T>): this {
 
         newNode.next = this._headSentry.next;
         this._headSentry.next = newNode;
@@ -179,7 +204,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    protected _addTailNode(newNode: SinglyListNode<T>): this {
+    protected _addTailNode(newNode: ISinglyListNode<T>): this {
 
         newNode.next = this._tailSentry;
         this._tailPointer.next = newNode;
@@ -197,7 +222,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     protected _insertByValidIndex(value: T, validIndex: number): this {
         if (validIndex === 0) {
-            return this.addHeadNode(value);
+            return this.insertAtHead(value);
         }
 
         if (validIndex === this._size) {
@@ -291,7 +316,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _getValidIndex(index: number): number {
-        if(!index && index !== 0) {
+        if (!index && index !== 0) {
             throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
         }
 
@@ -321,7 +346,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return -1;
     }
 
-    protected _getNodeByValidIndex(validIndex: number): SinglyListNode<T> {
+    protected _getNodeByValidIndex(validIndex: number): ISinglyListNode<T> {
 
         if (validIndex < 0) return this._headSentry;
 

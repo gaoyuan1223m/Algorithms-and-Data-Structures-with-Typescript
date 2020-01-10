@@ -4,7 +4,7 @@ import { StackFactory } from "@DataStructure/stack-queue";
 
 describe('Test for Stack', () => {
 
-    const stack: IStack<number> = StackFactory.create<number>();
+    const stack: IStack<number> = StackFactory.create<number>(); // Implemented by Singly Linked List
 
     /** Stack
      *      Bottom <------------- Peek 

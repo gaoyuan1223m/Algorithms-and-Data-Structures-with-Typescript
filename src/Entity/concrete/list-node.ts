@@ -1,27 +1,30 @@
-export class SinglyListNode<T> {
 
-    public value: T;
-    public next: SinglyListNode<T>;
+import { ISinglyListNodeConstructor, IDoublyListNodeConstructor, ISinglyListNode, IDoublyListNode } from "@Interface/specific";
+
+export const SinglyListNode: ISinglyListNodeConstructor = class SinglyListNode<T> implements ISinglyListNode<T> {
+
+    value: T;
+    next: ISinglyListNode<T>;
 
     constructor(
         value: T = null,
-        next: SinglyListNode<T> = null,
+        next: ISinglyListNode<T> = null,
     ) {
         this.value = value;
         this.next = next;
     }
 }
 
-export class DoublyListNode<T> {
+export const DoublyListNode: IDoublyListNodeConstructor = class DoublyListNode<T> implements IDoublyListNode<T> {
 
     public value: T;
-    public next: DoublyListNode<T>;
-    public prev: DoublyListNode<T>;
+    public next: IDoublyListNode<T>;
+    public prev: IDoublyListNode<T>;
 
     constructor(
         value: T = null,
-        next: DoublyListNode<T> = null,
-        prev: DoublyListNode<T> = null
+        next: IDoublyListNode<T> = null,
+        prev: IDoublyListNode<T> = null
     ) {
         this.value = value;
         this.next = next;

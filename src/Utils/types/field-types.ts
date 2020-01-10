@@ -37,3 +37,24 @@ export const isEmptyString = (value: any) => getType(value) === TYPES.STRING ? v
 export const isPlainObject = (value: any) => getType(value) === TYPES.OBJECT;
 
 export const isArray = (value: any) => getType(value) === TYPES.ARRAY;
+
+// interface Person {
+//     name: string
+//     age: number
+// }
+
+// type propertyName = keyof Person
+
+// function pluck<T, K extends keyof T>(items: T[], ...names: K[]): T[K][][] {
+//     return names.map(name => items.map(item => item[name]));
+// }
+
+// const p: Person[] = [{
+//     name: "Ryan",
+//     age: 12
+// }, {
+//     name: "Peter",
+//     age: 25
+// }]
+
+// console.log(pluck(p, "name", "age"))

@@ -1,5 +1,5 @@
 import { BinaryTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList } from "@Interface/specific";
+import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { SortMethods } from "@Algorithm/sort";
@@ -10,7 +10,7 @@ import { SortMethods } from "@Algorithm/sort";
  */
 export class BinarySearchTree<T> implements ITree<T> {
     
-    private _rootNode: BinaryTreeNode<T>;
+    private _rootNode: IBinaryTreeNode<T>;
     private _size: number;
 
     get size(): number {
@@ -86,6 +86,12 @@ export class BinarySearchTree<T> implements ITree<T> {
 
         return [-1];
     }
+    
+    byPath(path: number[]): T {
+        if(!path) return null;
+
+        return this.rootValue;
+    }
 
     remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
         this._rootNode = this._removeByRecursion(this._rootNode, value, compare);
@@ -130,15 +136,15 @@ export class BinarySearchTree<T> implements ITree<T> {
         throw new Error("Method not implemented.");
     }
 
-    private _getNodeWithMaxValue(): BinaryTreeNode<T> {
+    private _getNodeWithMaxValue(): IBinaryTreeNode<T> {
         return this._getMaxByRecursion(this._rootNode);
     }
 
-    private _getNodeWithMinValue(): BinaryTreeNode<T> {
+    private _getNodeWithMinValue(): IBinaryTreeNode<T> {
         return this._getMinByRecursion(this._rootNode);
     }
 
-    private _insertByRecursion(treeNode: BinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): BinaryTreeNode<T> {
+    private _insertByRecursion(treeNode: IBinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): IBinaryTreeNode<T> {
         if (!treeNode) {
             this._size += 1;
             return new BinaryTreeNode<T>(value);
@@ -155,12 +161,12 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _insertByIteraton(treeNode: BinaryTreeNode<T>, node: T): BinaryTreeNode<T> {
+    private _insertByIteraton(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
         return treeNode;
     }
 
     /// replace the deleted node (D_node) with the GetMax() of D_node.left;
-    private _removeByRecursion(treeNode: BinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): BinaryTreeNode<T> {
+    private _removeByRecursion(treeNode: IBinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): IBinaryTreeNode<T> {
         if (!treeNode) return;
 
         if (compare(treeNode.value).isLessThan(value)) {
@@ -181,25 +187,25 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _removeByIteration(treeNode: BinaryTreeNode<T>, node: T): BinaryTreeNode<T> {
+    private _removeByIteration(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
         return treeNode;
     }
 
-    private _findPathByRecursion(treeNode: BinaryTreeNode<T>, node: T): number {
+    private _findPathByRecursion(treeNode: IBinaryTreeNode<T>, node: T): number {
         return -1;
     }
 
-    private _findPathByIteration(treeNode: BinaryTreeNode<T>, node: T): number {
+    private _findPathByIteration(treeNode: IBinaryTreeNode<T>, node: T): number {
         return -1;
     }
 
-    private _getMaxByRecursion(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
+    private _getMaxByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         if (!treeNode.right) return treeNode;
 
         return this._getMaxByRecursion(treeNode.right);
     }
 
-    private _getMaxByIteration(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
+    private _getMaxByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
 
         while (treeNode.right) {
             treeNode = treeNode.right;
@@ -207,13 +213,13 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _getMinByRecursion(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
+    private _getMinByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         if (!treeNode.left) return treeNode;
 
         return this._getMinByRecursion(treeNode.left);
     }
 
-    private _getMinByIteration(treeNode: BinaryTreeNode<T>): BinaryTreeNode<T> {
+    private _getMinByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
 
         while (treeNode.left) {
             treeNode = treeNode.left;

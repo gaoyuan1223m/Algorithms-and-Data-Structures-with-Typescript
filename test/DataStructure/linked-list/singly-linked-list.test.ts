@@ -4,50 +4,56 @@ import { IError } from "@Interface/common";
 import { Errors } from "@Utils/error-handling";
 import { ListTypes } from "@Utils/types";
 
+const errTolerantFn = (fn: Function) => (...args: any[]): string => {
+    try {
+        return fn(...args)
+    } catch (error) {
+        const e: IError = error;
+        return e.message;
+    }
+}
+
 describe(`Test for SinglyLinkedList`, () => {
 
     const sll: ILinkedList<number> = LinkedListFactory.create<number>(ListTypes.Singly);
 
     it(`#addHeadNode - add 0`, () => {
-        sll.addHeadNode(0);
+        sll.insertAtHead(0);
         expect(sll.head).toBe(0);
         expect(sll.tail).toBe(0);
     });
 
     it(`#addHeadNode - add 25`, () => {
-        sll.addHeadNode(25);
+        sll.insertAtHead(25);
         expect(sll.head).toBe(25);
-        expect(sll.tail).toBe(0)
+        expect(sll.tail).toBe(0);
     });
 
     it(`#addHeadNode - add 5`, () => {
-        sll.addHeadNode(5);
+        sll.insertAtHead(5);
         expect(sll.head).toBe(5);
-        expect(sll.tail).toBe(0)
+        expect(sll.tail).toBe(0);
     });
+
+    it(`#size of the current list`, () => {
+        expect(sll.size).toBe(3);
+    })
 
     it(`#append - append 38`, () => {
         sll.append(35);
         expect(sll.head).toBe(5)
         expect(sll.tail).toBe(35);
+        expect(sll.size).toBe(4);
     })
 
     it(`getByIndex - get -1.5`, () => {
-        try {
-            sll.getByIndex(-1.5)
-        } catch (error) {
-            const e: IError = error;
-            expect(e.message).toBe(Errors.Msg.InValidIdx);
-        }
+        expect<string>(errTolerantFn(sll.getByIndex.bind(sll))(-1.5))
+            .toBe<string>(Errors.Msg.InValidIdx);
     })
 
     it(`getByIndex - get 100`, () => {
-        try {
-            sll.getByIndex(100);
-        } catch (error) {
-            const e: IError = error;
-            expect(e.message).toBe(Errors.Msg.BeyondBoundary);
-        }
+        expect<string>(errTolerantFn(sll.getByIndex.bind(sll))(100))
+            .toBe<string>(Errors.Msg.BeyondBoundary)
     })
 
     it(`getByIndex - get 1`, () => {
@@ -66,7 +72,7 @@ describe(`Test for SinglyLinkedList`, () => {
     });
 
     it(`RemoveHeadNode, step 1`, () => {
-        sll.removeHeadNode();
+        sll.removeFromHead();
         expect(sll.head).toBe(25);
         expect(sll.tail).toBe(35);
         expect(sll.size).toBe(3);
@@ -74,7 +80,7 @@ describe(`Test for SinglyLinkedList`, () => {
     });
 
     it(`RemoveTailNode, step 1`, () => {
-        sll.removeTaiNode();
+        sll.removeFromTail();
         expect(sll.head).toBe(25);
         expect(sll.tail).toBe(0);
         expect(sll.size).toBe(2);
@@ -109,12 +115,8 @@ describe(`Test for SinglyLinkedList`, () => {
     });
 
     it(`IndexOf - Invalid Element`, () => {
-        try {
-            sll.indexOf(undefined);
-        } catch (error) {
-            const e: IError = error;
-            expect(e.message).toBe(Errors.Msg.InValidArg);
-        }
+        expect<string>(errTolerantFn(sll.indexOf.bind(sll))(undefined))
+            .toBe<string>(Errors.Msg.InValidArg);
     });
 
     it(`IndexOf - 123 or 321`, () => {
@@ -134,10 +136,54 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.size).toBe(4);
         expect(sll.head).toBe(0);
         expect(sll.tail).toBe(54);
-    })
+    });
 
-    it(`#print the linked list`, () => {
+    it(`#print the linked list - FIRST`, () => {
         sll.print();
-    })
-})
+    });
 
+    it(`#remove all elements`, () => {
+        sll.clear();
+        expect<boolean>(sll.isEmpty()).toBe<boolean>(true);
+        expect<number>(sll.size).toBe<number>(0);
+    });
+
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *               ----------------                ----------
+     *     (remove) | 31 -> 11 -> 24 |-> 34 -> 18 ->| 19 -> 21 |
+     *               ----------------                ----------
+     *      --------------------------------------------------------
+     */
+
+    it(`#add more elements at once at HEAD`, () => {
+        sll.insertAtHead(34, 24, 11, 31);
+        expect(sll.head).toBe(31);
+        expect(sll.tail).toBe(34);
+        expect(sll.size).toBe(4);
+    });
+
+    it(`#add more elements at once at TAIL`, () => {
+        sll.insertAtTail(18, 19, null, 21);
+        expect(sll.tail).toBe(21);
+        expect(sll.size).toBe(7);
+    });
+
+    it(`#remove more elements at once from HEAD`, () => {
+        expect(sll.removeFromHead(3)).toEqual([31, 11, 24]);
+        expect(sll.head).toBe(34);
+        expect(sll.size).toBe(4);
+    });
+
+    it(`#remove more elements at once from TAIL`, () => {
+        expect(sll.removeFromTail(2)).toEqual([21, 19]);
+        expect(sll.tail).toBe(18);
+        expect(sll.size).toBe(2);
+    });
+
+    it(`#print the linked list - SECOND`, () => {
+        console.log(`The second Linked List`)
+        sll.print();
+    });
+
+})

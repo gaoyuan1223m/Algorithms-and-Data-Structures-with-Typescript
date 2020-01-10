@@ -1,22 +1,19 @@
-import { IQueue, ILinkedList } from "@Interface/specific";
+import { IQueue, ILinkedList, ILimitedLinkedList } from "@Interface/specific";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ListTypes } from "@Utils/types";
+import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common QUEUE by Singly Linked List */
 
 export class Queue<T> implements IQueue<T> {
     
-    protected _list: ILinkedList<T>;
+    protected _list: ILimitedLinkedList<T>;
 
     get head(): T {
-        if(this.isEmpty()) return null;
-
         return this._list.head;
     }
 
     get tail(): T {
-        if(this.isEmpty()) return null;
-
         return this._list.tail;
     }
 
@@ -25,34 +22,22 @@ export class Queue<T> implements IQueue<T> {
     };
 
     constructor() {
-        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
+        this._list = new LimitedLinkedList<T>(ListTypes.Singly)
     }
 
     enqueue(...values: T[]): this {
-        for (const value of values) {
-            this._list.addTailNode(value);
-        }
+        this._list.insertAtTail(...values);
         return this;
     }
 
     dequeue(): T;
     dequeue(n: number): T[];
     dequeue(n?: any): any {
-        if (this.isEmpty() || n <= 0) return null;
-
-        let size = this._list.size;
-
-        if (n) {
-            return new Array(n > size ? size : ~~n)
-                .fill(0)
-                .map(() => this._list.removeHeadNode())
-        }
-
-        return this._list.removeHeadNode();
+        return this._list.removeFromHead(n);
     }
 
     isEmpty(): boolean {
-        return this._list.size === 0;
+        return this._list.isEmpty();
     }
 
     clear(): this {

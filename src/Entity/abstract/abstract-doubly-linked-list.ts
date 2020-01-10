@@ -1,18 +1,18 @@
-import { ILinkedList, ITree, IArray } from "@Interface/specific";
+import { ILinkedList, ITree, IArray, IDoublyListNode } from "@Interface/specific";
 import { ICompareFunc, valueTypeComparison, NOT_EXISTED } from "@Utils/compare";
 import { SortMethods } from "@Algorithm/sort";
 import { DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 
-export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
+export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {    
 
     abstract toArray(arrayType?: ArrayTypes): IArray<T>;
     abstract toList(listType?: ListTypes): ILinkedList<T>;
     abstract toTree(treeType?: TreeTypes): ITree<T>;
 
-    protected _headPointer: DoublyListNode<T>;
-    protected _tailPointer: DoublyListNode<T>;
+    protected _headPointer: IDoublyListNode<T>;
+    protected _tailPointer: IDoublyListNode<T>;
     protected _size: number;
 
     constructor() {
@@ -22,10 +22,14 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     get head(): T {
+        if(this.isEmpty()) return null;
+
         return this._headPointer.value
     }
 
     get tail(): T {
+        if(this.isEmpty()) return null;
+
         return this._tailPointer.value
     }
 
@@ -55,6 +59,45 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     removeTaiNode(): T {
         return this._removeTailNode();
+    }
+
+    insertAtHead(...values: T[]): this {
+       for (const value of values) {
+           if(!this._isValid(value)) continue;
+           this._addHeadNode(new DoublyListNode<T>(value));
+       }
+       return this;
+    }
+    insertAtTail(...values: T[]): this {
+        for (const value of values) {
+            if(!this._isValid(value)) continue;
+            this._addTailNode(new DoublyListNode<T>(value))
+        }
+        return this;
+    }
+
+    removeFromHead(): T;
+    removeFromHead(n: number): T[];
+    removeFromHead(n?: number): T | T[] {
+        if(this.isEmpty() || n <= 0) return null;
+
+        if(!n) {
+            return this._removeHeadNode()
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+    }
+
+    removeFromTail(): T;
+    removeFromTail(n: number): T[];
+    removeFromTail(n?: number): T | T[] {
+        if(this.isEmpty() || n <= 0) return null;
+
+        if(!n) {
+            return this._removeTailNode()
+        }
+        
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
     }
 
     insertByIndex(value: T, index: number): this {
@@ -125,7 +168,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         throw new Error("Method not implemented.");
     }
 
-    protected _addHeadNode(newNode: DoublyListNode<T>): this {
+    protected _addHeadNode(newNode: IDoublyListNode<T>): this {
 
         if (this._headPointer) {
             newNode.next = this._headPointer;
@@ -141,7 +184,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    protected _addTailNode(newNode: DoublyListNode<T>): this {
+    protected _addTailNode(newNode: IDoublyListNode<T>): this {
 
         if (this._tailPointer) {
             this._tailPointer.next = newNode;
@@ -254,7 +297,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
         const pointer = this._getNodeByValidIndex(validIndex);
 
-        
+        // NOT COMPLETED
 
     }
 
@@ -296,11 +339,11 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return -1;
     }
 
-    protected _getNodeByValidIndex(validIndex: number): DoublyListNode<T> {
+    protected _getNodeByValidIndex(validIndex: number): IDoublyListNode<T> {
 
         if (validIndex < 0) return this._headPointer;
 
-        let pointer: DoublyListNode<T>;
+        let pointer: IDoublyListNode<T>;
         let idx: number;
 
         if (validIndex < this._size / 2) {

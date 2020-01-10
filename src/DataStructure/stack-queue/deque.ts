@@ -1,80 +1,57 @@
-import { IDeque, ILinkedList } from "@Interface/specific";
+import { IDeque, ILimitedLinkedList } from "@Interface/specific";
 import { LinkedListFactory } from "@DataStructure/linked-list";
+import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common Deque by Doubly Linked List */
 
 export class Deque<T> implements IDeque<T> {
     
-    protected _deque: ILinkedList<T>;
+    protected _list: ILimitedLinkedList<T>;
     
     get head(): T {
-        return this._deque.head;
+        return this._list.head;
     };    
     
     get tail(): T {
-        return this._deque.tail;
+        return this._list.tail;
     }
 
     get size(): number {
-        return this._deque.size;
+        return this._list.size;
     }
 
     constructor() {
-        this._deque = LinkedListFactory.create<T>();
+        this._list = new LimitedLinkedList<T>();
     }
 
-    addAtHead(...values: T[]): this {        
-        for (const value of values) {
-            this._deque.addHeadNode(value);
-        }
+    unshift(...values: T[]): this {        
+        this._list.insertAtHead(...values);
         return this;
     }
 
-    addAtTail(...values: T[]): this {
-        for (const value of values) {
-            this._deque.addTailNode(value)
-        }
+    push(...values: T[]): this {
+        this._list.insertAtTail(...values);
         return this;
     }
 
-    popFromHead(): T;
-    popFromHead(n: number): T[];
-    popFromHead(n?: any): any {
-        if (this.isEmpty() || n <= 0) return null;
-
-        let size = this._deque.size;
-
-        if (n) {
-            return new Array(n > size ? size : ~~n)
-                .fill(0)
-                .map(() => this._deque.removeHeadNode())
-        }
-
-        return this._deque.removeHeadNode();
+    shift(): T;
+    shift(n: number): T[];
+    shift(n?: any): any {
+        return this._list.removeFromHead(n);
     }
 
-    popFromTail(): T;
-    popFromTail(n: number): T[];
-    popFromTail(n?: any): any {
-        if (this.isEmpty() || n <= 0) return null;
-
-        let size = this._deque.size;
-
-        if (n) {
-            return new Array(n > size ? size : ~~n)
-                .fill(0)
-                .map(() => this._deque.removeTaiNode())
-        }
-
-        return this._deque.removeTaiNode();
+    pop(): T;
+    pop(n: number): T[];
+    pop(n?: any): any {
+        return this._list.removeFromTail(n);
     }
     
     isEmpty(): boolean {
-        return this._deque.size === 0;
+        return this._list.size === 0;
     }
 
     clear(): this {
-        this._deque.clear();
+        this._list.clear();
         return this;
     }
 

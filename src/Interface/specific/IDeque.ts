@@ -2,46 +2,49 @@
 export interface IDeque<T> {
 
     /**
-     * *Looks at the object at the head of this Deque without removing it from the Deque*.
+     * *Looks at the HEAD Element of this Deque without removing it from the Deque*.
      */
     readonly head: T;
 
     /**
-     * *Looks at the object at the tail of this Deque without removing it from the Deque*.
+     * *Looks at TAIl Element of this Deque without removing it from the Deque*.
      */
     readonly tail: T;
 
     /**
-     * *The number of the object on the current Deque*.
+     * *Return the number of the elements on the current Deque*.
      */
     readonly size: number;
 
     /**
-     * *Add an object or a sequence of objects to the Head of this Deque*
-     * @param values: Object(s) that needs to add at the Head of this Deque 
+     * *Add element(s) to the HEAD of this Deque*
+     * @param values: element(s) that need(s) to add at the HEAD of this Deque 
      */
-    addAtHead(...values: T[]): this;
+    unshift(...values: T[]): this;
 
     /**
-     * *Add an object or a sequence of objects to the Tail of this Deque*
-     * @param values: Object(s) that needs to add at the Tail of this Deque   
+     * *Add elements to the TAIL of this Deque*
+     * @param values: Elements(s) that need(s) to add at the TAIL of this Deque   
      */
-    addAtTail(...values: T[]): this;
+    push(...values: T[]): this;
 
     /**
-     * *Remove objects from the Head of Deque and return*
+     * *Remove element(s) from the HEAD of Deque and return*
      */
-    popFromHead(): T;
+    shift(): T;
     /** 
-     * @param n: the number of Objects that needs to removing from Head of this Deque 
+     * @param n the number of element(s) that need(s) to remove from HEAD of this Deque 
      */
-    popFromHead(n: number): T[];
+    shift(n: number): T[];
 
     /**
      * *Remove object(s) from the Tail of Deque and return*
      */
-    popFromTail(): T;
-    popFromTail(n: number): T[];
+    pop(): T;
+    /**
+     * @param n the number of elements that needs to remove from the Tail of this Deque
+     */
+    pop(n: number): T[];
 
     /**
      * *Whether current Deque contains any object, return a boolen value*
@@ -49,7 +52,7 @@ export interface IDeque<T> {
     isEmpty(): boolean;
 
     /**
-     * *Remove all objects from current Deque*
+     * *Remove all elements from current Deque*
      */
     clear(): this;
 }

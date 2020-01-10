@@ -1,9 +1,10 @@
-import { ILinkedList, IArray, IStack } from "@Interface/specific";
+import { ILinkedList, IArray, IStack, ILimitedLinkedList } from "@Interface/specific";
 import { ICollectionFactory } from "@Interface/common";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { Validation, ValidateParams } from "@Utils/decorator";
 import { ListTypes } from "@Utils/types";
+import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
 
@@ -78,13 +79,9 @@ class ArrayStack<T> implements IStack<T> {
  */
 class LinkedListStack<T> implements IStack<T> {
 
-    protected _list: ILinkedList<T>
+    protected _list: ILimitedLinkedList<T>
 
     get peek(): T {
-        if (this.isEmpty()) {
-            return null;
-        }
-
         return this._list.head;
     }
 
@@ -93,13 +90,11 @@ class LinkedListStack<T> implements IStack<T> {
     };
 
     constructor() {
-        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
+        this._list = new LimitedLinkedList<T>(ListTypes.Singly);
     }
 
     push(...values: T[]): this {
-        for (const value of values) {
-            this._list.addHeadNode(value)
-        }
+        this._list.insertAtHead(...values);
         return this;
     }
 
@@ -107,15 +102,7 @@ class LinkedListStack<T> implements IStack<T> {
     pop(): T;
     pop(n: number): T[];
     pop(n?: any): any {
-        if (this.isEmpty() || n <= 0) return null;
-
-        if (n) {
-            return new Array(n > this._list.size ? this._list.size : ~~n)
-                .fill(0)
-                .map(() => this._list.removeHeadNode());
-        }
-
-        return this._list.removeHeadNode();
+        return this._list.removeFromHead(n);
 
     }
 
