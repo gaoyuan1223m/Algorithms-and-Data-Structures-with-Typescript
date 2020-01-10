@@ -23,12 +23,10 @@ describe(`Test for Deque`, () => {
 
     it(`#Should have right head value`, () => {
         expect(deque.head).toBe(8);
-        expect(deque.size).toBe(8);
     });
 
     it(`#Should have right tail value`, () => {
         expect(deque.tail).toBe(6);
-        expect(deque.size).toBe(8);
     });
 
     it(`#Should return A value from Head`, () => {
@@ -48,6 +46,7 @@ describe(`Test for Deque`, () => {
 
     it(`#Shoulde return NULL when passing invalid number`, () => {
         expect(deque.shift(-1.34)).toBe(null);
+        expect(deque.pop(-1.23)).toBe(null);
     });
 
     it(`#Should return values from Tail`, () => {

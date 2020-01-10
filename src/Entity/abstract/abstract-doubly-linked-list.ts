@@ -5,7 +5,7 @@ import { DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 
-export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {    
+export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     abstract toArray(arrayType?: ArrayTypes): IArray<T>;
     abstract toList(listType?: ListTypes): ILinkedList<T>;
@@ -22,13 +22,13 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     get head(): T {
-        if(this.isEmpty()) return null;
+        if (this.isEmpty()) return null;
 
         return this._headPointer.value
     }
 
     get tail(): T {
-        if(this.isEmpty()) return null;
+        if (this.isEmpty()) return null;
 
         return this._tailPointer.value
     }
@@ -37,41 +37,23 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return this._size;
     }
 
-    addHeadNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        return this._addHeadNode(new DoublyListNode<T>(value));
-    }
-
-    addTailNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
-        }
-
-        return this._addTailNode(new DoublyListNode<T>(value));
-    }
-
-    removeHeadNode(): T {
-        return this._removeHeadNode();
-    }
-
-    removeTaiNode(): T {
-        return this._removeTailNode();
-    }
-
     insertAtHead(...values: T[]): this {
-       for (const value of values) {
-           if(!this._isValid(value)) continue;
-           this._addHeadNode(new DoublyListNode<T>(value));
-       }
-       return this;
+        return this._insert(values, this._addHeadNode.bind(this));
     }
     insertAtTail(...values: T[]): this {
+        return this._insert(values, this._addTailNode.bind(this));
+    }
+
+    /**
+     * *Insert values to the List*
+     * @param values elements that need to insert
+     * @param fn control elements that need to insert to HEAD or TAIL
+     */
+    protected _insert(values: T[], fn: Function): this {
         for (const value of values) {
-            if(!this._isValid(value)) continue;
-            this._addTailNode(new DoublyListNode<T>(value))
+            if (!this._isValid(value)) continue;
+
+            fn(new DoublyListNode<T>(value));
         }
         return this;
     }
@@ -79,25 +61,28 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     removeFromHead(): T;
     removeFromHead(n: number): T[];
     removeFromHead(n?: number): T | T[] {
-        if(this.isEmpty() || n <= 0) return null;
-
-        if(!n) {
-            return this._removeHeadNode()
-        }
-
-        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+        return this._remove(n, this._removeHeadNode.bind(this));
     }
 
     removeFromTail(): T;
     removeFromTail(n: number): T[];
     removeFromTail(n?: number): T | T[] {
-        if(this.isEmpty() || n <= 0) return null;
+        return this._remove(n, this._removeTailNode.bind(this));
+    }
 
-        if(!n) {
-            return this._removeTailNode()
+    /**
+     * *Remove elements*
+     * @param n the number of elements that need to remove
+     * @param fn control elements removed from HEAD or TAIL
+     */
+    protected _remove(n: number, fn: Function): T | T[] {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return fn()
         }
-        
-        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(() => fn());
     }
 
     insertByIndex(value: T, index: number): this {
@@ -106,7 +91,28 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     removeByIndex(index: number): T {
-        throw new Error("Method not implemented.");
+        const idx = this._getInvalidIndex(index);
+        if (idx === 0) {
+            return this._removeHeadNode();
+        }
+
+        if(idx === this._size - 1) {
+            return this._removeTailNode();
+        }
+
+        const currPointer = this._getNodeByValidIndex(idx);
+        const currValue = currPointer.value;
+        const prevPointer = currPointer.prev; 
+
+        prevPointer.next = currPointer.next;
+        currPointer.next.prev = currPointer.prev;
+
+        currPointer.next = null;
+        currPointer.prev =null;
+
+        this._size -= 1;
+
+        return currValue;
     }
 
     updateByIndex(value: T, index: number): this {
@@ -133,7 +139,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     append(value: T): this {
-        return this.addTailNode(value);
+        return this.insertAtTail(value);
     }
 
     contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
@@ -291,7 +297,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
             return this._removeHeadNode();
         }
 
-        if(validIndex === this._size - 1) {
+        if (validIndex === this._size - 1) {
             return this._removeTailNode();
         }
 
