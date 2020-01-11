@@ -1,11 +1,9 @@
 import { ArrayFactory } from "@DataStructure/array";
-import { IArray } from "@Interface/specific";
-
 
 describe(`Test for Static Array`, () => {
 
-    const capacity: number = 7;
-    const staticArray: IArray<number> = ArrayFactory.create<number>(capacity);
+    const capacity = 7;
+    const staticArray = ArrayFactory.createStaticArray<number>(capacity);
 
     beforeAll(() => {
         staticArray

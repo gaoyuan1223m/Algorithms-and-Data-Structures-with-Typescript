@@ -1,10 +1,8 @@
-import { ILinkedList, ISinglyListNode } from "@Interface/specific";
+import { ILinkedList, ISinglyListNode, IArray, ITree } from "@Interface/specific";
 import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { SinglyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
-import { IArray } from "@Interface/specific";
-import { ITree } from "@Interface/specific";
 import { Console } from "@Utils/emphasize";
 import { SortMethods } from "@Algorithm/sort";
 

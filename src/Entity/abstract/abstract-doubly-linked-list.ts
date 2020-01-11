@@ -39,7 +39,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     addHeadNode(value: T): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         return this._addHeadNode(new DoublyListNode<T>(value));
@@ -47,7 +47,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     addTailNode(value: T): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         return this._addTailNode(new DoublyListNode<T>(value));
@@ -85,7 +85,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
             return this._removeHeadNode()
         }
 
-        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeHeadNode.bind(this));
     }
 
     removeFromTail(): T;
