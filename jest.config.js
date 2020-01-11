@@ -4,8 +4,8 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  // collectCoverage: true,
-  // collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageThreshold: {
     global: {
       branches: 100,
@@ -14,6 +14,6 @@ module.exports = {
       statements: 100
     }
   },
-  testRegex: 'static-array.test.ts', /**Run Single Unit Test */
+  testRegex: 'deque.test.ts', /**Run Single Unit Test */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };
