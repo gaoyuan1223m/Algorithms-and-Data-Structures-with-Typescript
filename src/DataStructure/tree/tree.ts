@@ -3,13 +3,15 @@ import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { SortMethods } from "@Algorithm/sort";
+import { Errors } from "@Utils/error-handling";
+import { Err } from "@Utils/emphasize";
 
 /**
  * @BinarySearchTree
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
  */
 export class BinarySearchTree<T> implements ITree<T> {
-    
+
     private _rootNode: IBinaryTreeNode<T>;
     private _size: number;
 
@@ -86,11 +88,19 @@ export class BinarySearchTree<T> implements ITree<T> {
 
         return [-1];
     }
-    
-    byPath(path: number[]): T {
-        if(!path) return null;
 
-        return this.rootValue;
+    byPath(path: number[]): T {
+        if (!path) return null;
+
+        let pointer = this._rootNode;
+
+        for (const n of path) {
+            if (n !== 0 && n !== 1) throw new Errors.InvalidArgument(Errors.Msg.InvalidPath);
+
+            pointer = n ? pointer.right : pointer.left;
+        }
+        
+        return pointer.value;
     }
 
     remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {

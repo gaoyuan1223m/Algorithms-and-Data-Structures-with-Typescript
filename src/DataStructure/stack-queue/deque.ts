@@ -4,13 +4,14 @@ import { LimitedLinkedList } from "@Entity/concrete";
 /**Implement common Deque by Doubly Linked List */
 
 export class Deque<T> implements IDeque<T> {
-    
+
+
     protected _list: ILimitedLinkedList<T>;
-    
+
     get head(): T {
         return this._list.head;
-    };    
-    
+    };
+
     get tail(): T {
         return this._list.tail;
     }
@@ -23,7 +24,7 @@ export class Deque<T> implements IDeque<T> {
         this._list = new LimitedLinkedList<T>();
     }
 
-    unshift(...values: T[]): this {        
+    unshift(...values: T[]): this {
         this._list.insertAtHead(...values);
         return this;
     }
@@ -44,9 +45,13 @@ export class Deque<T> implements IDeque<T> {
     pop(n?: any): any {
         return this._list.removeFromTail(n);
     }
-    
+
     isEmpty(): boolean {
         return this._list.size === 0;
+    }
+
+    print(): this {
+        throw new Error("Method not implemented.");
     }
 
     clear(): this {

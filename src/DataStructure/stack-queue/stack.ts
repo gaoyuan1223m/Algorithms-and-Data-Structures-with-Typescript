@@ -1,9 +1,8 @@
-import { ILinkedList, IArray, IStack, ILimitedLinkedList } from "@Interface/specific";
+import { IArray, IStack, ILimitedLinkedList } from "@Interface/specific";
 import { ICollectionFactory } from "@Interface/common";
 import { ArrayFactory } from "@DataStructure/array";
-import { LinkedListFactory } from "@DataStructure/linked-list";
 import { Validation, ValidateParams } from "@Utils/decorator";
-import { ListTypes } from "@Utils/types";
+import { ListTypes, PrintOrder } from "@Utils/types";
 import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
@@ -67,6 +66,10 @@ class ArrayStack<T> implements IStack<T> {
         return this._array.size === 0;
     }
 
+    print(order?: PrintOrder): this {
+        throw new Error("Method not implemented.");
+    }
+
     clear(): this {
         this._array.clear();
         return this;
@@ -98,7 +101,6 @@ class LinkedListStack<T> implements IStack<T> {
         return this;
     }
 
-
     pop(): T;
     pop(n: number): T[];
     pop(n?: any): any {
@@ -108,6 +110,10 @@ class LinkedListStack<T> implements IStack<T> {
 
     isEmpty(): boolean {
         return this._list.size === 0;
+    }
+
+    print(order?: PrintOrder): this {
+        throw new Error("Method not implemented.");
     }
 
     clear(): this {

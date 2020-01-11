@@ -14,6 +14,6 @@ module.exports = {
       statements: 100
     }
   },
-  // testRegex: 'deque.test.ts', /**Run Single Unit Test */
+  testRegex: 'static-array.test.ts', /**Run Single Unit Test */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };

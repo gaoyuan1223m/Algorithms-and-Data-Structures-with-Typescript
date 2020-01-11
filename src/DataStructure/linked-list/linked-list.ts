@@ -4,7 +4,7 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 
 
 export class LinkedListFactory {
-
+    
     static create<T>(type?: ListTypes): ILinkedList<T> {
         switch (type) {
             case ListTypes.Singly: 

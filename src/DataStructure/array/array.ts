@@ -1,4 +1,3 @@
-import { IArrayFactory } from "@Interface/common";
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { AbstractArray } from "@Entity/abstract";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
@@ -7,22 +6,13 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { Validation, ValidateParams } from "@Utils/decorator";
 
 
-export const ArrayFactory: IArrayFactory = class ArrayFactory {
-
-    static createStaticArray<T>(capacity: number): IArray<T> {
-        return this.create<T>(capacity);
-    }
-
-    static createDynamicArray<T>(capacity: number, incrementals: number = capacity): IArray<T> {
-        return this.create<T>(capacity, incrementals);
-    }
+export class ArrayFactory {
 
     static create<T>(capacity: number, incrementals: number = 0): IArray<T> {
         if (incrementals === 0) return new StaticArray(capacity);
 
         return new DynamicArray(capacity, incrementals);
     }
-
 }
 
 class StaticArray<T> extends AbstractArray<T> {

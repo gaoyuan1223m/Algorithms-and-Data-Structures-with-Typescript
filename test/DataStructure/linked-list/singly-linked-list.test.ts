@@ -48,7 +48,7 @@ describe(`Test for SinglyLinkedList`, () => {
 
     it(`getByIndex - get -1.5`, () => {
         expect<string>(errTolerantFn(sll.getByIndex.bind(sll))(-1.5))
-            .toBe<string>(Errors.Msg.InValidIdx);
+            .toBe<string>(Errors.Msg.InvalidIdx);
     })
 
     it(`getByIndex - get 100`, () => {
@@ -116,7 +116,7 @@ describe(`Test for SinglyLinkedList`, () => {
 
     it(`IndexOf - Invalid Element`, () => {
         expect<string>(errTolerantFn(sll.indexOf.bind(sll))(undefined))
-            .toBe<string>(Errors.Msg.InValidArg);
+            .toBe<string>(Errors.Msg.InvalidArg);
     });
 
     it(`IndexOf - 123 or 321`, () => {

@@ -50,7 +50,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     append(value: T): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         return this._addTailNode(new SinglyListNode<T>(value));
@@ -58,7 +58,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     insertByIndex(value: T, index: number): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         const idx = this._getValidIndex(index);
@@ -114,7 +114,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     updateByIndex(value: T, index: number): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
         const idx = this._getValidIndex(index);
         return this._updateByValidIndex(value, idx);
@@ -128,7 +128,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         return this._indexOf(value, compare);
@@ -317,11 +317,11 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
 
     protected _getValidIndex(index: number): number {
         if (!index && index !== 0) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
+            throw new Errors.InvalidIndex(Errors.Msg.InvalidIdx);
         }
 
         if (index < 0 && index + this._size < 0 || index >= this._size) {

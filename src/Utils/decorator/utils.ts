@@ -119,7 +119,7 @@ export class Validator {
 
 function isValidValue(value: any): string | null {
     if (value === null || value === undefined || Number(value) === NaN || Number(value) === Infinity || String(value) === "") {
-        return Errors.Msg.InValidArg;
+        return Errors.Msg.InvalidArg;
     }
 
     return null
@@ -127,11 +127,11 @@ function isValidValue(value: any): string | null {
 
 function isValidIndex(index: number): string | null {
     if (!index && index !== 0) {
-        return Errors.Msg.InValidArg;
+        return Errors.Msg.InvalidArg;
     }
 
     if (!Number.isSafeInteger(index)) {
-        return Errors.Msg.InValidIdx;
+        return Errors.Msg.InvalidIdx;
     }
 
     return null;

@@ -128,7 +128,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         return this._indexOf(value, compare);
@@ -264,7 +264,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     protected _insertByValidIndex(value: T, validIndex: number): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         const newNode = new DoublyListNode<T>(value);
@@ -309,7 +309,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     protected _updateByValidIndex(value: T, validIndex: number): this {
         if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InValidArg);
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
         const pointer = this._getNodeByValidIndex(validIndex);
@@ -319,7 +319,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     protected _getInvalidIndex(index: number): number {
         if (!Number.isInteger(index)) {
-            throw new Errors.InvalidIndex(Errors.Msg.InValidIdx);
+            throw new Errors.InvalidIndex(Errors.Msg.InvalidIdx);
         }
 
         if (index < 0 && index + this._size < 0 || index >= this._size) {

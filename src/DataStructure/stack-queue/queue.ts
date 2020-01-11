@@ -1,6 +1,5 @@
-import { IQueue, ILinkedList, ILimitedLinkedList } from "@Interface/specific";
-import { LinkedListFactory } from "@DataStructure/linked-list";
-import { ListTypes } from "@Utils/types";
+import { IQueue, ILimitedLinkedList } from "@Interface/specific";
+import { ListTypes, PrintOrder } from "@Utils/types";
 import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common QUEUE by Singly Linked List */
@@ -38,6 +37,10 @@ export class Queue<T> implements IQueue<T> {
 
     isEmpty(): boolean {
         return this._list.isEmpty();
+    }
+
+    print(order?: PrintOrder): this {
+        throw new Error("Method not implemented.");
     }
 
     clear(): this {

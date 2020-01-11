@@ -1,21 +1,6 @@
-import { DataStructures } from "@Utils/types/data-types";
+import { IListBase } from "@Interface/common";
 
-export interface IQueue<T> {
-
-    /**
-     * *Looks at the object at the head of this Queue without removing it from the Queue*.
-     */
-    readonly head: T;
-
-    /**
-     * *Looks at the object at the tail of this Queue without removing it from the Queue*.
-     */
-    readonly tail: T;
-
-    /**
-     * *The number of the object on the current Queue*.
-     */
-    readonly size: number;
+export interface IQueue<T> extends IListBase<T> {
 
     /**
      * *Enqueue an object or a sequence of objects to the tail of this Queue*
@@ -32,14 +17,5 @@ export interface IQueue<T> {
      */
     dequeue(n: number): T[];
 
-    /**
-     * *Whether current Queue contains any object, return a boolen value*
-     */
-    isEmpty(): boolean;
-
-    /**
-     * *Remove all objects from current Queue*
-     */
-    clear(): this;
 }
 
