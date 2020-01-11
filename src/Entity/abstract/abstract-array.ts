@@ -39,7 +39,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this[this._capacity - 1];
     }
 
-    protected constructor(capacity: number, incrementals: number, ) {
+    constructor(capacity: number, incrementals: number) {
         this._size = 0;
         this._incrementals = incrementals
         this._idxOfLastElm = -1;
