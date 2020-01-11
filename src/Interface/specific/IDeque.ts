@@ -4,13 +4,13 @@ export interface IDeque<T> extends IListBase<T> {
 
     /**
      * *Add element(s) to the HEAD of this Deque*
-     * @param values element(s) that need(s) to add at the HEAD of this Deque 
+     * @param values: element(s) that need(s) to add at the HEAD of this Deque 
      */
     unshift(...values: T[]): this;
 
     /**
-     * *Add element(s) to the TAIL of this Deque*
-     * @param values element(s) that need(s) to add at the TAIL of this Deque   
+     * *Add elements to the TAIL of this Deque*
+     * @param values: Elements(s) that need(s) to add at the TAIL of this Deque   
      */
     push(...values: T[]): this;
 
