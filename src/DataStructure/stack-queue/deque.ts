@@ -1,5 +1,6 @@
 import { IDeque, ILimitedLinkedList } from "@Interface/specific";
-import { LimitedLinkedList } from "@Entity/concrete";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common Deque by Doubly Linked List */
 
