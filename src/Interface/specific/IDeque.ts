@@ -1,20 +1,6 @@
+import { IListBase } from "@Interface/common";
 
-export interface IDeque<T> {
-
-    /**
-     * *Looks at the HEAD Element of this Deque without removing it from the Deque*.
-     */
-    readonly head: T;
-
-    /**
-     * *Looks at TAIl Element of this Deque without removing it from the Deque*.
-     */
-    readonly tail: T;
-
-    /**
-     * *Return the number of the elements on the current Deque*.
-     */
-    readonly size: number;
+export interface IDeque<T> extends IListBase<T> {
 
     /**
      * *Add element(s) to the HEAD of this Deque*
@@ -46,13 +32,4 @@ export interface IDeque<T> {
      */
     pop(n: number): T[];
 
-    /**
-     * *Whether current Deque contains any object, return a boolen value*
-     */
-    isEmpty(): boolean;
-
-    /**
-     * *Remove all elements from current Deque*
-     */
-    clear(): this;
 }

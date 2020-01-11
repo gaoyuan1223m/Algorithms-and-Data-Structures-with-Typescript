@@ -1,23 +1,6 @@
-import { IList, INode } from "@Interface/common";
-import { LinkedListFactory } from "@DataStructure/linked-list";
-import { ListTypes } from "@Utils/types";
+import { IList, INode, IListBase } from "@Interface/common";
 
-export interface ILimitedLinkedList<T> {
-
-    /**
-     * *Look at the HEAD elements on the List and return it without removing it from the List*
-     */
-    readonly head: T;
-
-    /**
-     * *Look at the TAIL elements on the List and return it without removing it from the List*
-     */
-    readonly tail: T;
-
-    /**
-     * *Return the number of elements on the List*
-     */
-    readonly size: number;
+export interface ILimitedLinkedList<T> extends IListBase<T> {
 
     /**
      * *Add element(s) to the HEAD of List*
@@ -50,16 +33,6 @@ export interface ILimitedLinkedList<T> {
      * @param n the number of element(s) that need(s) to remove
      */
     removeFromTail(n: number): T[];
-
-    /**
-     * *Return whether the current List has elements or not*
-     */
-    isEmpty(): boolean;
-
-    /**
-     * *Remove all elements from the List*
-     */
-    clear(): this;
 
 }
 

@@ -5,7 +5,7 @@ import { IArray } from "@Interface/specific";
 describe(`Test for Static Array`, () => {
 
     const capacity: number = 7;
-    const staticArray: IArray<number> = ArrayFactory.createStaticArray<number>(capacity);
+    const staticArray: IArray<number> = ArrayFactory.create<number>(capacity);
 
     beforeAll(() => {
         staticArray

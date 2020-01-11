@@ -1,57 +1,56 @@
-import { ICollection } from "@Interface/common/ICollection";
+import { ICollection, ICollectionBase } from "@Interface/common/ICollection";
 import { ICompareFunc } from "@Utils/compare";
+import { SortMethods } from "@Algorithm/sort";
 
-/**
- * *IList provides clients with CRUD methods.*
- * *Element on the IList has a unique Index Signature by which clients can query the element.*
- * *Generally, Array, LinkedList can implement IList Interface* 
- */
-export interface IList<T> extends ICollection<T> {
+export interface IListBase<T> extends ICollectionBase<T> {
 
     /**
-     * *Return the numbers of element from the List*
+     * @return {number} the number of current elements on the List
      */
     readonly size: number;
 
     /**
-     * *Return the first element from the List*
+     * @return {T} the first element from the List without removing it*
      */
     readonly head: T;
 
     /**
-     * *Return the last element from the list*
+     * @return {T} the last element from the List without removing it*
      */
     readonly tail: T;
+}
+
+export interface IList<T> extends IListBase<T>, ICollection<T> {
 
     /**
      * *Insert a new element at the index on the List*
-     * @param value: value of a single element
-     * @param index: index of the inserted element
+     * @param value element to add
+     * @param index index where the new element is added
      */
     insertByIndex(value: T, index: number): this;
 
     /**
      * *Remove a element by its index from the List*
-     * @param index: index of the element that has to be removed from the List 
+     * @param index index of the element to remove from the List 
      */
     removeByIndex(index: number): T;
 
     /**
-     * *Update value of the Object by its index on the List*
-     * @param value: the value that needs to be updated on the Array
-     * @param index: the position where the old value is located
+     * *Update the element by its index on the List*
+     * @param value element to update
+     * @param index index where the old element is replaced by the new one
      */
     updateByIndex(value: T, index: number): this;
 
     /**
-     * *Get a element from the List by its index*
-     * @param index: index of the element that has to be searched
+     * *Get a element by its index from the List*
+     * @param index index of the element to find
      */
     getByIndex(index: number): T;
 
     /**
-     * *Look up the index of the element, if it's not there, return -1*
-     * @param value: value of the element that has to be searched on the List 
+     * *Look up the index of the element on the List, if it's not there, return -1*
+     * @param value element to search 
      */
     indexOf(value: T, compare?: ICompareFunc<T>): number;
 
@@ -59,4 +58,9 @@ export interface IList<T> extends ICollection<T> {
      * *Reverse the whole list*
      */
     reverse(): this;
+
+    /**
+     * *Sort element elements on the List Increaingly or Decreasingly*
+     */
+    sort(compare?: ICompareFunc<T>, method?: SortMethods): this;
 }

@@ -1,5 +1,5 @@
 import { ILimitedLinkedList, ILinkedList } from "@Interface/specific";
-import { ListTypes } from "@Utils/types";
+import { ListTypes, PrintOrder } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 
 export class LimitedLinkedList<T> implements ILimitedLinkedList<T> {
@@ -42,7 +42,7 @@ export class LimitedLinkedList<T> implements ILimitedLinkedList<T> {
     removeFromTail(n?: number): T | T[] {
         return this._list.removeFromTail(n)
     }
-    
+
     isEmpty(): boolean {
         return this._list.size === 0;
     }
@@ -50,6 +50,10 @@ export class LimitedLinkedList<T> implements ILimitedLinkedList<T> {
     clear(): this {
         this._list.clear();
         return this;
+    }
+
+    print(order?: PrintOrder): this {
+        throw new Error("Method not implemented.");
     }
 
     // protected _remove(num: number, fromHead: boolean): T | T[] {

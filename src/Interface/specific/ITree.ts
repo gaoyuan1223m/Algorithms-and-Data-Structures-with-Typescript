@@ -5,40 +5,42 @@ import { ICompareFunc } from "@Utils/compare";
 export interface ITree<T> extends ICollection<T> {
 
     /**
-     * The value of the Root Node.
+     * @return {T} root value in the Tree
      */
     readonly rootValue: T; // O(1)
 
     /**
-     * The maximum value on the Tree. 
+     * @return {T} the maximum value in the Tree
      */
     readonly maxValue: T; // Best O(1), Average O(log(n)), Worst O(n)
 
     /**
-     * The minimum value on the Tree. 
+     * @return {T} the minimum value in the Tree
      */
     readonly minValue: T; //Best O(1), Average O(log(n)), Worst O(n)
 
     /**
      * Find a path from the root to the specific tree node. Going to the left returns 0, while going to the right returns 1
      * **
-     * *          7            *
+     * *          7            
      * *        /   \
-     * *      5      9        *
+     * *      5      9        
      * *     / \   /   \
-     * *    4   6 8    11     *
+     * *    4   6 8    11     
      * *    /         /    \
-     * *  3         10     12 *   
+     * *  3         10     12 
+     * if we're going to find 7 (root) in the tree, it will return []
      * if we're going to find 10 on the tree, it will return [1 1 0];
      * if we're going to find 15 on the tree, it will return [-1];
      * @param value the value of Tree Node that needs to search 
+     * @param compare control elements to search on the Tree
      */
     findPath(value: T, compare?: ICompareFunc<T>): number[];
 
     /**
      * Insert a number of element (T[]) on the Tree 
-     * @param values [Necessary]
-     * @param compare [Optional]
+     * @param values elements to add
+     * @param compare control elements to add on the Tree
      */
     appendRange(values: T[], compare?: ICompareFunc<T>): this;
 
@@ -51,9 +53,7 @@ export interface ITree<T> extends ICollection<T> {
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {
-
-    left: IBinaryTreeNode<T>;
-    
+    left: IBinaryTreeNode<T>;    
     right: IBinaryTreeNode<T>;
 }
 
