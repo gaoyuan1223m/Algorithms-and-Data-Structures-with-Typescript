@@ -1,17 +1,8 @@
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ILinkedList } from "@Interface/specific";
-import { IError } from "@Interface/common";
-import { Errors } from "@Utils/error-handling";
+import { Errors, catchErr } from "@Utils/error-handling";
 import { ListTypes } from "@Utils/types";
 
-const errTolerantFn = (fn: Function) => (...args: any[]): string => {
-    try {
-        return fn(...args)
-    } catch (error) {
-        const e: IError = error;
-        return e.message;
-    }
-}
 
 describe(`Test for SinglyLinkedList`, () => {
 
@@ -47,12 +38,12 @@ describe(`Test for SinglyLinkedList`, () => {
     })
 
     it(`getByIndex - get -1.5`, () => {
-        expect<string>(errTolerantFn(sll.getByIndex.bind(sll))(-1.5))
+        expect<string>(catchErr(sll.getByIndex.bind(sll))(-1.5))
             .toBe<string>(Errors.Msg.InvalidIdx);
     })
 
     it(`getByIndex - get 100`, () => {
-        expect<string>(errTolerantFn(sll.getByIndex.bind(sll))(100))
+        expect<string>(catchErr(sll.getByIndex.bind(sll))(100))
             .toBe<string>(Errors.Msg.BeyondBoundary)
     })
 
@@ -115,7 +106,7 @@ describe(`Test for SinglyLinkedList`, () => {
     });
 
     it(`IndexOf - Invalid Element`, () => {
-        expect<string>(errTolerantFn(sll.indexOf.bind(sll))(undefined))
+        expect<string>(catchErr(sll.indexOf.bind(sll))(undefined))
             .toBe<string>(Errors.Msg.InvalidArg);
     });
 
@@ -138,7 +129,7 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.tail).toBe(54);
     });
 
-    it(`#print the linked list - FIRST`, () => {
+    xit(`#print the linked list - FIRST`, () => {
         sll.print();
     });
 
@@ -181,8 +172,7 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.size).toBe(2);
     });
 
-    it(`#print the linked list - SECOND`, () => {
-        console.log(`The second Linked List`)
+    xit(`#print the linked list - SECOND`, () => {
         sll.print();
     });
 
