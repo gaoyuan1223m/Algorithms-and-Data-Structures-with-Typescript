@@ -1,9 +1,11 @@
 import { ArrayFactory } from "@DataStructure/array";
+import { Errors, catchErr } from "@Utils/error-handling";
+
 
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = ArrayFactory.createStaticArray<number>(capacity);
+    const staticArray = ArrayFactory.create<number>(capacity);
 
     beforeAll(() => {
         staticArray
@@ -28,6 +30,12 @@ describe(`Test for Static Array`, () => {
         expect(staticArray.size).toBe(4);
         expect(staticArray.length).toBe(7);
     });
+
+    it(`#Append invalid value but no exception throw`, () => {
+        expect(catchErr(staticArray.append.bind(staticArray))(null))
+            .toContain(Errors.Msg.InvalidArg);
+        expect(staticArray.size).toBe(4);
+    })
 
     it(`#Get value by positive index`, () => {
         expect(staticArray[3]).toBe(16);
@@ -110,7 +118,7 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-4]).toBe(2);
     })
 
-    it(`print the array`, () => {
+    xit(`print the array`, () => {
         staticArray.print();
     })
 
