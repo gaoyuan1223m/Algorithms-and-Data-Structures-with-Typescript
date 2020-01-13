@@ -1,11 +1,12 @@
 import { ArrayFactory } from "@DataStructure/array";
 import { Errors, catchErr } from "@Utils/error-handling";
+import { ArrayTypes } from "@Utils/types";
 
 
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = ArrayFactory.create<number>(capacity);
+    const staticArray = new ArrayFactory(capacity).create<number>(ArrayTypes.Static);
 
     beforeAll(() => {
         staticArray

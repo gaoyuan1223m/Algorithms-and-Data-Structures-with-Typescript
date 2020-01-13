@@ -10,7 +10,6 @@ class InvalidIndex implements IError {
         this.message = message;
         this.name = name;
     }
-
 }
 
 class InvalidArgument implements IError {
@@ -23,7 +22,18 @@ class InvalidArgument implements IError {
         this.message = message;
         this.name = name;
     }
+}
 
+class InvalidDataType implements IError {
+
+    readonly name: string;
+    readonly message: string;
+    readonly stack?: string;
+
+    constructor(message: string, name?: string) {
+        this.message = message;
+        this.name = name;
+    }
 }
 
 class OutOfBoundary implements IError {
@@ -55,6 +65,7 @@ enum Msg {
     InvalidArg = 'Arg cannot be Null, Undefined, NAN, INFINITY or Empty String!',
     InvalidIdx = 'Index should be safe INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     InvalidPath = 'Invalid path number, only 0 or 1 is acceptable',
+    InvalidDataType = 'Invalid input of Data Type',
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement queried doesn\'t exist',
     NoElements ='No elements in current collection',
@@ -64,6 +75,7 @@ enum Msg {
 export const Errors = {
     InvalidIndex,
     InvalidArgument,
+    InvalidDataType,
     OutOfBoundary,
     ELementNotExisted,
     Msg

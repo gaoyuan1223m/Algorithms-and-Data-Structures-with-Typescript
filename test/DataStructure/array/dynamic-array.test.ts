@@ -1,12 +1,13 @@
 import { ArrayFactory } from "@DataStructure/array"
+import { ArrayTypes } from "@Utils/types";
 
 describe(`Test for Dynamic Array`, () => {
 
     const initCapacity = 7;
-    const da = ArrayFactory.create<number>(initCapacity, initCapacity);
+    const dynamicArray = new ArrayFactory(initCapacity).create<number>(ArrayTypes.Dynamic);
 
     it(`#should return right size`, () => {
-        expect(da.length).toBe(7);
-        expect(da.size).toBe(0)
-    })
-})
+        expect(dynamicArray.length).toBe(7);
+        expect(dynamicArray.size).toBe(0)
+    });
+});

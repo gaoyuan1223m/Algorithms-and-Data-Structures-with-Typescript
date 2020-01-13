@@ -1,12 +1,10 @@
 import { IArray, IStack, ILinkedList } from "@Interface/specific";
-import { ICollectionFactory } from "@Interface/common";
 import { ArrayFactory } from "@DataStructure/array";
 import { Validation, ValidateParams } from "@Utils/decorator";
-import { ListTypes, PrintOrder } from "@Utils/types";
+import { ListTypes, PrintOrder, ArrayTypes } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
-// import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
-export const StackFactory: ICollectionFactory = class StackFactory {
+export class StackFactory {
 
     /**Recommend implementing Stack by Linked List, so no parameter needs to pass */
     static create<T>(capacity?: number): IStack<T> {
@@ -36,7 +34,8 @@ class ArrayStack<T> implements IStack<T> {
     };
 
     constructor(capacity: number) {
-        this._array = ArrayFactory.create<T>(capacity, capacity)
+        // this._array = ArrayFactory.create<T>(capacity, capacity)
+        this._array = new ArrayFactory(capacity).create<T>(ArrayTypes.Dynamic);
     }
 
 
