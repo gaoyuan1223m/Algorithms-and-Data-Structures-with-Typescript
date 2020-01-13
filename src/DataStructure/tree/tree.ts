@@ -97,9 +97,15 @@ export class BinarySearchTree<T> implements ITree<T> {
         for (const n of path) {
             if (n !== 0 && n !== 1) throw new Errors.InvalidArgument(Errors.Msg.InvalidPath);
 
-            pointer = n ? pointer.right : pointer.left;
+            if (n) {
+                if (!pointer.right) return null;
+                pointer = pointer.right;
+            } else {
+                if (!pointer.left) return null;
+                pointer = pointer.left;
+            }
         }
-        
+
         return pointer.value;
     }
 
