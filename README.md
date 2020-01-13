@@ -10,59 +10,88 @@
 > - Step 2: npm install
 > - Step 3: npm test
 
-## Detailed Discussion
+## Data Structures
 
 ### Array
-Array is a kind of data structure that can store a sequential collection of elements of the same type. An array is used to store a collection of data, but it's often more useful to think of an array as a collection of variables of the same type.
-- [Static Array](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/static-array.ts)
 
-<img src="assets/img/array/static-array.png">
+Array refers to a sequence of elements which can be visited by their indices. Array can be created by **ArrayFactory** imported from this repo. Generic Method "*create<T>()*" in ArrayFactory recieves two parameters, first one is capacity of the Array to create, while second one, optional, is incremental of the Array. 
 
-- [Dynamic Array](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+- [Static Array](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/array/array.ts)
 
-<img src="assets/img/array/dynamic-array.png">
+```
+import { ArrayFactory } from "@DataStructure/array";
+
+const capacity = 5;
+
+const staticArray = ArrayFactory.create<number>(capacity);
+```
+<img src="assets/img/array/static-array.png" width="100%" height="450px">
+
+- [Dynamic Array](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/array/array.ts)
+
+```
+import { ArrayFactory } from "@DataStructure/array";
+
+const capacity = 5, incremental = 5;
+
+const dynamicArray = ArrayFactory.create<number>(capacity, incremental);
+```
+
+<img src="assets/img/array/dynamic-array.png" width="100%" height="450px">
 
 ### Linked List
 
-- [Singly Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+- [Singly Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-<img src="assets/img/linked-list/singly-linked-list.png">
+<img src="assets/img/linked-list/singly-linked-list.png" width="100%" height="300px">
 
-- [Doubly Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+- [Doubly Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-<img src="assets/img/linked-list/doubly-linked-list.png">
+<img src="assets/img/linked-list/doubly-linked-list.png" width="100%" height="300px">
 
-- [Circular Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+- [Circular Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-<img src="assets/img/linked-list/circular-singly-linked-list.png">
+<img src="assets/img/linked-list/circular-singly-linked-list.png" width="100%" height="300px">
 
-- [Skip Linked List](https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures/blob/master/src/DataStructure/array/dynamic-array.ts)
+- [Skip Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-<img src="assets/img/linked-list/skip-list.png">
+<img src="assets/img/linked-list/skip-list.png" width="100%" height="200px">
 
 ### Stack
 
+- [Stack](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/stack.ts)
 
-- Stack by Linked List
-
-- Stack by Array
+<img src="assets/img/stack/stack.png" width="100%" height="500px">
 
 ### Queue
 
-- Queue by Linked List
+- [Queue](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/queue.ts)
 
-- Queue by Array
+<img src="assets/img/queue/queue.png" width="100%" height="600px">
+
+### Deque
+
+- [Deque](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/deque.ts)
+
+<img src="assets/img/deque/deque.png" width="100%" height="400px">
 
 ### Tree
 
-- Binary Search Tree (BST)
+- BST
 
 - AVL
 
 - Red-Black
 
-### Hash
+### Hashing
 
 - Dictionary
 
 ### Graph
+
+- Direction
+
+
+## Algorithms
+
+### Sort
