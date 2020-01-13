@@ -1,6 +1,6 @@
-import { IList, INode, IListBase } from "@Interface/common";
+import { IList, INode } from "@Interface/common";
 
-export interface ILimitedLinkedList<T> extends IListBase<T> {
+export interface ILinkedList<T> extends IList<T> {
 
     /**
      * *Add element(s) to the HEAD of List*
@@ -33,11 +33,6 @@ export interface ILimitedLinkedList<T> extends IListBase<T> {
      * @param n the number of element(s) that need(s) to remove
      */
     removeFromTail(n: number): T[];
-
-}
-
-export interface ILinkedList<T> extends ILimitedLinkedList<T>, IList<T> {
-
 
 }
 

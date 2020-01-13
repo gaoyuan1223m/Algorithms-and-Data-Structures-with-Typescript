@@ -3,7 +3,7 @@ import { ICompareFunc, valueTypeComparison, NOT_EXISTED } from "@Utils/compare";
 import { SortMethods } from "@Algorithm/sort";
 import { DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 
 export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {    
 
@@ -37,29 +37,29 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return this._size;
     }
 
-    addHeadNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        }
+    // addHeadNode(value: T): this {
+    //     if (!this._isValid(value)) {
+    //         throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+    //     }
 
-        return this._addHeadNode(new DoublyListNode<T>(value));
-    }
+    //     return this._addHeadNode(new DoublyListNode<T>(value));
+    // }
 
-    addTailNode(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        }
+    // addTailNode(value: T): this {
+    //     if (!this._isValid(value)) {
+    //         throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+    //     }
 
-        return this._addTailNode(new DoublyListNode<T>(value));
-    }
+    //     return this._addTailNode(new DoublyListNode<T>(value));
+    // }
 
-    removeHeadNode(): T {
-        return this._removeHeadNode();
-    }
+    // removeHeadNode(): T {
+    //     return this._removeHeadNode();
+    // }
 
-    removeTaiNode(): T {
-        return this._removeTailNode();
-    }
+    // removeTaiNode(): T {
+    //     return this._removeTailNode();
+    // }
 
     insertAtHead(...values: T[]): this {
        for (const value of values) {
@@ -133,7 +133,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     append(value: T): this {
-        return this.addTailNode(value);
+        return this.insertAtHead(value);
     }
 
     contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
@@ -152,7 +152,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    print(): this {
+    print(order?: ListPrintOrder): this {
         throw new Error("Method not implemented.");
     }
 

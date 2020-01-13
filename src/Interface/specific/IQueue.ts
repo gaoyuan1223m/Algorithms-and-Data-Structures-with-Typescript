@@ -10,6 +10,7 @@ export interface IQueue<T> extends IListBase<T> {
 
     /**
      * *Dequeue object(s) from the Head of this Queue*
+     * @return {T | T[]} element or elements in Array 
      */
     dequeue(): T;
     /** 

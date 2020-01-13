@@ -1,12 +1,11 @@
-enum TreePrintOrder {
+export enum TreePrintOrder {
     PreOrder,
     InOrder,
     PostOrder
 }
-
-enum ListPrintOrder {
-    Increase,
-    Decrease
+export enum ListPrintOrder {
+    FromHeadToTail,
+    FromTailToHead
 }
 
 export type PrintOrder = TreePrintOrder | ListPrintOrder;

@@ -1,13 +1,14 @@
-import { IDeque, ILimitedLinkedList } from "@Interface/specific";
+import { IDeque, ILinkedList } from "@Interface/specific";
 import { LinkedListFactory } from "@DataStructure/linked-list";
-import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
+import { ListTypes } from "@Utils/types";
+// import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common Deque by Doubly Linked List */
 
 export class Deque<T> implements IDeque<T> {
 
 
-    protected _list: ILimitedLinkedList<T>;
+    protected _list: ILinkedList<T>;
 
     get head(): T {
         return this._list.head;
@@ -22,7 +23,7 @@ export class Deque<T> implements IDeque<T> {
     }
 
     constructor() {
-        this._list = new LimitedLinkedList<T>();
+        this._list = LinkedListFactory.create<T>(ListTypes.Doubly);
     }
 
     unshift(...values: T[]): this {

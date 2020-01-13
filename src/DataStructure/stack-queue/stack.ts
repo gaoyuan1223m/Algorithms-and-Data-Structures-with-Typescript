@@ -1,9 +1,10 @@
-import { IArray, IStack, ILimitedLinkedList } from "@Interface/specific";
+import { IArray, IStack, ILinkedList } from "@Interface/specific";
 import { ICollectionFactory } from "@Interface/common";
 import { ArrayFactory } from "@DataStructure/array";
 import { Validation, ValidateParams } from "@Utils/decorator";
 import { ListTypes, PrintOrder } from "@Utils/types";
-import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+// import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 export const StackFactory: ICollectionFactory = class StackFactory {
 
@@ -82,7 +83,7 @@ class ArrayStack<T> implements IStack<T> {
  */
 class LinkedListStack<T> implements IStack<T> {
 
-    protected _list: ILimitedLinkedList<T>
+    protected _list: ILinkedList<T>
 
     get peek(): T {
         return this._list.head;
@@ -93,7 +94,7 @@ class LinkedListStack<T> implements IStack<T> {
     };
 
     constructor() {
-        this._list = new LimitedLinkedList<T>(ListTypes.Singly);
+        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
     }
 
     push(...values: T[]): this {
