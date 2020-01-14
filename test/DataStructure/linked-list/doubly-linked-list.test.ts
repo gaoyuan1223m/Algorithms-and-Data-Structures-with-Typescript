@@ -19,9 +19,10 @@ describe(`Test for Doubly-Linked-List`, () => {
             .insertAtTail(34, 18, 19, null, Infinity, 21);
     });
 
-    xit(`#print current doubly linked list`, () => {
+    it(`#print current doubly linked list`, () => {
         dll.print(ListPrintOrder.FromHeadToTail);
         dll.print(ListPrintOrder.FromTailToHead);
+        expect(catchErr(dll.print.bind(dll))()).toBe(Errors.Msg.UnacceptablePrintOrder);
     })
 
     it(`#Should return right size of List`, () => {
@@ -96,6 +97,34 @@ describe(`Test for Doubly-Linked-List`, () => {
     it(`#Shoulde return whether the element to find is on the Liste`, () => {
         expect(dll.contains(9)).toBe(true);
         expect(dll.contains(11)).toBe(false);
+    });
+
+    it(`#Should insert value by POSITIVE index`, () => {
+        const val = 32;
+        dll.insertByIndex(val, 4);
+        expect(dll.getByIndex(-4)).toBe(val);
+    });
+
+    it(`#Should insert value by NEGATIVE index`, () => {
+        const val = 22;
+        dll.insertByIndex(val, -2);
+        // dll.print(ListPrintOrder.FromHeadToTail);
+        expect(dll.getByIndex(7)).toBe(val);
+    });
+
+    it(`Should return valid TAIL when inserting at TAIL`, () => {
+        const val = 13;
+        dll.insertByIndex(val, -1);
+        // dll.print(ListPrintOrder.FromHeadToTail);
+        expect(dll.tail).toBe(val);
+        expect(dll.size).toBe(10);
+    });
+
+    it(`#Shoulde reutrn vlaid HEAD when inserting at HEAD`, () => {
+        const val = 11;
+        dll.insertByIndex(val, -10);
+        // dll.print(ListPrintOrder.FromHeadToTail);
+        expect(dll.getByIndex(-10)).toBe(11);
     });
 
 });

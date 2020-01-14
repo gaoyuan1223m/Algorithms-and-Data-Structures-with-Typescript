@@ -80,12 +80,12 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
 
     insertByIndex(value: T, index: number): this {
         const idx = this._getInvalidIndex(index);
-        return this._insertByValidIndex(value, idx);
+        return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
     }
 
     removeByIndex(index: number): T {
         const idx = this._getInvalidIndex(index);
-        return this._removeByValidIndex(index);
+        return this._removeByValidIndex(idx);
     }
 
     updateByIndex(value: T, index: number): this {
@@ -120,7 +120,12 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
-        throw new Error("Method not implemented.");
+        const idx = this.indexOf(value, compare);
+
+        if(idx === NOT_EXISTED) return this;
+
+        this.removeByIndex(idx);
+        return this;
     }
 
     sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
@@ -279,7 +284,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
             return this._addHeadNode(newNode);
         }
 
-        if (validIndex === this._size - 1) {
+        if (validIndex === this._size) {
             return this._addTailNode(newNode);
         }
 
@@ -337,7 +342,7 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
             throw new Errors.InvalidIndex(Errors.Msg.InvalidIdx);
         }
 
-        if (index < 0 && index + this._size < 0 || index >= this._size) {
+        if (index < 0 && index + this._size < 0 || index > this._size) {
             throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
         }
 
