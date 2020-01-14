@@ -66,6 +66,7 @@ enum Msg {
     InvalidIdx = 'Index should be safe INTEGER, both POSITIVE or NEGATIVE are acceptable!',
     InvalidPath = 'Invalid path number, only 0 or 1 is acceptable',
     InvalidDataType = 'Invalid input of Data Type',
+    UnacceptablePrintOrder = "Print order is NOT acceptable",
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement queried doesn\'t exist',
     NoElements ='No elements in current collection',

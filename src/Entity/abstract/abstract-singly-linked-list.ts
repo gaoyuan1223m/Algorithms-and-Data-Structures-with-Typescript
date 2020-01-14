@@ -132,12 +132,12 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
         return this._indexOf(value, compare);
     }
 
-    contains(value: T): boolean {
-        return this.indexOf(value) !== NOT_EXISTED;
+    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
+        return this.indexOf(value, compare) !== NOT_EXISTED;
     }
 
-    remove(value: T): this {
-        const idx = this.indexOf(value);
+    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+        const idx = this.indexOf(value, compare);
 
         if (idx === NOT_EXISTED) return this;
 
@@ -284,12 +284,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _removeByValidIndex(validIndex: number): T {
-        if (this._size === 1) {
-            const value = this._headPointer.value;
-            this._clearCurrentList();
-            return value;
-        }
-
+        
         if (validIndex === 0) return this._removeHeadNode();
 
         if (validIndex === this._size - 1) return this._removeTailNode();
@@ -364,7 +359,7 @@ export abstract class AbstractSinglyLinkedList<T> implements ILinkedList<T> {
             && value !== null
             && Number(value) !== NaN
             && Number(value) !== Infinity
-            && String(value) !== ""
+            && String(value) !== "";
     }
 
     protected _clearCurrentList(): this {
