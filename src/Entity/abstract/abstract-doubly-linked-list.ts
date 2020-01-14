@@ -390,11 +390,11 @@ export abstract class AbstractDoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _isValid(value: T) {
-        return value !== undefined
-            && value !== null
-            && Number(value) !== NaN
-            && Number(value) !== Infinity
-            && String(value) !== "";
+        return value !== undefined           // 不能是undefined
+            && value !== null                // 不能是null
+            && !isNaN(Number(value))         // 不能是NaN
+            && isFinite(Number(value))       // 不能是Infinity
+            && String(value) !== "";         // 不能是空字符串  
     }
 
 }

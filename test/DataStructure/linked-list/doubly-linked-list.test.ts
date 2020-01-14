@@ -1,6 +1,7 @@
 import { ILinkedList } from "@Interface/specific"
 import { LinkedListFactory } from "@DataStructure/linked-list"
 import { ListPrintOrder } from "@Utils/types";
+import { catchErr, Errors } from "@Utils/error-handling";
 
 describe(`Test for Doubly-Linked-List`, () => {
 
@@ -14,11 +15,11 @@ describe(`Test for Doubly-Linked-List`, () => {
      */
     beforeAll(() => {
         dll
-            .insertAtHead(24, 11, 31)
-            .insertAtTail(34, 18, 19, 21);
+            .insertAtHead(24, null, NaN, 11, 31)
+            .insertAtTail(34, 18, 19, null, Infinity, 21);
     });
 
-    xit(`#print current doubly linked list`, () => { 
+    xit(`#print current doubly linked list`, () => {
         dll.print(ListPrintOrder.FromHeadToTail);
         dll.print(ListPrintOrder.FromTailToHead);
     })
@@ -42,12 +43,12 @@ describe(`Test for Doubly-Linked-List`, () => {
         expect(dll.size).toBe(6)
     });
 
-    it(`#Shoud return a series of values when removing from HEAD`, () => {
+    it(`#Should return a series of values when removing from HEAD`, () => {
         expect(dll.removeFromHead(3)).toEqual([31, 11, 24]);
         expect(dll.size).toBe(3);
     });
 
-    it(`#Shoulde return a series of value when removing from TAIL`, () => {
+    it(`#Should return a series of value when removing from TAIL`, () => {
         expect(dll.removeFromTail(2)).toEqual([21, 19]);
         expect(dll.size).toBe(1);
     });
@@ -59,5 +60,42 @@ describe(`Test for Doubly-Linked-List`, () => {
     it(`#Should be empty`, () => {
         dll.clear();
         expect(dll.isEmpty()).toBe(true);
-    })
-})
+    });
+
+    it(`#Should return null when NO element on the List`, () => {
+        expect(dll.head).toBe(null);
+        expect(dll.tail).toBe(null);
+    });
+
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *       2 <-> 6 <-> 8 <-> 3 <-> 4 <-> 9 <-> 7 
+     *      --------------------------------------------------------
+     */
+
+    it(`#Add elements to the List`, () => {
+        dll.insertAtHead(8, 6, null, 2);
+        dll.insertAtTail(3, 4, 9, undefined, NaN, 7);
+        expect(dll.size).toBe(7);
+    });
+
+    xit(`#Print current elements on the List`, () => {
+        dll.print(ListPrintOrder.FromHeadToTail);
+    });
+
+    it(`#Get element by INVALID index`, () => {
+        expect(catchErr(dll.getByIndex.bind(dll))(-1.5)).toBe(Errors.Msg.InvalidIdx);
+        expect(catchErr(dll.getByIndex.bind(dll))(9)).toBe(Errors.Msg.BeyondBoundary);
+    });
+
+    it(`#Shoulde return right index of element to find`, () => {
+        expect(dll.indexOf(3)).toBe(3);
+        expect(dll.indexOf(11)).toBe(-1);
+    });
+
+    it(`#Shoulde return whether the element to find is on the Liste`, () => {
+        expect(dll.contains(9)).toBe(true);
+        expect(dll.contains(11)).toBe(false);
+    });
+
+});
