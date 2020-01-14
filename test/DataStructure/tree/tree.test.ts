@@ -46,7 +46,10 @@ describe(`Test for Binary Search Tree`, () => {
     });
 
     it(`#ByPath`, () => {
-        expect(BST.byPath([1, 1, 0])).toBe(10);
+        expect(BST.byPath()).toBe(7);
+        expect(BST.byPath(1, 1, 0)).toBe(10);
+        expect(BST.byPath(0, 0)).toBe(4);
+        expect(BST.byPath(1, 0, 1)).toBe(null);
     });
 
 });

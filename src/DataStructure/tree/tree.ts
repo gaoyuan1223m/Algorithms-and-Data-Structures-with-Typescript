@@ -89,13 +89,13 @@ export class BinarySearchTree<T> implements ITree<T> {
         return [-1];
     }
 
-    byPath(path: number[]): T {
+    byPath(...path: number[]): T {
         if (!path) return null;
 
         let pointer = this._rootNode;
 
         for (const n of path) {
-            if (n !== 0 && n !== 1) throw new Errors.InvalidArgument(Errors.Msg.InvalidPath);
+            if (n !== 0 && n !== 1) continue;
 
             if (n) {
                 if (!pointer.right) return null;
