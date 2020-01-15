@@ -1,4 +1,5 @@
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
+import { IFactory } from "@Interface/common";
 import { AbstractArray } from "@Entity/abstract";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
@@ -6,13 +7,22 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { Validation, ValidateParams } from "@Utils/decorator";
 
 
-export class ArrayFactory {
+export class ArrayFactory implements IFactory {
 
-    static create<T>(capacity: number, incrementals: number = 0): IArray<T> {
-        if (incrementals === 0) return new StaticArray(capacity);
+    constructor(private capacity: number, private incremental?: number) { }
 
-        return new DynamicArray(capacity, incrementals);
+    create<T>(type: ArrayTypes): IArray<T> {
+        if (type === ArrayTypes.Static) {
+            return new StaticArray<T>(this.capacity);
+        }
+
+        if (type === ArrayTypes.Dynamic) {
+            return new DynamicArray(this.capacity, this.incremental ? this.incremental : this.capacity);
+        }
+
+        throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
+
 }
 
 class StaticArray<T> extends AbstractArray<T> {

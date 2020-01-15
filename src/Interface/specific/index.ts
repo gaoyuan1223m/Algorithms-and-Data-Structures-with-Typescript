@@ -1,5 +1,6 @@
 export * from './IArray'
 export * from './IDeque'
+export * from './IHash'
 export * from './ILinkedList'
 export * from './IQueue'
 export * from './IStack'

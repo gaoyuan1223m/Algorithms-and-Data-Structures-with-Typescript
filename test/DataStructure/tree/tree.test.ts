@@ -39,13 +39,20 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.findPath(111)).toEqual([-1]);
     });
 
-    it(`Contains a value`, () => {
+    it(`#Contains a value`, () => {
         expect(BST.contains(12)).toBe(true);
         expect(BST.contains(8)).toBe(true);
         expect(BST.contains(14)).toBe(false);
-    })
+    });
 
-})
+    it(`#ByPath`, () => {
+        expect(BST.byPath()).toBe(7);
+        expect(BST.byPath(1, 1, 0)).toBe(10);
+        expect(BST.byPath(0, 0)).toBe(4);
+        expect(BST.byPath(1, 0, 1)).toBe(null);
+    });
+
+});
 
 
 

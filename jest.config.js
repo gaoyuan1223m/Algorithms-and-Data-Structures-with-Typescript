@@ -4,14 +4,14 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  // collectCoverage: true,
-  // collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
   coverageThreshold: {
     global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100
+      branches: 75,
+      functions: 75,
+      lines: 75,
+      statements: 75
     }
   },
   // testRegex: 'singly-linked-list.test.ts', /**Run Single Unit Test */

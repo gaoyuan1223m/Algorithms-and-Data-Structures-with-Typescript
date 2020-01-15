@@ -1,11 +1,10 @@
-import { IArray, IStack, ILimitedLinkedList } from "@Interface/specific";
-import { ICollectionFactory } from "@Interface/common";
+import { IArray, IStack, ILinkedList } from "@Interface/specific";
 import { ArrayFactory } from "@DataStructure/array";
 import { Validation, ValidateParams } from "@Utils/decorator";
-import { ListTypes, PrintOrder } from "@Utils/types";
-import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
+import { ListTypes, PrintOrder, ArrayTypes } from "@Utils/types";
+import { LinkedListFactory } from "@DataStructure/linked-list";
 
-export const StackFactory: ICollectionFactory = class StackFactory {
+export class StackFactory {
 
     /**Recommend implementing Stack by Linked List, so no parameter needs to pass */
     static create<T>(capacity?: number): IStack<T> {
@@ -35,7 +34,8 @@ class ArrayStack<T> implements IStack<T> {
     };
 
     constructor(capacity: number) {
-        this._array = ArrayFactory.create<T>(capacity, capacity)
+        // this._array = ArrayFactory.create<T>(capacity, capacity)
+        this._array = new ArrayFactory(capacity).create<T>(ArrayTypes.Dynamic);
     }
 
 
@@ -82,7 +82,7 @@ class ArrayStack<T> implements IStack<T> {
  */
 class LinkedListStack<T> implements IStack<T> {
 
-    protected _list: ILimitedLinkedList<T>
+    protected _list: ILinkedList<T>
 
     get peek(): T {
         return this._list.head;
@@ -93,7 +93,7 @@ class LinkedListStack<T> implements IStack<T> {
     };
 
     constructor() {
-        this._list = new LimitedLinkedList<T>(ListTypes.Singly);
+        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
     }
 
     push(...values: T[]): this {

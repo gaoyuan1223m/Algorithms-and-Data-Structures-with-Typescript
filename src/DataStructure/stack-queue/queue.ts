@@ -1,12 +1,13 @@
-import { IQueue, ILimitedLinkedList } from "@Interface/specific";
+import { IQueue, ILinkedList } from "@Interface/specific";
 import { ListTypes, PrintOrder } from "@Utils/types";
-import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+// import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common QUEUE by Singly Linked List */
 
 export class Queue<T> implements IQueue<T> {
-    
-    protected _list: ILimitedLinkedList<T>;
+
+    protected _list: ILinkedList<T>;
 
     get head(): T {
         return this._list.head;
@@ -21,7 +22,7 @@ export class Queue<T> implements IQueue<T> {
     };
 
     constructor() {
-        this._list = new LimitedLinkedList<T>(ListTypes.Singly)
+        this._list = LinkedListFactory.create<T>(ListTypes.Singly)
     }
 
     enqueue(...values: T[]): this {

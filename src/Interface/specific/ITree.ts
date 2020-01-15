@@ -47,9 +47,9 @@ export interface ITree<T> extends ICollection<T> {
     /**
      * *Return an element by the given path.*
      * **0** means going left, while **1** referst to going right, and other numbers will be ignored.
-     * @param path an Number Array that only comprises of 0 and 1
+     * @param path a Number Array that only comprises of 0 and 1
      */
-    byPath(path: number[]): T
+    byPath(...path: number[]): T
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {

@@ -25,7 +25,7 @@ export interface IList<T> extends IListBase<T>, ICollection<T> {
     /**
      * *Insert a new element at the index on the List*
      * @param value element to add
-     * @param index index where the new element is added
+     * @param index index where the new element is located after inserting
      */
     insertByIndex(value: T, index: number): this;
 
@@ -38,7 +38,7 @@ export interface IList<T> extends IListBase<T>, ICollection<T> {
     /**
      * *Update the element by its index on the List*
      * @param value element to update
-     * @param index index where the old element is replaced by the new one
+     * @param index index of the old element replaced by the new one
      */
     updateByIndex(value: T, index: number): this;
 
