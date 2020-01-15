@@ -1,5 +1,6 @@
 import { ICollection, INode } from "@Interface/common";
 import { ICompareFunc } from "@Utils/compare";
+import { TreeNodeColor } from "@Utils/types";
 
 
 export interface ITree<T> extends ICollection<T> {
@@ -53,10 +54,28 @@ export interface ITree<T> extends ICollection<T> {
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {
-    left: IBinaryTreeNode<T>;    
+    left: IBinaryTreeNode<T>;
     right: IBinaryTreeNode<T>;
 }
 
+export interface IRedBlackTreeNode<T> extends INode<T> {
+    color: TreeNodeColor;
+    left: IRedBlackTreeNode<T>;
+    right: IRedBlackTreeNode<T>;
+    parent: IRedBlackTreeNode<T>
+}
+
+
 export interface IBinaryTreeNodeConstructor {
     new <T>(value: T, left?: IBinaryTreeNode<T>, right?: IBinaryTreeNode<T>): IBinaryTreeNode<T>;
+}
+
+export interface IRedBlackNodeConstructor {
+    new <T>(
+        value: T,
+        left?: IRedBlackTreeNode<T>,
+        right?: IRedBlackTreeNode<T>,
+        parent?: IRedBlackTreeNode<T>,
+        color?: TreeNodeColor
+    ): IRedBlackTreeNode<T>
 }
