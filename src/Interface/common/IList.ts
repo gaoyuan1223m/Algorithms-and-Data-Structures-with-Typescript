@@ -2,7 +2,7 @@ import { ICollection, ICollectionBase } from "@Interface/common/ICollection";
 import { ICompareFunc } from "@Utils/compare";
 import { SortMethods } from "@Algorithm/sort";
 
-export interface IListBase<T> extends ICollectionBase<T> {
+export interface IListBase<T> extends ICollectionBase {
 
     /**
      * @return {number} the number of current elements on the List

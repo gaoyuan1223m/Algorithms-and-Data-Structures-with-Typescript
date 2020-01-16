@@ -2,7 +2,7 @@ import { ITraversable, ITransformable } from "@Interface/common";
 import { ICompareFunc } from "@Utils/compare";
 import { PrintOrder } from "@Utils/types";
 
-export interface ICollectionBase<T> {
+export interface ICollectionBase {
 
     /**
     * @return {number} the number of current elements on the Collection
@@ -25,7 +25,7 @@ export interface ICollectionBase<T> {
     clear(): this;
 }
 
-export interface ICollection<T> extends ICollectionBase<T>, ITransformable<T>, ITraversable<T> {
+export interface ICollection<T> extends ICollectionBase, ITransformable<T>, ITraversable<T> {
 
     /**
      * *Add an element at the end of the Collection.

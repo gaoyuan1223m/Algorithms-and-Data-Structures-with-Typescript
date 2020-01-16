@@ -1,5 +1,6 @@
 import { IDictionary, IHash } from "@Interface/specific";
 import { Console } from "@Utils/emphasize";
+import { Errors } from "@Utils/error-handling";
 
 export class Dictionary<K, V> implements IDictionary<K, V> {
 
@@ -15,24 +16,29 @@ export class Dictionary<K, V> implements IDictionary<K, V> {
         this._initMaps();
     }
 
-    clear(): void {
-        this._initMaps();
+    clear(): this {
+        return this._initMaps();
     }
 
-    delete(key: K): boolean {
+    del(key: K): boolean {
+
+        if (!this.has(key)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidDictKey);
+        }
 
         const hashKey = this._hashCode(key);
 
-        if (!this._hashKeyAndValueMap[hashKey]) return false;
+        delete this._hashKeyAndValueMap[hashKey];
+        delete this._hasdKeyAndOriginalKeyMap[hashKey];
 
-        this._hashKeyAndValueMap[hashKey] = undefined;
         this._size -= 1;
 
         return true;
     }
 
-    get(key: K): V | undefined {
-        return this._hashKeyAndValueMap[this._hashCode(key)];
+    get(key: K): V {
+        const value = this._hashKeyAndValueMap[this._hashCode(key)];
+        return value ? value : null;
     }
 
     has(key: K): boolean {
@@ -50,17 +56,32 @@ export class Dictionary<K, V> implements IDictionary<K, V> {
         return this;
     }
 
-    print(): void {
+
+    forEach(callbackfn: (value: V, key: K, dict: IDictionary<K, V>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
+
+    print(): this {
+
+        let pair = "";
+
         for (const hashKey in this._hashKeyAndValueMap) {
             if (!this._hashKeyAndValueMap.hasOwnProperty(hashKey)) continue;
 
-            Console.OK(`${this._hasdKeyAndOriginalKeyMap[hashKey]} => ${this._hashKeyAndValueMap[hashKey]}`);
+            if (!this._hasdKeyAndOriginalKeyMap[hashKey]) continue;
+
+            pair += `${this._hasdKeyAndOriginalKeyMap[hashKey]} => ${this._hashKeyAndValueMap[hashKey]}, `;
         }
+
+        Console.OK(`{ ${pair} }`);
+
+        return this;
     }
 
-    forEach(callbackfn: (value: V, key: K, dict: Dictionary<K, V>) => void, thisArg?: any): void {
-
-    }
 
     private _hashCode(key: K): number {
 
@@ -81,10 +102,11 @@ export class Dictionary<K, V> implements IDictionary<K, V> {
         return Math.abs(hash);
     }
 
-    private _initMaps(): void {
+    private _initMaps(): this {
         this._size = 0;
         this._hashKeyAndValueMap = {} as IHash<V>;
-        this._hasdKeyAndOriginalKeyMap = {} as IHash<K>
+        this._hasdKeyAndOriginalKeyMap = {} as IHash<K>;
+        return this;
     }
 
 }
