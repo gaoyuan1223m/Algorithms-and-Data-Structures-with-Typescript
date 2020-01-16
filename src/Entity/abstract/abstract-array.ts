@@ -6,6 +6,9 @@ import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { QuickSort, SortMethods } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
+import { ArrayFactory } from "@DataStructure/array";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { BinarySearchTree } from "@DataStructure/tree";
 
 export abstract class AbstractArray<T> implements IArray<T> {
 
@@ -50,11 +53,32 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract append(value: T): this;
 
-    abstract toArray(arrayType: ArrayTypes): IArray<T>;
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        const array = ArrayFactory.create<T>(arrayType, this.size);
+        const currLength = this._size;
+        for (let index = 0; index < currLength; index++) {
+            array.append(this[index])            
+        }
+        return array;
+    }
 
-    abstract toList(listType: ListTypes): ILinkedList<T>;
+    toList(listType: ListTypes): ILinkedList<T> {
+        const list = LinkedListFactory.create<T>(listType);
+        const currLength = this._size;
 
-    abstract toTree(treeType: TreeTypes): ITree<T>;
+        for (let index = 0; index < currLength; index++) {
+            list.append(this[index]);            
+        }
+
+        this.clear();
+
+        return list;
+    }
+
+    toTree(treeType: TreeTypes): ITree<T> {
+        const tree = new BinarySearchTree<T>();
+        return tree;
+    }
 
     abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IList<U>
 

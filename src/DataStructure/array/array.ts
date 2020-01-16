@@ -122,64 +122,8 @@ class StaticArray<T> extends AbstractArray<T> {
         return newStaticArray;
     }
 
-    toArray(arrayType: ArrayTypes = ArrayTypes.Dynamic): IArray<T> {
-        if (arrayType = ArrayTypes.Static) return this;
-
-        return this._toDynamicArray();
-    }
-
-    toList(listType: ListTypes = ListTypes.Singly): ILinkedList<T> {
-        if (listType === ListTypes.Doubly) return this._toDoublyLinkedList();
-
-        if (listType === ListTypes.Circular) return this._toCircularLinkedList();
-
-        if (listType === ListTypes.Skip) return this._toSkipLinkedList();
-
-        return this._toSinglyLinkedList();
-    }
-
-    toTree(treeType: TreeTypes = TreeTypes.BST): ITree<T> {
-        if (treeType === TreeTypes.AVL) return this._toAVL();
-
-        if (treeType === TreeTypes.R_B) return this._toRedBlack();
-
-        return this._toBST();
-    }
-
     private _getIdxOfLastElm(index: number): number {
         return index > this._idxOfLastElm ? index : this._idxOfLastElm;
-    }
-
-    private _toDynamicArray(): IArray<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toSinglyLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toDoublyLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toCircularLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toSkipLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toBST(): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toAVL(): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toRedBlack(): ITree<T> {
-        throw new Error("Method not implemented.");
     }
 
 }
@@ -198,18 +142,6 @@ class DynamicArray<T> extends AbstractArray<T> {
 
     @Validation()
     insertByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
-        throw new Error("Method not implemented.");
-    }
-
-    toArray(arrayType: ArrayTypes): IArray<T> {
-        return this;
-    }
-
-    toList(listType: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    toTree(treeType: TreeTypes): ITree<T> {
         throw new Error("Method not implemented.");
     }
 

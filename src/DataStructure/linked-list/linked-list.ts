@@ -1,43 +1,414 @@
-import { IArray, ILinkedList, ITree } from "@Interface/specific";
-import { AbstractDoublyLinkedList, AbstractSinglyLinkedList } from "@Entity/abstract";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
-import { IFactory } from "@Interface/common";
+import { ILinkedList, ISinglyListNode, IArray, ITree, IDoublyListNode } from "@Interface/specific";
+import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
+import { SinglyListNode, DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
-
+import { Console } from "@Utils/emphasize";
+import { SortMethods } from "@Algorithm/sort";
+import { ArrayFactory } from "@DataStructure/array";
+import { BinarySearchTree } from "@DataStructure/tree";
+import { IFactory } from "@Interface/common";
 
 export class Factory implements IFactory {
 
     create<T>(type: ListTypes): ILinkedList<T> {
-        if (type === ListTypes.Singly) return new SimpleSinglyLinkedList();
 
-        if (type === ListTypes.Doubly) return new SimpleDoublyLinkedList();
+        if (type === ListTypes.Singly) return new SinglyLinkedList();
 
-        if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
+        if (type === ListTypes.Doubly) return new DoublyLinkedList();
+
+        // if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
 
 }
 
-class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+class SinglyLinkedList<T> implements ILinkedList<T> {
+
+    protected _headSentry: ISinglyListNode<T>; // Head Sentry Node 头哨兵节点
+    protected _tailSentry: ISinglyListNode<T>; // Tail Sentry Node 尾哨兵节点
+    protected _headPointer: ISinglyListNode<T>; // Head Node Pointer 头元素指针
+    protected _tailPointer: ISinglyListNode<T>; // Tail Node Pointer 尾元素指针
+    protected _size: number;
 
     constructor() {
-        super();
+        this._headSentry = new SinglyListNode<T>();
+        this._tailSentry = new SinglyListNode<T>();
+        this._headSentry.next = this._tailSentry;
+        this._headPointer = this._headSentry;
+        this._tailPointer = this._headSentry
+        this._size = 0;
     }
 
-    toArray(arrayType?: ArrayTypes): IArray<T> {
+    get head(): T {
+        if (this.isEmpty()) return null;
+
+        return this._headPointer.value;
+    }
+
+    get tail(): T {
+        if (this.isEmpty()) return null;
+
+        return this._tailPointer.value;
+    }
+
+    get size(): number {
+        return this._size;
+    }
+
+    append(value: T): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        return this._addTailNode(new SinglyListNode<T>(value));
+    }
+
+    insertByIndex(value: T, index: number): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        const idx = this._getValidIndex(index);
+
+        return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
+    }
+
+    insertAtHead(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addHeadNode(new SinglyListNode<T>(value));
+        }
+        return this;
+    }
+
+    insertAtTail(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addTailNode(new SinglyListNode<T>(value));
+        }
+        return this;
+    }
+
+    removeFromHead(): T
+    removeFromHead(n: number): T[]
+    removeFromHead(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return this._removeHeadNode();
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeHeadNode.bind(this));
+    }
+
+    removeFromTail(): T
+    removeFromTail(n: number): T[]
+    removeFromTail(n?: any): any {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return this._removeTailNode();
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+    }
+
+    removeByIndex(index: number): T {
+        const idx = this._getValidIndex(index);
+
+        return this._removeByValidIndex(idx);
+    }
+
+    updateByIndex(value: T, index: number): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+        const idx = this._getValidIndex(index);
+        return this._updateByValidIndex(value, idx);
+    }
+
+    getByIndex(index: number): T {
+        const idx = this._getValidIndex(index);
+        const pointer = this._getNodeByValidIndex(idx);
+        return pointer.value;
+    }
+
+    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        return this._indexOf(value, compare);
+    }
+
+    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
+        return this.indexOf(value, compare) !== NOT_EXISTED;
+    }
+
+    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+        const idx = this.indexOf(value, compare);
+
+        if (idx === NOT_EXISTED) return this;
+
+        this.removeByIndex(idx);
+
+        return this;
+    }
+
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
+
+    sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
         throw new Error("Method not implemented.");
     }
 
-    toTree(treeType?: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
+    print(): this {
+        let pointer = this._headPointer;
+        let idx = 0;
+        let str = 'HEAD -> ';
+        while (pointer && idx < this._size) {
+            str += `[${pointer.value.toString()}] -> `
+            pointer = pointer.next;
+            idx++;
+        }
+        str += `END`;
+        Console.Warn(str);
+        return this;
+    }
+
+    clear(): this {
+        return this._clearCurrentList();
     }
 
     reverse(): this {
+        throw "NOT IMPLEMENTED";
+    }
+
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        const array = ArrayFactory.create<T>(arrayType, this._size);
+        const currLength = this._size;
+        for (let index = 0; index < currLength; index++) {
+            array.append(this.removeFromHead());
+        }
+        return array;
+    }
+
+    toList(listType: ListTypes): ILinkedList<T> {
+        const list = LinkedListFactory.create<T>(listType);
+        const currLength = this._size;
+
+        const values = this.removeFromHead(currLength);
+        list.insertAtTail(...values);
+
+        return list;
+    }
+
+    toTree(treeType?: TreeTypes): ITree<T> {
+        throw "NOT IMPLEMENTED";
+    }
+
+    forEach(callbackfn: (value: T, index: number, current: ILinkedList<T>) => void, thisArg?: any): void {
+        let p = this._headPointer;
+        let idx = 0;
+        while (p && idx < this._size) {
+            callbackfn(p.value, idx, this);
+            p = p.next;
+            idx++;
+        }
+    }
+
+    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): ILinkedList<U> {
         throw new Error("Method not implemented.");
     }
 
-    toList(listType?: ListTypes): ILinkedList<T> {
+    protected _addHeadNode(newNode: ISinglyListNode<T>): this {
+
+        newNode.next = this._headSentry.next;
+        this._headSentry.next = newNode;
+
+        this._headPointer = this._headSentry.next;
+
+        this._size += 1;
+
+        if (this._size === 1) {
+            this._tailPointer = this._headPointer;
+        }
+
+        return this;
+    }
+
+    protected _addTailNode(newNode: ISinglyListNode<T>): this {
+
+        newNode.next = this._tailSentry;
+        this._tailPointer.next = newNode;
+
+        this._tailPointer = newNode;
+
+        this._size += 1;
+
+        if (this._size === 1) {
+            this._headPointer = this._headSentry.next;
+        }
+
+        return this;
+    }
+
+    protected _insertByValidIndex(value: T, validIndex: number): this {
+        if (validIndex === 0) {
+            return this.insertAtHead(value);
+        }
+
+        if (validIndex === this._size) {
+            return this.append(value);
+        }
+
+        const newNode = new SinglyListNode<T>(value);
+
+        const preNode = this._getNodeByValidIndex(validIndex - 1);
+        newNode.next = preNode.next;
+        preNode.next = newNode;
+        this._size += 1;
+
+        return this;
+    }
+
+    protected _removeHeadNode(): T {
+        if (this._size === 0) return null;
+
+        if (this._size === 1) {
+            const value = this._headPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
+
+        const value = this._headPointer.value;
+
+        this._headSentry.next = this._headSentry.next.next;
+        this._headPointer.next = null;
+        this._headPointer = this._headSentry.next;
+        this._size -= 1;
+
+        return value;
+    }
+
+    protected _removeTailNode(): T {
+        if (this._size === 0) return null;
+
+        if (this._size === 1) {
+            const value = this._tailPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
+
+        const preNode = this._getNodeByValidIndex(this._size - 2);
+        const delNode = this._tailPointer;
+
+        const value = delNode.value;
+
+        preNode.next = preNode.next.next;
+        delNode.next = null;
+
+        let pointer = this._headPointer;
+        while (pointer.next.next) {
+            pointer = pointer.next
+        }
+
+        this._tailPointer = pointer;
+        this._size -= 1;
+        return value;
+    }
+
+    protected _removeByValidIndex(validIndex: number): T {
+
+        if (validIndex === 0) return this._removeHeadNode();
+
+        if (validIndex === this._size - 1) return this._removeTailNode();
+
+        const preNode = this._getNodeByValidIndex(validIndex - 1);
+        const delNode = preNode.next;
+
+        const value = delNode.value;
+
+        preNode.next = preNode.next.next;
+        delNode.next = null; // preventing single node which already doesn't belong to the Linked-List from hanging on it
+
+        this._size -= 1;
+
+        return value;
+    }
+
+    protected _updateByValidIndex(value: T, validIndex: number): this {
+        const pointer = this._getNodeByValidIndex(validIndex);
+        pointer.value = value;
+        return this;
+    }
+
+    protected _getValidIndex(index: number): number {
+        if (!index && index !== 0) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        if (!Number.isInteger(index)) {
+            throw new Errors.InvalidIndex(Errors.Msg.InvalidIdx);
+        }
+
+        if (index < 0 && index + this._size < 0 || index >= this._size) {
+            throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
+        }
+
+        if (index < 0) {
+            return index + this._size;
+        }
+
+        return index;
+    }
+
+    protected _indexOf(validValue: T, compare: ICompareFunc<T>): number {
+        let i = -1;
+        let p = this._headPointer;
+        while (p && i < this._size) {
+            i += 1;
+            if (compare(p.value).isEqualTo(validValue)) return i;
+            p = p.next;
+        }
+        return -1;
+    }
+
+    protected _getNodeByValidIndex(validIndex: number): ISinglyListNode<T> {
+
+        if (validIndex < 0) return this._headSentry;
+
+        let pointer = this._headSentry.next;
+        let i = validIndex;
+
+        while (i > 0) {
+            pointer = pointer.next;
+            i--;
+        }
+
+        return pointer;
+    }
+
+    protected _isValid(value: T) {
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== "";
+    }
+
+    protected _clearCurrentList(): this {
+        if (this._size === 0) return this;
+
+        this._headSentry.next = this._tailSentry;
+        this._tailPointer.next = null;
+        this._headPointer = this._headSentry;
+        this._tailPointer = this._headSentry;
+
+        this._size = 0;
         return this;
     }
 
@@ -56,64 +427,508 @@ class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
      */
 }
 
-class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
+class DoublyLinkedList<T> implements ILinkedList<T> {
+
+    protected _headPointer: IDoublyListNode<T>;
+    protected _tailPointer: IDoublyListNode<T>;
+    protected _size: number;
 
     constructor() {
-        super();
+        this._headPointer = null;
+        this._tailPointer = null;
+        this._size = 0;
     }
 
-    toArray(arrayType?: ArrayTypes): IArray<T> {
-        throw new Error("Method not implemented.");
+    get head(): T {
+        if (this.isEmpty()) return null;
+
+        return this._headPointer.value
     }
 
-    toList(listType?: ListTypes): ILinkedList<T> {
+    get tail(): T {
+        if (this.isEmpty()) return null;
+
+        return this._tailPointer.value
+    }
+
+    get size(): number {
+        return this._size;
+    }
+
+    insertAtHead(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addHeadNode(new DoublyListNode<T>(value));
+        }
         return this;
     }
 
-    toTree(treeType?: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
+    insertAtTail(...values: T[]): this {
+        for (const value of values) {
+            if (!this._isValid(value)) continue;
+            this._addTailNode(new DoublyListNode<T>(value))
+        }
+        return this;
     }
 
-}
+    removeFromHead(): T;
+    removeFromHead(n: number): T[];
+    removeFromHead(n?: number): T | T[] {
+        if (this.isEmpty() || n <= 0) return null;
 
-class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
+        if (!n) {
+            return this._removeHeadNode()
+        }
 
-    /**
-     *                                               HeadNode Pointer    
-     *                                                      |
-     *                                                      |
-     *                                                      V
-     *                                          index:      0           1                  n-2          n-1
-     * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
-     *      ^                                    index:     -n         -n+1                 -2           -1             |
-     *      |                                                                                             ^             |                                                                          
-     *      |                                                                                             |             |
-     *      |                                                                                             |             |
-     *      |                                                                                     TailNode Pointer      |
-     *      |___________________________________________________________________________________________________________|
-     *
-     */
-    constructor() {
-        super()
-        this._tailSentry.next = this._headSentry;
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeHeadNode.bind(this));
+    }
+
+    removeFromTail(): T;
+    removeFromTail(n: number): T[];
+    removeFromTail(n?: number): T | T[] {
+        if (this.isEmpty() || n <= 0) return null;
+
+        if (!n) {
+            return this._removeTailNode()
+        }
+
+        return new Array<T>(n > this._size ? this._size : ~~n).fill(null).map(this._removeTailNode.bind(this));
+    }
+
+    insertByIndex(value: T, index: number): this {
+        const idx = this._getInvalidIndex(index);
+        return this._insertByValidIndex(value, index < 0 ? idx + 1 : idx);
+    }
+
+    removeByIndex(index: number): T {
+        const idx = this._getInvalidIndex(index);
+        return this._removeByValidIndex(idx);
+    }
+
+    updateByIndex(value: T, index: number): this {
+        const idx = this._getInvalidIndex(index);
+        return this._updateByValidIndex(value, idx);
+    }
+
+    getByIndex(index: number): T {
+        const idx = this._getInvalidIndex(index);
+        const pointer = this._getNodeByValidIndex(idx);
+        return pointer.value;
+    }
+
+    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        return this._indexOf(value, compare);
     }
 
     reverse(): this {
         throw new Error("Method not implemented.");
     }
 
-    toArray(arrayType?: ArrayTypes): IArray<T> {
+    append(value: T): this {
+        return this.insertAtHead(value);
+    }
+
+    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
+        return this.indexOf(value, compare) !== NOT_EXISTED;
+    }
+
+    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
+        const idx = this.indexOf(value, compare);
+
+        if (idx === NOT_EXISTED) return this;
+
+        this.removeByIndex(idx);
+        return this;
+    }
+
+    sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
         throw new Error("Method not implemented.");
     }
 
-    toList(listType?: ListTypes): ILinkedList<T> {
+    isEmpty(): boolean {
+        return this._size === 0;
+    }
+
+    print(order: ListPrintOrder): this {
+
+        if (order === ListPrintOrder.FromHeadToTail) return this._printFromHeadToTail();
+
+        if (order === ListPrintOrder.FromTailToHead) return this._printFromTailToHead();
+
+        throw new Errors.InvalidDataType(Errors.Msg.UnacceptablePrintOrder);
+    }
+
+    clear(): this {
+        return this._clearCurrentList();
+    }
+
+
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        const array = ArrayFactory.create<T>(arrayType, this._size);
+        const currLength = this._size;
+        for (let index = 0; index < currLength; index++) {
+            array.append(this.removeFromHead());
+        }
+        return array;
+    }
+
+    toList(listType: ListTypes): ILinkedList<T> {
+        const list = LinkedListFactory.create<T>(listType);
+        const currLength = this._size;
+
+        const values = this.removeFromHead(currLength);
+        list.insertAtTail(...values);
+
+        return list;
+    }
+
+    toTree(treeType: TreeTypes): ITree<T> {
+        const tree = new BinarySearchTree<T>();
+        return tree;
+    }
+
+    private _printFromHeadToTail() {
+        let pointer = this._headPointer;
+        let idx = 0;
+        let str = 'HEAD -> ';
+        while (pointer && idx < this._size) {
+            str += `[${pointer.value.toString()}] -> `
+            pointer = pointer.next;
+            idx++;
+        }
+        str += `TAIL`;
+        Console.Warn(str);
+        return this;
+    }
+
+    private _printFromTailToHead() {
+        let pointer = this._tailPointer;
+        let idx = this._size - 1;
+        let str = 'TAIL -> ';
+        while (pointer && idx >= 0) {
+            str += `[${pointer.value.toString()}] -> `
+            pointer = pointer.prev;
+            idx--;
+        }
+        str += `HEAD`;
+        Console.Warn(str);
+        return this;
+    }
+
+    forEach(callbackfn: (value: T, index: number, current: ILinkedList<T>) => void, thisArg?: any): void {
         throw new Error("Method not implemented.");
     }
 
-    toTree(treeType?: TreeTypes): ITree<T> {
+    map<U>(callbackfn: (value: T, index: number, current: ILinkedList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): DoublyLinkedList<U> {
         throw new Error("Method not implemented.");
+    }
+
+    protected _addHeadNode(newNode: IDoublyListNode<T>): this {
+
+        if (this._headPointer) {
+            newNode.next = this._headPointer;
+            this._headPointer.prev = newNode;
+            this._headPointer = newNode;
+        } else {
+            this._headPointer = newNode;
+            this._tailPointer = this._headPointer
+        }
+
+        this._size += 1;
+
+        return this;
+    }
+
+    protected _addTailNode(newNode: IDoublyListNode<T>): this {
+
+        if (this._tailPointer) {
+            this._tailPointer.next = newNode;
+            newNode.prev = this._tailPointer;
+            this._tailPointer = newNode;
+        } else {
+            this._tailPointer = newNode;
+            this._headPointer = this._tailPointer;
+        }
+
+        this._size += 1;
+
+        return this;
+    }
+
+    protected _removeHeadNode(): T {
+        if (this._size === 0) return null;
+
+        if (this._size === 1) {
+            const value = this._headPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
+
+        const value = this._headPointer.value;
+
+        let nextPointer = this._headPointer.next;
+
+        this._headPointer.next = null;
+        nextPointer.prev = null;
+
+        this._headPointer = nextPointer;
+
+        this._size -= 1;
+
+        return value;
+    }
+
+    protected _removeTailNode(): T {
+        if (this._size === 0) return null;
+
+        if (this._size === 1) {
+            const value = this._tailPointer.value;
+            this._clearCurrentList();
+            return value;
+        }
+
+        const value = this._tailPointer.value;
+
+        let prevPointer = this._tailPointer.prev;
+
+        this._tailPointer.prev = null;
+        prevPointer.next = null;
+
+        this._tailPointer = prevPointer;
+
+        this._size -= 1;
+
+        return value;
+    }
+
+    protected _clearCurrentList(): this {
+        if (this._size === 0) return this;
+
+        this._headPointer = null;
+        this._tailPointer = null;
+
+        this._size = 0;
+        return this;
+    }
+
+    protected _insertByValidIndex(value: T, validIndex: number): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        const newNode = new DoublyListNode<T>(value);
+
+        if (validIndex === 0) {
+            return this._addHeadNode(newNode);
+        }
+
+        if (validIndex === this._size) {
+            return this._addTailNode(newNode);
+        }
+
+        const pointer = this._getNodeByValidIndex(validIndex);
+        const prevPointer = pointer.prev;
+
+        newNode.next = pointer;
+        pointer.prev = newNode;
+
+        prevPointer.next = newNode;
+        newNode.prev = prevPointer;
+
+        this._size += 1;
+
+        return this;
+    }
+
+    protected _removeByValidIndex(validIndex: number): T {
+
+        if (validIndex === 0) {
+            return this._removeHeadNode();
+        }
+
+        if (validIndex === this._size - 1) {
+            return this._removeTailNode();
+        }
+
+        const currPointer = this._getNodeByValidIndex(validIndex);
+        const currValue = currPointer.value;
+        const prevPointer = currPointer.prev;
+
+        prevPointer.next = currPointer.next;
+        currPointer.next.prev = prevPointer;
+
+        currPointer.next = null;
+        currPointer.prev = null;
+
+        this._size -= 1;
+
+        return currValue;
+    }
+
+    protected _updateByValidIndex(value: T, validIndex: number): this {
+        if (!this._isValid(value)) {
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+
+        const pointer = this._getNodeByValidIndex(validIndex);
+        pointer.value = value;
+        return this;
+    }
+
+    protected _getInvalidIndex(index: number): number {
+        if (!Number.isInteger(index)) {
+            throw new Errors.InvalidIndex(Errors.Msg.InvalidIdx);
+        }
+
+        if (index < 0 && index + this._size < 0 || index > this._size) {
+            throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
+        }
+
+        if (index < 0) {
+            return index + this._size;
+        }
+
+        return index;
+    }
+
+    protected _indexOf(validValue: T, compare: ICompareFunc<T>): number {
+        let i = -1;
+        let p = this._headPointer;
+        // (i < this._size) to avoid circular Linked List
+        while (p && i < this._size) {
+            i += 1;
+            if (compare(p.value).isEqualTo(validValue)) return i;
+            p = p.next;
+        }
+        return -1;
+    }
+
+    protected _getNodeByValidIndex(validIndex: number): IDoublyListNode<T> {
+
+        if (validIndex < 0) return this._headPointer;
+
+        let pointer: IDoublyListNode<T>;
+        let idx: number;
+
+        if (validIndex < this._size / 2) {
+            idx = validIndex;
+            pointer = this._headPointer;
+
+            while (idx > 0) {
+                pointer = pointer.next;
+                idx -= 1;
+            }
+
+        } else {
+            idx = this._size - 1;
+            pointer = this._tailPointer;
+
+            while (idx !== validIndex) {
+                pointer = pointer.prev;
+                idx -= 1;
+            }
+        }
+
+        return pointer;
+    }
+
+    protected _isValid(value: T) {
+        return value !== undefined           // 不能是undefined
+            && value !== null                // 不能是null
+            && !isNaN(Number(value))         // 不能是NaN
+            && isFinite(Number(value))       // 不能是Infinity
+            && String(value) !== "";         // 不能是空字符串  
     }
 
 }
+
+// class SimpleSinglyLinkedList<T> extends SinglyLinkedList<T> {
+
+//     constructor() {
+//         super();
+//     }
+
+//     toArray(arrayType?: ArrayTypes): IArray<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toTree(treeType?: TreeTypes): ITree<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     reverse(): this {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toList(listType?: ListTypes): ILinkedList<T> {
+//         return this;
+//     }
+
+
+// }
+
+// class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
+
+//     constructor() {
+//         super();
+//     }
+
+//     toArray(arrayType?: ArrayTypes): IArray<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toList(listType?: ListTypes): ILinkedList<T> {
+//         return this;
+//     }
+
+//     toTree(treeType?: TreeTypes): ITree<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+// }
+
+// class CircularSinglyLinkedList<T> extends SinglyLinkedList<T> {
+
+//     /**
+//      *                                               HeadNode Pointer    
+//      *                                                      |
+//      *                                                      |
+//      *                                                      V
+//      *                                          index:      0           1                  n-2          n-1
+//      * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
+//      *      ^                                    index:     -n         -n+1                 -2           -1             |
+//      *      |                                                                                             ^             |                                                                          
+//      *      |                                                                                             |             |
+//      *      |                                                                                             |             |
+//      *      |                                                                                     TailNode Pointer      |
+//      *      |___________________________________________________________________________________________________________|
+//      *
+//      */
+//     constructor() {
+//         super()
+//         this._tailSentry.next = this._headSentry;
+//     }
+
+//     reverse(): this {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toArray(arrayType?: ArrayTypes): IArray<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toList(listType?: ListTypes): ILinkedList<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+//     toTree(treeType?: TreeTypes): ITree<T> {
+//         throw new Error("Method not implemented.");
+//     }
+
+// }
 
 export const LinkedListFactory = new Factory();

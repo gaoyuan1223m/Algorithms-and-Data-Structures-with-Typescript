@@ -1,7 +1,7 @@
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ILinkedList } from "@Interface/specific";
 import { Errors, catchErr } from "@Utils/error-handling";
-import { ListTypes } from "@Utils/types";
+import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
 
 
 describe(`Test for SinglyLinkedList`, () => {
@@ -174,6 +174,44 @@ describe(`Test for SinglyLinkedList`, () => {
 
     xit(`#print the linked list - SECOND`, () => {
         sll.print();
+    });
+
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *               ----------------                ----------
+     *               | 31 -> 11 -> 24 |-> 34 -> 18 ->| 19 -> 21 |
+     *               ----------------                ----------
+     *      --------------------------------------------------------
+     */
+
+    it(`#Should Transform to Static Array`, () => {
+        sll
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const array = sll.toArray(ArrayTypes.Static);
+
+        expect(array.size).toBe(sll.size);
+    });
+
+    it(`#Should Transform to Doubly Linked List`, () => {
+        sll
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const list = sll.toList(ListTypes.Doubly);
+
+        expect(list.size).toBe(sll.size);
+    });
+
+    it(`#Should Transform to BST`, () => {
+        sll
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const tree = sll.toTree(TreeTypes.BST);
+
+        expect(tree.size).toBe(7);
     });
 
 })

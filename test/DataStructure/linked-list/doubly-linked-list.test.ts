@@ -1,6 +1,6 @@
 import { ILinkedList } from "@Interface/specific"
 import { LinkedListFactory } from "@DataStructure/linked-list"
-import { ListPrintOrder, ListTypes } from "@Utils/types";
+import { ListPrintOrder, ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
 import { catchErr, Errors } from "@Utils/error-handling";
 
 describe(`Test for Doubly-Linked-List`, () => {
@@ -125,6 +125,38 @@ describe(`Test for Doubly-Linked-List`, () => {
         dll.insertByIndex(val, -10);
         // dll.print(ListPrintOrder.FromHeadToTail);
         expect(dll.getByIndex(-10)).toBe(11);
+    });
+
+
+    it(`#Should Transform to Static Array`, () => {
+        dll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const array = dll.toArray(ArrayTypes.Static);
+
+        expect(array.size).toBe(dll.size);
+    });
+
+    it(`#Should Transform to Singly Linked List`, () => {
+        dll
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const list = dll.toList(ListTypes.Singly);
+
+        expect(list.size).toBe(dll.size);
+    });
+
+    it(`#Should Transform to BST`, () => {
+        dll
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const tree = dll.toTree(TreeTypes.BST);
+
+        expect(tree.size).toBe(7);
     });
 
 });
