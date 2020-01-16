@@ -6,7 +6,7 @@ import { ListTypes } from "@Utils/types";
 
 describe(`Test for SinglyLinkedList`, () => {
 
-    const sll: ILinkedList<number> = LinkedListFactory.create<number>(ListTypes.Singly);
+    const sll: ILinkedList<number> = LinkedListFactory.create(ListTypes.Singly);
 
     it(`#addHeadNode - add 0`, () => {
         sll.insertAtHead(0);

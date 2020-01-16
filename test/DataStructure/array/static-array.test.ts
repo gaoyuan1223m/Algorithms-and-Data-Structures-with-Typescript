@@ -6,7 +6,7 @@ import { ArrayTypes } from "@Utils/types";
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = new ArrayFactory(capacity).create<number>(ArrayTypes.Static);
+    const staticArray = ArrayFactory.create<number>(ArrayTypes.Static, capacity);
 
     beforeAll(() => {
         staticArray

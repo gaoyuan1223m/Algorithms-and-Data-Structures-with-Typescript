@@ -1,11 +1,11 @@
 import { IStack } from "@Interface/specific";
+import { IFactory } from "@Interface/common";
 import { AbstractStack } from "@Entity/abstract";
 import { Errors } from "@Utils/error-handling";
 
-export class StackFactory {
+class Factory implements IFactory {
 
-    /**Recommend implementing Stack by Linked List, so no parameter needs to pass */
-    static create<T>(capacity?: number): IStack<T> {
+    create<T>(capacity?: number): IStack<T> {
         if (capacity) return new StaticStack<T>(capacity);
 
         return new DynamicStack<T>();
@@ -42,3 +42,5 @@ class DynamicStack<T> extends AbstractStack<T> {
         return this;
     }
 }
+
+export const StackFactory = new Factory();

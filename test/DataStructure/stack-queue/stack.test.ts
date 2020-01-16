@@ -5,7 +5,7 @@ import { catchErr, Errors } from "@Utils/error-handling";
 
 describe('Test for Dynamic Stack', () => {
 
-    const stack: IStack<number> = StackFactory.create<number>(); //
+    const stack: IStack<number> = StackFactory.create(); //
 
     /** Stack
      *      Bottom <------------- Peek 
@@ -60,7 +60,7 @@ describe('Test for Dynamic Stack', () => {
 describe(`Test for Static Stack`, () => {
 
     const capacity = 5;
-    const stack: IStack<number> = StackFactory.create<number>(capacity); //
+    const stack: IStack<number> = StackFactory.create(capacity); //
 
     /** Stack
      *      Bottom <------------- Peek 

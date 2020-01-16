@@ -7,17 +7,17 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { Validation, ValidateParams } from "@Utils/decorator";
 
 
-export class ArrayFactory implements IFactory {
+class Factory implements IFactory {
 
-    constructor(private capacity: number, private incremental?: number) { }
+    constructor() { }
 
-    create<T>(type: ArrayTypes): IArray<T> {
-        if (type === ArrayTypes.Static) {
-            return new StaticArray<T>(this.capacity);
+    create<T>(type: ArrayTypes, capacity: number, incremental?: number): IArray<T> {
+        if (type === ArrayTypes.Static || incremental === 0) {
+            return new StaticArray<T>(capacity);
         }
 
         if (type === ArrayTypes.Dynamic) {
-            return new DynamicArray(this.capacity, this.incremental ? this.incremental : this.capacity);
+            return new DynamicArray(capacity, incremental);
         }
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
@@ -218,3 +218,5 @@ class DynamicArray<T> extends AbstractArray<T> {
     }
 
 }
+
+export const ArrayFactory = new Factory();

@@ -1,7 +1,7 @@
 
 import { DataStructures } from "@Utils/types";
-import { ICollectionBase } from "./ICollection";
+import { ICollectionBase } from "@Interface/common";
 
 export interface IFactory {
-    create<T>(type: DataStructures): ICollectionBase;
+    create(type?: DataStructures, capacity?: number, incremental?: number): ICollectionBase;
 }

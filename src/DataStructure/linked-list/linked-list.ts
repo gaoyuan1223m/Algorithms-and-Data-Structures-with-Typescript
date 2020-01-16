@@ -1,29 +1,30 @@
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { AbstractDoublyLinkedList, AbstractSinglyLinkedList } from "@Entity/abstract";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { IFactory } from "@Interface/common";
+import { Errors } from "@Utils/error-handling";
 
 
-export class LinkedListFactory {
-    
-    static create<T>(type?: ListTypes): ILinkedList<T> {
-        switch (type) {
-            case ListTypes.Singly: 
-                return new SimpleSinglyLinkedList();
-            
-            case ListTypes.Circular:
-                return new CircularSinglyLinkedList();
-                
-            default: 
-                return new SimpleDoublyLinkedList()
-        }
+export class Factory implements IFactory {
+
+    create<T>(type: ListTypes): ILinkedList<T> {
+        if (type === ListTypes.Singly) return new SimpleSinglyLinkedList();
+
+        if (type === ListTypes.Doubly) return new SimpleDoublyLinkedList();
+
+        if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
+
+        throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
+
 }
 
 class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
     constructor() {
-        super();     
+        super();
     }
+
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");
     }
@@ -37,7 +38,7 @@ class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
     }
 
     toList(listType?: ListTypes): ILinkedList<T> {
-       return this;
+        return this;
     }
 
     /**
@@ -56,15 +57,15 @@ class SimpleSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 }
 
 class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
-    
+
     constructor() {
-        super();    
+        super();
     }
-    
+
     toArray(arrayType?: ArrayTypes): IArray<T> {
         throw new Error("Method not implemented.");
-    }    
-    
+    }
+
     toList(listType?: ListTypes): ILinkedList<T> {
         return this;
     }
@@ -115,3 +116,4 @@ class CircularSinglyLinkedList<T> extends AbstractSinglyLinkedList<T> {
 
 }
 
+export const LinkedListFactory = new Factory();

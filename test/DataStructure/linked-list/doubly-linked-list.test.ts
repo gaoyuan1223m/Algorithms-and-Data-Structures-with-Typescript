@@ -1,11 +1,11 @@
 import { ILinkedList } from "@Interface/specific"
 import { LinkedListFactory } from "@DataStructure/linked-list"
-import { ListPrintOrder } from "@Utils/types";
+import { ListPrintOrder, ListTypes } from "@Utils/types";
 import { catchErr, Errors } from "@Utils/error-handling";
 
 describe(`Test for Doubly-Linked-List`, () => {
 
-    const dll: ILinkedList<number> = LinkedListFactory.create<number>();
+    const dll: ILinkedList<number> = LinkedListFactory.create(ListTypes.Doubly);
     /**     HEAD ............................................. TAIL  
      *      --------------------------------------------------------
      *               ----------------                       ----------

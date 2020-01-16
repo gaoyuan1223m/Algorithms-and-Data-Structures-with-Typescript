@@ -1,6 +1,6 @@
 import { ILinkedList, IStack } from "@Interface/specific";
-import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ListTypes, ListPrintOrder } from "@Utils/types";
+import { LinkedListFactory } from "@DataStructure/linked-list";
 
 export abstract class AbstractStack<T> implements IStack<T> {
 
