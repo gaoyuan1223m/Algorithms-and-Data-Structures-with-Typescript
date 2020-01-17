@@ -12,7 +12,7 @@
  * @平方根SQRT
  */
 
-const mySqrt = (n: number): number => {
+export const mySqrt = (n: number): number => {
     n = ~~n; // 取整数部分
 
     if (n < 0) return NaN;

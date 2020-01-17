@@ -187,11 +187,14 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         throw "NOT IMPLEMENTED";
     }
 
+    // O(n)
     toArray(arrayType: ArrayTypes): IArray<T> {
         const array = ArrayFactory.create<T>(arrayType, this._size);
         const currLength = this._size;
         for (let index = 0; index < currLength; index++) {
-            array.append(this.removeFromHead());
+            let value = this._removeHeadNode();
+            array.append(value);
+            this._addTailNode(new DoublyListNode<T>(value)); // recover current List
         }
         return array;
     }
@@ -203,11 +206,21 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         const values = this.removeFromHead(currLength);
         list.insertAtTail(...values);
 
+        this.insertAtTail(...values);// recover current List
+
         return list;
     }
 
-    toTree(treeType?: TreeTypes): ITree<T> {
-        throw "NOT IMPLEMENTED";
+    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+        const tree = new BinarySearchTree<T>();
+
+        const currLength = this._size;
+        const values = this.removeFromHead(currLength);
+        tree.appendRange(values, compare);
+
+        this.insertAtTail(...values);
+
+        return tree;
     }
 
     forEach(callbackfn: (value: T, index: number, current: ILinkedList<T>) => void, thisArg?: any): void {
@@ -568,11 +581,15 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
 
 
     toArray(arrayType: ArrayTypes): IArray<T> {
-        const array = ArrayFactory.create<T>(arrayType, this._size);
         const currLength = this._size;
+        const array = ArrayFactory.create<T>(arrayType, currLength);
+
         for (let index = 0; index < currLength; index++) {
-            array.append(this.removeFromHead());
+            let value = this._removeHeadNode();
+            array.append(value);
+            this._addTailNode(new DoublyListNode<T>(value));
         }
+
         return array;
     }
 
@@ -583,11 +600,20 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         const values = this.removeFromHead(currLength);
         list.insertAtTail(...values);
 
+        this.insertAtTail(...values);
+
         return list;
     }
 
-    toTree(treeType: TreeTypes): ITree<T> {
+    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
         const tree = new BinarySearchTree<T>();
+
+        const currLength = this._size;
+        const values = this.removeFromHead(currLength);
+        tree.appendRange(values, compare);
+
+        this.insertAtTail(...values);
+
         return tree;
     }
 

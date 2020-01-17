@@ -141,6 +141,7 @@ describe(`Test for Doubly-Linked-List`, () => {
 
     it(`#Should Transform to Singly Linked List`, () => {
         dll
+            .clear()
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
@@ -151,12 +152,13 @@ describe(`Test for Doubly-Linked-List`, () => {
 
     it(`#Should Transform to BST`, () => {
         dll
+            .clear()
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
         const tree = dll.toTree(TreeTypes.BST);
 
-        expect(tree.size).toBe(7);
+        expect(tree.size).toBe(dll.size);
     });
 
 });

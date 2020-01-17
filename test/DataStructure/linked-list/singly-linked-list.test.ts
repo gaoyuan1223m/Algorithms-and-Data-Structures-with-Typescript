@@ -186,6 +186,7 @@ describe(`Test for SinglyLinkedList`, () => {
 
     it(`#Should Transform to Static Array`, () => {
         sll
+            .clear()
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
@@ -196,6 +197,7 @@ describe(`Test for SinglyLinkedList`, () => {
 
     it(`#Should Transform to Doubly Linked List`, () => {
         sll
+            .clear()
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
@@ -206,6 +208,7 @@ describe(`Test for SinglyLinkedList`, () => {
 
     it(`#Should Transform to BST`, () => {
         sll
+            .clear()
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 

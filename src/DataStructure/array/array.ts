@@ -31,7 +31,7 @@ class StaticArray<T> extends AbstractArray<T> {
         super(capacity, 0)
     }
 
-    // O(i)
+    // O(1)
     @Validation('value')
     append(@ValidateParams() value: T): this {
 

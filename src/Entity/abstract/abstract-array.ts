@@ -12,7 +12,7 @@ import { BinarySearchTree } from "@DataStructure/tree";
 
 export abstract class AbstractArray<T> implements IArray<T> {
 
-    [n: number]: T;
+    [n: number]: T; // index signature to present Array
 
     @PositiveSaftInt()
     protected _capacity: number;
@@ -54,29 +54,38 @@ export abstract class AbstractArray<T> implements IArray<T> {
     abstract append(value: T): this;
 
     toArray(arrayType: ArrayTypes): IArray<T> {
-        const array = ArrayFactory.create<T>(arrayType, this.size);
-        const currLength = this._size;
+        const currLength = this._capacity;
+        const array = ArrayFactory.create<T>(arrayType, currLength);
+
         for (let index = 0; index < currLength; index++) {
-            array.append(this[index])            
+            if (!this[index]) continue;
+            array.append(this[index])
         }
+
         return array;
     }
 
     toList(listType: ListTypes): ILinkedList<T> {
+        const currLength = this._capacity;
         const list = LinkedListFactory.create<T>(listType);
-        const currLength = this._size;
 
         for (let index = 0; index < currLength; index++) {
-            list.append(this[index]);            
+            if (!this[index]) continue;
+            list.append(this[index]);
         }
-
-        this.clear();
 
         return list;
     }
 
-    toTree(treeType: TreeTypes): ITree<T> {
+    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+        const currLength = this._capacity;
         const tree = new BinarySearchTree<T>();
+
+        for (let index = 0; index < currLength; index++) {
+            if (!this[index]) continue;
+            tree.append(this[index], compare);
+        }
+
         return tree;
     }
 
@@ -161,6 +170,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
             jj -= 1;
         }
 
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+
         return this;
     }
 
@@ -201,6 +212,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             this[i] = undefined;
             this[i - this._capacity] = undefined;
         }
+        this._idxOfLastElm = -1;
         this._size = 0;
         return this;
     }
@@ -235,9 +247,18 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _quickSort(compare?: ICompareFunc<T>): this {
-        QuickSort(this, 0, this._capacity - 1, compare);
-        QuickSort(this, 0 - this._capacity, -1, compare);
+        QuickSort(this, 0, this._capacity - 1, compare); // positive indice
+        QuickSort(this, 0 - this._capacity, -1, compare); // negative indice
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
         return this;
+    }
+
+    protected _findNewIdxOfLastElm(): number {
+        let kk = this._capacity - 1;
+        while (!this[kk] && kk >= 0) { kk -= 1; }
+
+        return kk;
     }
 
 }

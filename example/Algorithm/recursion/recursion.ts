@@ -2,7 +2,7 @@
 /**
  * return fibonacci array
  */
-const fibonacci = (length: number): number[] => {
+export const fibonacci = (length: number): number[] => {
     if (length < 1) return [];
 
     const arr = [1];
@@ -24,7 +24,7 @@ const fibonacci = (length: number): number[] => {
  * print ruler
  */
 
-const drawLine = (tick_length: number, label?: string): void => {
+export const drawLine = (tick_length: number, label?: string): void => {
     let line = '';
     for (let i = 0; i < tick_length; i++) {
         line += '-';
@@ -35,7 +35,7 @@ const drawLine = (tick_length: number, label?: string): void => {
     console.log(line);
 }
 
-const drawInterval = (center_lenth: number): void => {
+export const drawInterval = (center_lenth: number): void => {
     if (center_lenth < 1) return;
 
     drawInterval(center_lenth - 1);
@@ -43,7 +43,7 @@ const drawInterval = (center_lenth: number): void => {
     drawInterval(center_lenth - 1);
 }
 
-const drawRuler = (num_inches: number, major_length: number): void => {
+export const drawRuler = (num_inches: number, major_length: number): void => {
     drawLine(major_length, '0');
     for (let i = 1; i <= num_inches; i++) {
         drawInterval(major_length - 1);
