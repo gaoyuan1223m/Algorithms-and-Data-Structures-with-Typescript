@@ -1,6 +1,6 @@
 import { ILinkedList, ISinglyListNode, IArray, ITree, IDoublyListNode } from "@Interface/specific";
 import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
-import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder, PrintOrder } from "@Utils/types";
 import { SinglyListNode, DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -191,7 +191,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         let prevPointer: ISinglyListNode<T> = null;
         let nextPointer: ISinglyListNode<T> = null;
 
-        while(pointer.next) {
+        while (pointer.next) {
             nextPointer = pointer.next; // reserver next pointer
             pointer.next = prevPointer; // reverse
             prevPointer = pointer; // prev point moves forward
@@ -199,7 +199,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         }
 
         this._headPointer = prevPointer;
-        this._tailPointer  = standByPointer;
+        this._tailPointer = standByPointer;
 
         this._headSentry.next = this._headPointer;
         this._tailPointer.next = this._tailSentry;
@@ -586,7 +586,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    print(order: ListPrintOrder): this {
+    print(order: PrintOrder = ListPrintOrder.FromHeadToTail): this {
 
         if (order === ListPrintOrder.FromHeadToTail) return this._printFromHeadToTail();
 
@@ -891,90 +891,5 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
     }
 
 }
-
-// class SimpleSinglyLinkedList<T> extends SinglyLinkedList<T> {
-
-//     constructor() {
-//         super();
-//     }
-
-//     toArray(arrayType?: ArrayTypes): IArray<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toTree(treeType?: TreeTypes): ITree<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     reverse(): this {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toList(listType?: ListTypes): ILinkedList<T> {
-//         return this;
-//     }
-
-
-// }
-
-// class SimpleDoublyLinkedList<T> extends AbstractDoublyLinkedList<T> {
-
-//     constructor() {
-//         super();
-//     }
-
-//     toArray(arrayType?: ArrayTypes): IArray<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toList(listType?: ListTypes): ILinkedList<T> {
-//         return this;
-//     }
-
-//     toTree(treeType?: TreeTypes): ITree<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-// }
-
-// class CircularSinglyLinkedList<T> extends SinglyLinkedList<T> {
-
-//     /**
-//      *                                               HeadNode Pointer    
-//      *                                                      |
-//      *                                                      |
-//      *                                                      V
-//      *                                          index:      0           1                  n-2          n-1
-//      * HeadSentry: ListNode(value:null, next: NODE_0) --> NODE_0 --> NODE_1 --> ... --> NODE_n-2 --> NODE_n-1 --> TailSentry: ListNode(value：null, next: null)
-//      *      ^                                    index:     -n         -n+1                 -2           -1             |
-//      *      |                                                                                             ^             |                                                                          
-//      *      |                                                                                             |             |
-//      *      |                                                                                             |             |
-//      *      |                                                                                     TailNode Pointer      |
-//      *      |___________________________________________________________________________________________________________|
-//      *
-//      */
-//     constructor() {
-//         super()
-//         this._tailSentry.next = this._headSentry;
-//     }
-
-//     reverse(): this {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toArray(arrayType?: ArrayTypes): IArray<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toList(listType?: ListTypes): ILinkedList<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-//     toTree(treeType?: TreeTypes): ITree<T> {
-//         throw new Error("Method not implemented.");
-//     }
-
-// }
 
 export const LinkedListFactory = new Factory();

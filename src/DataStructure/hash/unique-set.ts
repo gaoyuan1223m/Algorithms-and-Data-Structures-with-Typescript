@@ -54,7 +54,7 @@ export class UniqueSet<T> implements IUniqueSet<T> {
         for (const key in this._map) {
             if (!this._map.hasOwnProperty(key)) continue;
 
-            str += `${this._map[key]} `
+            str += `${this._map[key]}, `
         }
 
         Console.Warn(`< ${str}>`);

@@ -1,7 +1,7 @@
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { IList } from "@Interface/common";
 import { Console } from "@Utils/emphasize";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { QuickSort, SortMethods } from "@Algorithm/sort";
@@ -195,16 +195,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this._size === 0;
     }
 
-    print(): this {
-        let str = "[ "
-        for (let i = 0; i < this._capacity; i++) {
-            str += `${this[i]}`;
-            if ((i + 1) === this._capacity) continue;
-            str += `, `
-        }
-        str += ` ]`;
-        Console.Warn(str);
-        return this;
+    print(order: ListPrintOrder = ListPrintOrder.FromHeadToTail): this {
+
+        if (order === ListPrintOrder.FromHeadToTail) return this._printFromHeadToTail();
+
+        if (order === ListPrintOrder.FromTailToHead) return this._printFromTailToHead();
+
+        throw new Errors.InvalidArgument(Errors.Msg.UnacceptablePrintOrder);
     }
 
     clear(): this {
@@ -260,5 +257,31 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
         return kk;
     }
+
+
+    private _printFromHeadToTail(): this {
+        let str = "[ "
+        for (let i = 0; i < this._capacity; i++) {
+            str += `${this[i]}`;
+            if ((i + 1) === this._capacity) continue;
+            str += `, `
+        }
+        str += ` ]`;
+        Console.Warn(str);
+        return this;
+    }
+
+    private _printFromTailToHead(): this {
+        let str = "[ "
+        for (let i = this._capacity - 1; i >= 0; i--) {
+            str += `${this[i]}`;
+            if (i === 0) continue;
+            str += `, `
+        }
+        str += ` ]`;
+        Console.Err(str);
+        return this;
+    }
+
 
 }

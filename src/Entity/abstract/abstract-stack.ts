@@ -1,5 +1,5 @@
 import { ILinkedList, IStack } from "@Interface/specific";
-import { ListTypes, ListPrintOrder } from "@Utils/types";
+import { ListTypes } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 
 export abstract class AbstractStack<T> implements IStack<T> {
@@ -33,7 +33,7 @@ export abstract class AbstractStack<T> implements IStack<T> {
     }
 
     print(): this {
-        this._list.print(ListPrintOrder.FromHeadToTail);
+        this._list.print();
         return this;
     }
 

@@ -1,5 +1,5 @@
 import { IQueue, ILinkedList } from "@Interface/specific";
-import { ListTypes, PrintOrder } from "@Utils/types";
+import { ListTypes, PrintOrder, ListPrintOrder } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 // import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
@@ -40,8 +40,9 @@ export class Queue<T> implements IQueue<T> {
         return this._list.isEmpty();
     }
 
-    print(order?: PrintOrder): this {
-        throw new Error("Method not implemented.");
+    print(): this {
+       this._list.print(ListPrintOrder.FromHeadToTail);
+       return this;
     }
 
     clear(): this {

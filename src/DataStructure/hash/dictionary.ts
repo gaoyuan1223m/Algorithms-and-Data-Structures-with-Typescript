@@ -74,10 +74,10 @@ export class Dictionary<K, V> implements IDictionary<K, V> {
 
             if (!this._hasdKeyAndOriginalKeyMap[hashKey]) continue;
 
-            pair += `${this._hasdKeyAndOriginalKeyMap[hashKey]} => ${this._hashKeyAndValueMap[hashKey]}, `;
+            pair += `\t${this._hasdKeyAndOriginalKeyMap[hashKey]} => ${this._hashKeyAndValueMap[hashKey]},\n `;
         }
 
-        Console.OK(`{ ${pair} }`);
+        Console.OK(`{ \n${pair} }`);
 
         return this;
     }

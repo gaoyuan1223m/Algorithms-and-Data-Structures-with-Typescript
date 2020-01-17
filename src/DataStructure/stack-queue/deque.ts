@@ -1,6 +1,6 @@
 import { IDeque, ILinkedList } from "@Interface/specific";
 import { LinkedListFactory } from "@DataStructure/linked-list";
-import { ListTypes } from "@Utils/types";
+import { ListTypes, ListPrintOrder } from "@Utils/types";
 // import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common Deque by Doubly Linked List */
@@ -52,8 +52,9 @@ export class Deque<T> implements IDeque<T> {
         return this._list.size === 0;
     }
 
-    print(): this {
-        throw new Error("Method not implemented.");
+    print(order: ListPrintOrder): this {
+        this._list.print(order)
+        return this;
     }
 
     clear(): this {

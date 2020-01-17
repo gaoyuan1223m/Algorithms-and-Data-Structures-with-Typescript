@@ -1,6 +1,6 @@
 import { ILinkedList } from "@Interface/specific"
 import { LinkedListFactory } from "@DataStructure/linked-list"
-import { ListPrintOrder, ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
+import { ListPrintOrder, ListTypes, ArrayTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { catchErr, Errors } from "@Utils/error-handling";
 
 describe(`Test for Doubly-Linked-List`, () => {
@@ -22,7 +22,9 @@ describe(`Test for Doubly-Linked-List`, () => {
     it(`#print current doubly linked list`, () => {
         dll.print(ListPrintOrder.FromHeadToTail);
         dll.print(ListPrintOrder.FromTailToHead);
-        expect(catchErr(dll.print.bind(dll))()).toBe(Errors.Msg.UnacceptablePrintOrder);
+
+        expect(catchErr(dll.print.bind(dll))(TreePrintOrder.InOrder))
+            .toBe(Errors.Msg.UnacceptablePrintOrder);
     })
 
     it(`#Should return right size of List`, () => {
