@@ -1,12 +1,13 @@
 import { ArrayFactory } from "@DataStructure/array";
 import { Errors, catchErr } from "@Utils/error-handling";
-import { ArrayTypes } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { valueTypeComparison } from "@Utils/compare";
 
 
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = new ArrayFactory(capacity).create<number>(ArrayTypes.Static);
+    const staticArray = ArrayFactory.create<number>(ArrayTypes.Static, capacity);
 
     beforeAll(() => {
         staticArray
@@ -109,7 +110,7 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-5]).toBe(26);
         expect(staticArray[-2]).toBe(100);
         expect(staticArray[-1]).toBeUndefined();
-    })
+    });
 
     it(`#reverse current array`, () => {
         staticArray.reverse();
@@ -117,15 +118,57 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[6]).toBe(7);
         expect(staticArray[-2]).toBe(16);
         expect(staticArray[-4]).toBe(2);
-    })
+    });
 
     xit(`print the array`, () => {
         staticArray.print();
+    });
+
+    it(`Sort the Array`, () => {
+        staticArray
+            .sort()
+            .append(200);
+        for (let i = 0; i < staticArray.size - 1; i++) {
+            expect(
+                valueTypeComparison<number>(staticArray[i])
+                    .isLessThan(staticArray[i + 1])
+            ).toBe(true);
+        }
     })
 
     it(`clear the array`, () => {
         staticArray.clear();
         expect(staticArray.isEmpty()).toBeTruthy();
-    })
+    });
+
+
+
+    it(`Should transform to Linked List`, () => {
+        const list
+            = staticArray
+                .clear()
+                .append(7)
+                .insertByIndex(6, 3)
+                .insertByIndex(2, 5)
+                .insertByIndex(16, 3)
+                .updateByIndex(26, 4)
+                .toList(ListTypes.Singly);
+
+        expect(list.size).toBe(staticArray.size);
+    });
+
+    it(`Should transform to BST`, () => {
+        const tree
+            = staticArray
+                .clear()
+                .append(7)
+                .insertByIndex(6, 3)
+                .insertByIndex(2, 5)
+                .insertByIndex(16, 3)
+                .updateByIndex(26, 4)
+                .toTree(TreeTypes.BST);
+
+        expect(tree.size).toBe(staticArray.size);
+    });
 
 });

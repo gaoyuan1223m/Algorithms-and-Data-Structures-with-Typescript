@@ -7,17 +7,17 @@ import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { Validation, ValidateParams } from "@Utils/decorator";
 
 
-export class ArrayFactory implements IFactory {
+class Factory implements IFactory {
 
-    constructor(private capacity: number, private incremental?: number) { }
+    constructor() { }
 
-    create<T>(type: ArrayTypes): IArray<T> {
-        if (type === ArrayTypes.Static) {
-            return new StaticArray<T>(this.capacity);
+    create<T>(type: ArrayTypes, capacity: number, incremental?: number): IArray<T> {
+        if (type === ArrayTypes.Static || incremental === 0) {
+            return new StaticArray<T>(capacity);
         }
 
         if (type === ArrayTypes.Dynamic) {
-            return new DynamicArray(this.capacity, this.incremental ? this.incremental : this.capacity);
+            return new DynamicArray(capacity, incremental);
         }
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
@@ -31,7 +31,7 @@ class StaticArray<T> extends AbstractArray<T> {
         super(capacity, 0)
     }
 
-    // O(i)
+    // O(1)
     @Validation('value')
     append(@ValidateParams() value: T): this {
 
@@ -122,64 +122,8 @@ class StaticArray<T> extends AbstractArray<T> {
         return newStaticArray;
     }
 
-    toArray(arrayType: ArrayTypes = ArrayTypes.Dynamic): IArray<T> {
-        if (arrayType = ArrayTypes.Static) return this;
-
-        return this._toDynamicArray();
-    }
-
-    toList(listType: ListTypes = ListTypes.Singly): ILinkedList<T> {
-        if (listType === ListTypes.Doubly) return this._toDoublyLinkedList();
-
-        if (listType === ListTypes.Circular) return this._toCircularLinkedList();
-
-        if (listType === ListTypes.Skip) return this._toSkipLinkedList();
-
-        return this._toSinglyLinkedList();
-    }
-
-    toTree(treeType: TreeTypes = TreeTypes.BST): ITree<T> {
-        if (treeType === TreeTypes.AVL) return this._toAVL();
-
-        if (treeType === TreeTypes.R_B) return this._toRedBlack();
-
-        return this._toBST();
-    }
-
     private _getIdxOfLastElm(index: number): number {
         return index > this._idxOfLastElm ? index : this._idxOfLastElm;
-    }
-
-    private _toDynamicArray(): IArray<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toSinglyLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toDoublyLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toCircularLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toSkipLinkedList(): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toBST(): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toAVL(): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    private _toRedBlack(): ITree<T> {
-        throw new Error("Method not implemented.");
     }
 
 }
@@ -201,20 +145,10 @@ class DynamicArray<T> extends AbstractArray<T> {
         throw new Error("Method not implemented.");
     }
 
-    toArray(arrayType: ArrayTypes): IArray<T> {
-        return this;
-    }
-
-    toList(listType: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    toTree(treeType: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
-    }
-
     map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, ICompareFunc: ICompareFunc<U> = valueTypeComparison, thisArg?: any): IArray<U> {
         throw new Error("Method not implemented.");
     }
 
 }
+
+export const ArrayFactory = new Factory();

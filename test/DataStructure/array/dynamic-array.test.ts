@@ -4,7 +4,7 @@ import { ArrayTypes } from "@Utils/types";
 describe(`Test for Dynamic Array`, () => {
 
     const initCapacity = 7;
-    const dynamicArray = new ArrayFactory(initCapacity).create<number>(ArrayTypes.Dynamic);
+    const dynamicArray = ArrayFactory.create<number>(ArrayTypes.Dynamic, initCapacity);
 
     it(`#should return right size`, () => {
         expect(dynamicArray.length).toBe(7);

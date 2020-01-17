@@ -1,12 +1,12 @@
 export enum TreePrintOrder {
-    PreOrder = 0,
-    InOrder,
-    PostOrder
+    PreOrder = "PRE",
+    InOrder = "IN",
+    PostOrder = "POST"
 }
 
 export enum ListPrintOrder {
-    FromHeadToTail = 0,
-    FromTailToHead = 1
+    FromHeadToTail = "SEQ",
+    FromTailToHead = "REV"
 }
 
 export type PrintOrder = TreePrintOrder | ListPrintOrder;

@@ -1,11 +1,11 @@
 import { ILinkedList } from "@Interface/specific"
 import { LinkedListFactory } from "@DataStructure/linked-list"
-import { ListPrintOrder } from "@Utils/types";
+import { ListPrintOrder, ListTypes, ArrayTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { catchErr, Errors } from "@Utils/error-handling";
 
 describe(`Test for Doubly-Linked-List`, () => {
 
-    const dll: ILinkedList<number> = LinkedListFactory.create<number>();
+    const dll: ILinkedList<number> = LinkedListFactory.create(ListTypes.Doubly);
     /**     HEAD ............................................. TAIL  
      *      --------------------------------------------------------
      *               ----------------                       ----------
@@ -22,7 +22,9 @@ describe(`Test for Doubly-Linked-List`, () => {
     it(`#print current doubly linked list`, () => {
         dll.print(ListPrintOrder.FromHeadToTail);
         dll.print(ListPrintOrder.FromTailToHead);
-        expect(catchErr(dll.print.bind(dll))()).toBe(Errors.Msg.UnacceptablePrintOrder);
+
+        expect(catchErr(dll.print.bind(dll))(TreePrintOrder.InOrder))
+            .toBe(Errors.Msg.UnacceptablePrintOrder);
     })
 
     it(`#Should return right size of List`, () => {
@@ -125,6 +127,40 @@ describe(`Test for Doubly-Linked-List`, () => {
         dll.insertByIndex(val, -10);
         // dll.print(ListPrintOrder.FromHeadToTail);
         expect(dll.getByIndex(-10)).toBe(11);
+    });
+
+
+    it(`#Should Transform to Static Array`, () => {
+        dll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const array = dll.toArray(ArrayTypes.Static);
+
+        expect(array.size).toBe(dll.size);
+    });
+
+    it(`#Should Transform to Singly Linked List`, () => {
+        dll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const list = dll.toList(ListTypes.Singly);
+
+        expect(list.size).toBe(dll.size);
+    });
+
+    it(`#Should Transform to BST`, () => {
+        dll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const tree = dll.toTree(TreeTypes.BST);
+
+        expect(tree.size).toBe(dll.size);
     });
 
 });

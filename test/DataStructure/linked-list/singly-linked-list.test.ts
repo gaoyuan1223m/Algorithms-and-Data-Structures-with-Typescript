@@ -1,12 +1,12 @@
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ILinkedList } from "@Interface/specific";
 import { Errors, catchErr } from "@Utils/error-handling";
-import { ListTypes } from "@Utils/types";
+import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
 
 
 describe(`Test for SinglyLinkedList`, () => {
 
-    const sll: ILinkedList<number> = LinkedListFactory.create<number>(ListTypes.Singly);
+    const sll: ILinkedList<number> = LinkedListFactory.create(ListTypes.Singly);
 
     it(`#addHeadNode - add 0`, () => {
         sll.insertAtHead(0);
@@ -174,6 +174,79 @@ describe(`Test for SinglyLinkedList`, () => {
 
     xit(`#print the linked list - SECOND`, () => {
         sll.print();
+    });
+
+
+    it(`#Reverse the List with 2 elements`, () => {
+        sll
+            .clear()
+            .insertAtHead(23, 45)
+            // .print()
+            .reverse()
+            // .print();
+
+        expect(sll.head).toBe(23);
+        expect(sll.tail).toBe(45);
+    })
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *               ----------------                ----------
+     *     (remove) | 31 -> 11 -> 24 |-> 34 -> 18 ->| 19 -> 21 |
+     *               ----------------                ----------
+     *      --------------------------------------------------------
+     */
+
+    it(`#Reverse the List with multiple elements`, () => {
+        sll
+            .clear()
+            .insertAtHead(24, 11, 31)
+            .insertAtTail(34, 18, 19, 21)
+            // .print()
+            .reverse()
+            // .print();
+        expect(sll.head).toBe(21);
+        expect(sll.tail).toBe(31);
+    })
+
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *               ----------------                ----------
+     *               | 31 -> 11 -> 24 |-> 34 -> 18 ->| 19 -> 21 |
+     *               ----------------                ----------
+     *      --------------------------------------------------------
+     */
+
+    it(`#Should Transform to Static Array`, () => {
+        sll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const array = sll.toArray(ArrayTypes.Static);
+
+        expect(array.size).toBe(sll.size);
+    });
+
+    it(`#Should Transform to Doubly Linked List`, () => {
+        sll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const list = sll.toList(ListTypes.Doubly);
+
+        expect(list.size).toBe(sll.size);
+    });
+
+    it(`#Should Transform to BST`, () => {
+        sll
+            .clear()
+            .insertAtHead(34, 24, 11, 31)
+            .insertAtTail(18, 19, null, 21);
+
+        const tree = sll.toTree(TreeTypes.BST);
+
+        expect(tree.size).toBe(7);
     });
 
 })

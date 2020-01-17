@@ -1,6 +1,6 @@
 import { ICollectionBase } from "@Interface/common";
 
-export interface IStack<T> extends ICollectionBase<T> {
+export interface IStack<T> extends ICollectionBase {
 
     /**
      * @return top element of this Stack without removing it

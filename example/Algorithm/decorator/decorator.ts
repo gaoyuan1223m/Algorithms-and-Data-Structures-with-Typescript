@@ -1,9 +1,9 @@
-function notNull(target: any, propertyKey: string, parameterIndex: number) {
+export function notNull(target: any, propertyKey: string, parameterIndex: number) {
     console.log("param decorator notNull function invoked ");
     Validator.registerNotNull(target, propertyKey, parameterIndex);
 }
 
-function validate(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+export function validate(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     console.log("method decorator validate function invoked ");
     let originalMethod = descriptor.value;
     //wrapping the original method
@@ -18,7 +18,7 @@ function validate(target: any, propertyKey: string, descriptor: PropertyDescript
 }
 
 
-class Validator {
+export class Validator {
     private static notNullValidatorMap: Map<any, Map<string, number[]>> = new Map();
 
     //todo add more validator maps
@@ -58,7 +58,7 @@ class Validator {
     }
 }
 
-class Task {
+export class Task {
     @validate
     run(@notNull name: string): void {
         console.log("running task, name: " + name);

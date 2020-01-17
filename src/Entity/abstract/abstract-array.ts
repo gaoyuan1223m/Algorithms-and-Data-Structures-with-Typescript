@@ -1,15 +1,18 @@
 import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { IList } from "@Interface/common";
 import { Console } from "@Utils/emphasize";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { QuickSort, SortMethods } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
+import { ArrayFactory } from "@DataStructure/array";
+import { LinkedListFactory } from "@DataStructure/linked-list";
+import { BinarySearchTree } from "@DataStructure/tree";
 
 export abstract class AbstractArray<T> implements IArray<T> {
 
-    [n: number]: T;
+    [n: number]: T; // index signature to present Array
 
     @PositiveSaftInt()
     protected _capacity: number;
@@ -50,11 +53,41 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract append(value: T): this;
 
-    abstract toArray(arrayType: ArrayTypes): IArray<T>;
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        const currLength = this._capacity;
+        const array = ArrayFactory.create<T>(arrayType, currLength);
 
-    abstract toList(listType: ListTypes): ILinkedList<T>;
+        for (let index = 0; index < currLength; index++) {
+            if (!this[index]) continue;
+            array.append(this[index])
+        }
 
-    abstract toTree(treeType: TreeTypes): ITree<T>;
+        return array;
+    }
+
+    toList(listType: ListTypes): ILinkedList<T> {
+        const currLength = this._capacity;
+        const list = LinkedListFactory.create<T>(listType);
+
+        for (let index = 0; index < currLength; index++) {
+            if (!this[index]) continue;
+            list.append(this[index]);
+        }
+
+        return list;
+    }
+
+    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+        const currLength = this._capacity;
+        const tree = new BinarySearchTree<T>();
+
+        for (let index = 0; index < currLength; index++) {
+            if (!this[index]) continue;
+            tree.append(this[index], compare);
+        }
+
+        return tree;
+    }
 
     abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IList<U>
 
@@ -137,6 +170,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
             jj -= 1;
         }
 
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+
         return this;
     }
 
@@ -160,16 +195,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this._size === 0;
     }
 
-    print(): this {
-        let str = "[ "
-        for (let i = 0; i < this._capacity; i++) {
-            str += `${this[i]}`;
-            if ((i + 1) === this._capacity) continue;
-            str += `, `
-        }
-        str += ` ]`;
-        Console.Warn(str);
-        return this;
+    print(order: ListPrintOrder = ListPrintOrder.FromHeadToTail): this {
+
+        if (order === ListPrintOrder.FromHeadToTail) return this._printFromHeadToTail();
+
+        if (order === ListPrintOrder.FromTailToHead) return this._printFromTailToHead();
+
+        throw new Errors.InvalidArgument(Errors.Msg.UnacceptablePrintOrder);
     }
 
     clear(): this {
@@ -177,6 +209,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             this[i] = undefined;
             this[i - this._capacity] = undefined;
         }
+        this._idxOfLastElm = -1;
         this._size = 0;
         return this;
     }
@@ -211,9 +244,44 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _quickSort(compare?: ICompareFunc<T>): this {
-        QuickSort(this, 0, this._capacity - 1, compare);
-        QuickSort(this, 0 - this._capacity, -1, compare);
+        QuickSort(this, 0, this._capacity - 1, compare); // positive indice
+        QuickSort(this, 0 - this._capacity, -1, compare); // negative indice
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
         return this;
     }
+
+    protected _findNewIdxOfLastElm(): number {
+        let kk = this._capacity - 1;
+        while (!this[kk] && kk >= 0) { kk -= 1; }
+
+        return kk;
+    }
+
+
+    private _printFromHeadToTail(): this {
+        let str = "[ "
+        for (let i = 0; i < this._capacity; i++) {
+            str += `${this[i]}`;
+            if ((i + 1) === this._capacity) continue;
+            str += `, `
+        }
+        str += ` ]`;
+        Console.Warn(str);
+        return this;
+    }
+
+    private _printFromTailToHead(): this {
+        let str = "[ "
+        for (let i = this._capacity - 1; i >= 0; i--) {
+            str += `${this[i]}`;
+            if (i === 0) continue;
+            str += `, `
+        }
+        str += ` ]`;
+        Console.Err(str);
+        return this;
+    }
+
 
 }

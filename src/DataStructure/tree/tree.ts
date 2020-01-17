@@ -1,10 +1,8 @@
 import { BinaryTreeNode } from "@Entity/concrete";
 import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
-import { SortMethods } from "@Algorithm/sort";
 import { Errors } from "@Utils/error-handling";
-import { Err } from "@Utils/emphasize";
 
 /**
  * @BinarySearchTree
@@ -118,12 +116,15 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this._size === 0;
     }
 
-    sort(compare?: ICompareFunc<T>, method?: SortMethods): this {
-        throw new Error("Method not implemented.");
-    }
+    print(order: TreePrintOrder): this {
 
-    print(): this {
-        throw new Error("Method not implemented.");
+        if(order === TreePrintOrder.PreOrder) return this._printPreOrder();
+
+        if(order === TreePrintOrder.InOrder) return this._printInOrder();
+
+        if(order === TreePrintOrder.PostOrder) return this._printPostOrder();
+
+        throw new Errors.InvalidArgument(Errors.Msg.UnacceptablePrintOrder)
     }
 
     clear(): this {
@@ -241,6 +242,18 @@ export class BinarySearchTree<T> implements ITree<T> {
             treeNode = treeNode.left;
         }
         return treeNode;
+    }
+    
+    private _printPreOrder(): this {
+        return this;
+    }
+
+    private _printInOrder(): this {
+        return this;
+    }
+
+    private _printPostOrder(): this {
+        return this;
     }
 
 }

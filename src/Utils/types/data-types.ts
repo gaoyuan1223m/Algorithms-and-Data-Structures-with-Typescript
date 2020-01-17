@@ -21,5 +21,10 @@ export enum TreeNodeColor {
     Red
 }
 
-export type DataStructures = ArrayTypes | ListTypes | TreeTypes;
+export enum HashTypes {
+    Dict,
+    Set
+}
+
+export type DataStructures = ArrayTypes | ListTypes | TreeTypes | HashTypes;
 
