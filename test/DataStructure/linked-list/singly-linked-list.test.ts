@@ -176,6 +176,38 @@ describe(`Test for SinglyLinkedList`, () => {
         sll.print();
     });
 
+
+    it(`#Reverse the List with 2 elements`, () => {
+        sll
+            .clear()
+            .insertAtHead(23, 45)
+            // .print()
+            .reverse()
+            // .print();
+
+        expect(sll.head).toBe(23);
+        expect(sll.tail).toBe(45);
+    })
+    /**     HEAD ............................................. TAIL  
+     *      --------------------------------------------------------
+     *               ----------------                ----------
+     *     (remove) | 31 -> 11 -> 24 |-> 34 -> 18 ->| 19 -> 21 |
+     *               ----------------                ----------
+     *      --------------------------------------------------------
+     */
+
+    it(`#Reverse the List with multiple elements`, () => {
+        sll
+            .clear()
+            .insertAtHead(24, 11, 31)
+            .insertAtTail(34, 18, 19, 21)
+            // .print()
+            .reverse()
+            // .print();
+        expect(sll.head).toBe(21);
+        expect(sll.tail).toBe(31);
+    })
+
     /**     HEAD ............................................. TAIL  
      *      --------------------------------------------------------
      *               ----------------                ----------

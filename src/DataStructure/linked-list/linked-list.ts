@@ -182,9 +182,29 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     clear(): this {
         return this._clearCurrentList();
     }
-
+    // O(n)
     reverse(): this {
-        throw "NOT IMPLEMENTED";
+        if (this._size < 2) return this;
+
+        let pointer = this._headPointer;
+        let standByPointer = this._headPointer;
+        let prevPointer: ISinglyListNode<T> = null;
+        let nextPointer: ISinglyListNode<T> = null;
+
+        while(pointer.next) {
+            nextPointer = pointer.next; // reserver next pointer
+            pointer.next = prevPointer; // reverse
+            prevPointer = pointer; // prev point moves forward
+            pointer = nextPointer; // pointer moves forward
+        }
+
+        this._headPointer = prevPointer;
+        this._tailPointer  = standByPointer;
+
+        this._headSentry.next = this._headPointer;
+        this._tailPointer.next = this._tailSentry;
+
+        return this;
     }
 
     // O(n)
@@ -417,7 +437,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         if (this._size === 0) return this;
 
         this._headSentry.next = this._tailSentry;
-        this._tailPointer.next = null;
+        this._tailPointer.next = null; // cut off connection from the original last element to the TailSentry
         this._headPointer = this._headSentry;
         this._tailPointer = this._headSentry;
 
