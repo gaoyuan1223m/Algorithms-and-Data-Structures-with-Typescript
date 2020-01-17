@@ -641,7 +641,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
             idx--;
         }
         str += `HEAD`;
-        Console.Warn(str);
+        Console.Err(str);
         return this;
     }
 
