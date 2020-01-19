@@ -63,14 +63,14 @@ class StaticArray<T> extends AbstractArray<T> {
         let tempIdx: number; // the empty position cloest to the idx on the right
 
         for (let i = idx + 1; i < this._capacity; i++) {
-            if (this[i]) continue;
+            if (this._isValidValue(this[i])) continue;
             tempIdx = i;
             break;
         }
 
         if (!tempIdx) { // in case no more room for the new value on it's right, we search it's left part 
             for (let i = idx - 1; i >= 0; i--) {
-                if (this[i]) continue;
+                if (this._isValidValue(this[i])) continue;
                 tempIdx = i;
                 break;
             }
@@ -128,7 +128,7 @@ class StaticArray<T> extends AbstractArray<T> {
 
 }
 
-/**@NOT Completed */
+
 class DynamicArray<T> extends AbstractArray<T> {
 
     constructor(capacity: number, incremental: number = capacity) {
@@ -137,16 +137,131 @@ class DynamicArray<T> extends AbstractArray<T> {
 
     @Validation('value')
     append(@ValidateParams() value: T): this {
-        throw new Error("Method not implemented.");
+        if (this._idxOfLastElm + 1 === this._capacity) {
+            this._grow();
+        }
+
+        this[this._idxOfLastElm + 1] = value;
+        this[this._idxOfLastElm + 1 - this._capacity] = value;
+        this._size += 1;
+        this._idxOfLastElm += 1;
+        return this;
     }
 
     @Validation()
     insertByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
-        throw new Error("Method not implemented.");
+        const idx = this._getDynamicValidIndex(index);
+
+        if (!this._isValidValue(this[idx])) {
+            this._idxOfLastElm = this._getIdxOfLastElm(idx);
+            this[idx] = value;
+            this[idx - this._capacity] = value;
+            this._size += 1;
+            return this;
+        }
+        let tempIdx: number; // the empty position cloest to the idx on the right
+
+        for (let i = idx + 1; i < this._capacity; i++) {
+            if (this._isValidValue(this[i])) continue;
+            tempIdx = i;
+            break;
+        }
+
+        if (!tempIdx) { // in case no more room for the new value on it's right, we search it's left part 
+            for (let i = idx - 1; i >= 0; i--) {
+                if (this._isValidValue(this[i])) continue;
+                tempIdx = i;
+                break;
+            }
+        }
+
+        if (!tempIdx && tempIdx !== 0) {
+            this._grow();
+
+            for (let i = this._idxOfLastElm; i >= idx; i--) {
+                this[i + 1] = this[i];
+            }
+
+            this[idx] = value;
+
+            for (let j = this._idxOfLastElm - this._capacity; j >= idx - this._capacity; j--) {
+                this[j + 1] = this[j];
+            }
+
+            this[idx - this._capacity] = value;
+
+            this._size += 1;
+            this._idxOfLastElm += 1;
+            return this;
+        }
+
+        if (tempIdx > idx) {
+            this._idxOfLastElm = this._getIdxOfLastElm(tempIdx);
+
+            for (let j = tempIdx; j > idx; j--) {
+                this[j] = this[j - 1];
+            }
+            this[idx] = value;
+
+            // for negative idx
+            for (let k = tempIdx - this._capacity; k > idx - this._capacity; k--) {
+                this[k] = this[k - 1];
+            }
+            this[idx - this._capacity] = value;
+
+        } else {
+            for (let j = tempIdx; j < idx; j++) {
+                this[j] = this[j + 1];
+            }
+            this[idx] = value;
+
+            // for negative idx
+            for (let k = tempIdx - this._capacity; k < idx - this._capacity; k++) {
+                this[k] = this[k + 1];
+            }
+            this[idx - this._capacity] = value;
+        }
+
+        this._size += 1;
+        return this;
     }
 
     map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, ICompareFunc: ICompareFunc<U> = valueTypeComparison, thisArg?: any): IArray<U> {
         throw new Error("Method not implemented.");
+    }
+
+    private _getDynamicValidIndex(index: number): number {
+
+        if (index >= 2 * this._capacity || index + 2 * this._capacity < 0) {
+            throw new Errors.OutOfBoundary(Errors.Msg.BeyondBoundary);
+        }
+
+        if (index + this._capacity < 0 || index >= this._capacity) {
+            this._grow();
+            return index < 0 ? index + this._capacity : index;
+        }
+
+        if (index < 0) {
+            return index + this._capacity;
+        }
+
+        return index;
+    }
+
+    private _grow(): void {
+        for (let i = -1; i >= 0 - this._capacity; i--) {
+            this[i] = undefined;
+        }
+
+        this._capacity += this._incrementals; // grow
+
+        for (let i = 0; i <= this._idxOfLastElm; i++) {
+            this[i - this._capacity] = this[i];
+        }
+    }
+
+    private _getIdxOfLastElm(index: number): number {
+        return index > this._idxOfLastElm ? index : this._idxOfLastElm;
     }
 
 }
