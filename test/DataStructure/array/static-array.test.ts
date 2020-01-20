@@ -7,7 +7,7 @@ import { valueTypeComparison } from "@Utils/compare";
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = ArrayFactory.create<number>(ArrayTypes.Static, capacity);
+    const staticArray = ArrayFactory.create<number>(ArrayTypes.STATIC, capacity);
 
     beforeAll(() => {
         staticArray
@@ -152,7 +152,7 @@ describe(`Test for Static Array`, () => {
                 .insertByIndex(2, 5)
                 .insertByIndex(16, 3)
                 .updateByIndex(26, 4)
-                .toList(ListTypes.Singly);
+                .toList(ListTypes.SINGLY);
 
         expect(list.size).toBe(staticArray.size);
     });

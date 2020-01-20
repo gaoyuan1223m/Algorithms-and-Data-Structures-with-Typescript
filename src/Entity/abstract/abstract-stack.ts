@@ -17,7 +17,7 @@ export abstract class AbstractStack<T> implements IStack<T> {
 
     constructor(capacity?: number) {
         this._capacity = capacity;
-        this._list = LinkedListFactory.create<T>(ListTypes.Singly);
+        this._list = LinkedListFactory.create<T>(ListTypes.SINGLY);
     }
 
     abstract push(...values: T[]): this;

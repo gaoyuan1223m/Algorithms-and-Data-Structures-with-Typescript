@@ -22,7 +22,7 @@ export class Queue<T> implements IQueue<T> {
     };
 
     constructor() {
-        this._list = LinkedListFactory.create<T>(ListTypes.Singly)
+        this._list = LinkedListFactory.create<T>(ListTypes.SINGLY)
     }
 
     enqueue(...values: T[]): this {

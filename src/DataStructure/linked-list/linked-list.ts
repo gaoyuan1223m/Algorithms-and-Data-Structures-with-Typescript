@@ -13,7 +13,7 @@ export class Factory implements IFactory {
 
     create<T>(type: ListTypes): ILinkedList<T> {
 
-        if (type === ListTypes.Singly) return new SinglyLinkedList();
+        if (type === ListTypes.SINGLY) return new SinglyLinkedList();
 
         if (type === ListTypes.Doubly) return new DoublyLinkedList();
 

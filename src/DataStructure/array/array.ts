@@ -12,11 +12,11 @@ class Factory implements IFactory {
     constructor() { }
 
     create<T>(type: ArrayTypes, capacity: number, incremental?: number): IArray<T> {
-        if (type === ArrayTypes.Static || incremental === 0) {
+        if (type === ArrayTypes.STATIC || incremental === 0) {
             return new StaticArray<T>(capacity);
         }
 
-        if (type === ArrayTypes.Dynamic) {
+        if (type === ArrayTypes.DYNAMIC) {
             return new DynamicArray(capacity, incremental);
         }
 

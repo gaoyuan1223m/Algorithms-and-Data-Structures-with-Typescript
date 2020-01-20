@@ -4,7 +4,7 @@ import { ArrayTypes } from "@Utils/types";
 describe(`Test for Dynamic Array`, () => {
 
     const capacity = 5;
-    const dynamicArray = ArrayFactory.create<number>(ArrayTypes.Dynamic, capacity);
+    const dynamicArray = ArrayFactory.create<number>(ArrayTypes.DYNAMIC, capacity);
 
 
     beforeAll(() => {

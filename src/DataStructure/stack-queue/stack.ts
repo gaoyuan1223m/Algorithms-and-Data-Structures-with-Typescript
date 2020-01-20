@@ -1,9 +1,8 @@
 import { IStack } from "@Interface/specific";
-import { IFactory } from "@Interface/common";
 import { AbstractStack } from "@Entity/abstract";
 import { Errors } from "@Utils/error-handling";
 
-class Factory implements IFactory {
+class Factory {
 
     create<T>(capacity?: number): IStack<T> {
         if (capacity) return new StaticStack<T>(capacity);

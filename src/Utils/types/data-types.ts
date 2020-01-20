@@ -1,30 +1,35 @@
 export enum ArrayTypes {
-    Dynamic,
-    Static
+    DYNAMIC = "DYNAMIC ARRAY",
+    STATIC = "STATIC ARRAY"
 }
 
 export enum ListTypes {
-    Singly,
-    Doubly,
-    Circular,
-    Skip
+    SINGLY = "SINGLY LINKED LIST",
+    Doubly = "DOUBLY LINKED LIST",
+    CIRCULAR = "CIRCULAR LINKED LIST",
+    SKIP = "SKIP LINKED LIST"
 }
 
 export enum TreeTypes {
-    BST,
-    AVL,
-    R_B
+    BST = "BINARY SEARCH TREE",
+    AVL = "AVL TREE",
+    R_B = "RED BLACK TREE"
 }
 
 export enum TreeNodeColor {
-    Black,
-    Red
+    Black = "BLACK",
+    Red = "RED"
 }
 
 export enum HashTypes {
-    Dict,
-    Set
+    DICT = "KEY-VALUE MAPPING",
+    SET = "UNIQUE VALUES GROUP"
 }
 
-export type DataStructures = ArrayTypes | ListTypes | TreeTypes | HashTypes;
+export enum BinaryHeapTypes {
+    MAX = "MAX HEAP",
+    MIN = "MIN HEAP"
+}
+
+export type DataStructures = ArrayTypes | ListTypes | TreeTypes | HashTypes | BinaryHeapTypes;
 

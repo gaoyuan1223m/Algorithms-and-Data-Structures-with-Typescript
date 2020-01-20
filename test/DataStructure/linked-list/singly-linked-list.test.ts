@@ -6,7 +6,7 @@ import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
 
 describe(`Test for SinglyLinkedList`, () => {
 
-    const sll: ILinkedList<number> = LinkedListFactory.create(ListTypes.Singly);
+    const sll: ILinkedList<number> = LinkedListFactory.create(ListTypes.SINGLY);
 
     it(`#addHeadNode - add 0`, () => {
         sll.insertAtHead(0);
@@ -222,7 +222,7 @@ describe(`Test for SinglyLinkedList`, () => {
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
-        const array = sll.toArray(ArrayTypes.Static);
+        const array = sll.toArray(ArrayTypes.STATIC);
 
         expect(array.size).toBe(sll.size);
     });
