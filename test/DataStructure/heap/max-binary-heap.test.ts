@@ -1,9 +1,9 @@
-import { IHeap } from "@Interface/specific/IHeap"
-import { HeapFactory } from "@DataStructure/heap/heap"
+import { IHeap } from "@Interface/specific";
+import { HeapFactory } from "@DataStructure/heap";
 
 describe(`Test for MAX-Binary-Heap`, () => {
     // [ 10, 9, 7, 8, 2, 3, 4, 5, 6, 0, 1, undefined, undefined, undefined, undefined ]
-    const heap: IHeap<number> = HeapFactory.create();
+    const heap = HeapFactory.create<number>(15);
     const elements = [5, 6, 3, 7, 2, 9, 4, 8, 10, 0, 1];
 
     beforeAll(() => {

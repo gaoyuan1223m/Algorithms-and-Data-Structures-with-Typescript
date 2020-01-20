@@ -1,5 +1,6 @@
+
 import { AbstractHeap } from "@Entity/abstract/abstract-heap";
-import { IHeapConstructor, IHeap } from "@Interface/specific/IHeap";
+import { IHeapConstructor, IHeap } from "@Interface/specific";
 import { valueTypeComparison, ICompareFunc } from "@Utils/compare";
 import { IFactory } from "@Interface/common";
 import { BinaryHeapTypes } from "@Utils/types";

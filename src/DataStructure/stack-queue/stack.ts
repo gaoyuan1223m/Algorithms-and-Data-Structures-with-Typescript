@@ -1,5 +1,6 @@
+
+import { AbstractStack } from "@Entity/abstract/abstract-stack";
 import { IStack } from "@Interface/specific";
-import { AbstractStack } from "@Entity/abstract";
 import { Errors } from "@Utils/error-handling";
 
 class Factory {

@@ -1,6 +1,6 @@
 import { IArray } from "@Interface/specific";
 import { IFactory } from "@Interface/common";
-import { AbstractArray } from "@Entity/abstract";
+import { AbstractArray } from "@Entity/abstract/abstract-array";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { ArrayTypes } from "@Utils/types";
