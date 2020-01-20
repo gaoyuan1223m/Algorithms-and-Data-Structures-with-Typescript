@@ -11,17 +11,18 @@ import { IFactory } from "@Interface/common";
 
 export class Factory implements IFactory {
 
-    create<T>(type: ListTypes): ILinkedList<T> {
+    create<T>(capacity: number, comapre?: ICompareFunc<T>): ILinkedList<T>;
+    create<T>(capacity?: number, incremental?: number): ILinkedList<T>;
+    create<T>(type?: ListTypes, capacity?: number, incremental?: number, compare?: ICompareFunc<T>): ILinkedList<T>;
+    create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): any {
+        if (!type || type === ListTypes.SINGLY) return new SinglyLinkedList<T>();
 
-        if (type === ListTypes.SINGLY) return new SinglyLinkedList();
-
-        if (type === ListTypes.Doubly) return new DoublyLinkedList();
+        if (type === ListTypes.Doubly) return new DoublyLinkedList<T>();
 
         // if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
-
 }
 
 class SinglyLinkedList<T> implements ILinkedList<T> {
