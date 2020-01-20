@@ -18,7 +18,7 @@ export interface IHeap<T> extends ICollectionBase {
     /**
      * *Remove the Peak element from the HEAP*
      */
-    removePeak(): this;
+    removePeak(): T;
 
     /**
      * *Replace the Peak Value by the new one passed in*
@@ -32,6 +32,7 @@ export interface IHeapConstructor {
 }
 
 /**
+ * 完全二叉树性质
  * Implement HEAP by Dynamic Array since it's a complete Binary HEAP
  * n is the number of elements
  * i is index of the some element
@@ -44,4 +45,11 @@ export interface IHeapConstructor {
  *
  * if (2i + 2 <= n - 1), right node 2i + 2
  * if (2i + 2 > n - 1), no right
+ * 
+ * 第一个叶子节点的索引值 等于 非叶子节点 的数量
+ * index of the FIRST left node  === the number of parent nodes
+ * 
+ * 非叶子节点的个数为 Math.floor(n / 2)
+ * the number of parent nodes = Math.floor(n / 2)
+ * 
  */

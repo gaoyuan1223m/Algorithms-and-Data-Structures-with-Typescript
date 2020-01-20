@@ -261,9 +261,9 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     private _printFromHeadToTail(): this {
         let str = "[ "
-        for (let i = 0; i < this._capacity; i++) {
+        for (let i = 0; i <= this._idxOfLastElm; i++) {
             str += `${this[i]}`;
-            if ((i + 1) === this._capacity) continue;
+            if (i === this._idxOfLastElm) break;
             str += `, `
         }
         str += ` ]`;
@@ -273,9 +273,9 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     private _printFromTailToHead(): this {
         let str = "[ "
-        for (let i = this._capacity - 1; i >= 0; i--) {
+        for (let i = this._idxOfLastElm - 1; i >= 0; i--) {
             str += `${this[i]}`;
-            if (i === 0) continue;
+            if (i === 0) break;
             str += `, `
         }
         str += ` ]`;

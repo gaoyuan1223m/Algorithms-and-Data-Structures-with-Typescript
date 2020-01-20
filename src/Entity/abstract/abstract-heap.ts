@@ -7,7 +7,7 @@ import { ArrayTypes, ListPrintOrder } from "@Utils/types";
 export abstract class AbstractHeap<T> implements IHeap<T> {
 
     abstract add(value: T): this;
-    abstract removePeak(): this;
+    abstract removePeak(): T;
     abstract replacePeakBy(value: T): this;
 
     protected _elements: IArray<T>;
@@ -43,11 +43,15 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
     }
 
     protected _getParentIdx(childIndex: number): number {
-        return ~~((childIndex - 1) / 2);
+        return Math.floor((childIndex - 1) / 2);
     }
 
     protected _hasChild(parentIndex: number): boolean {
-        return this._hasleftChild(parentIndex) || this._hasRightChild(parentIndex);
+        return parentIndex < this._numOfParentNodes();
+    }
+
+    protected _hasChildren(parentIndex: number): boolean {
+        return this._hasleftChild(parentIndex) && this._hasRightChild(parentIndex);
     }
 
     protected _getLeftChildIndex(parentIndex: number): number {
@@ -64,6 +68,10 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
 
     protected _hasRightChild(parentIndex: number): boolean {
         return 2 * parentIndex + 2 <= this._elements.size - 1;
+    }
+
+    protected _numOfParentNodes() {
+        return Math.floor(this._elements.size / 2);
     }
 
 }
