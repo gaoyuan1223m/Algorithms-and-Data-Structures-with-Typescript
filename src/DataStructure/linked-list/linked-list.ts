@@ -193,7 +193,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         let nextPointer: ISinglyListNode<T> = null;
 
         while (pointer.next) {
-            nextPointer = pointer.next; // reserver next pointer
+            nextPointer = pointer.next; // reserve next pointer
             pointer.next = prevPointer; // reverse
             prevPointer = pointer; // prev point moves forward
             pointer = nextPointer; // pointer moves forward

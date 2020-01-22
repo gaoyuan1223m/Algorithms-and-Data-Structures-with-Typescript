@@ -16,19 +16,19 @@ export interface IHeap<T> extends ICollectionBase {
     add(value: T): this;
 
     /**
-     * *Remove the Peak element from the HEAP*
+     * *Remove the Peak element from the HEAP and return*
      */
     removePeak(): T;
 
     /**
-     * *Replace the Peak Value by the new one passed in*
+     * *Replace the Peak element by the new one passed in and return the original one*
      * @param value element to replace the Peak element of the HEAP
      */
-    replacePeakBy(value: T): this;
+    replacePeakBy(value: T): T;
 }
 
 export interface IHeapConstructor {
-    new <T>(capacity?: number, compare?: ICompareFunc<T>): IHeap<T>
+    new <T>(compare?: ICompareFunc<T>): IHeap<T>
 }
 
 /**

@@ -1,40 +1,75 @@
 import { IHeap } from "@Interface/specific/IHeap";
-import { IArray } from "@Interface/specific";
 import { ICompareFunc } from "@Utils/compare";
-import { ArrayFactory } from "@DataStructure/array";
-import { ArrayTypes, ListPrintOrder } from "@Utils/types";
+import { Console } from "@Utils/emphasize";
+import { Errors } from "@Utils/error-handling";
+
+interface ISimpleArray<T> {
+    [index: number]: T
+}
 
 export abstract class AbstractHeap<T> implements IHeap<T> {
 
     abstract add(value: T): this;
     abstract removePeak(): T;
-    abstract replacePeakBy(value: T): this;
+    abstract replacePeakBy(value: T): T;
 
-    protected _elements: IArray<T>;
+    protected _elements: ISimpleArray<T>;
+    protected _size: number
 
     get peak(): T {
         return this._elements[0];
     }
 
-    get size(): number {
-        return this._elements.size;
+    protected get tail(): T {
+        return this._elements[this._size - 1];
     }
 
-    constructor(protected capacity: number, protected compare: ICompareFunc<T>) {
-        this._elements = ArrayFactory.create<T>(ArrayTypes.DYNAMIC, capacity);
+    get size(): number {
+        return this._size;
+    }
+
+    constructor(protected compare: ICompareFunc<T>) {
+        this.__init__();
     }
 
     isEmpty(): boolean {
-        return this._elements.size === 0;
+        return this._size === 0;
     }
 
     print(): this {
-        this._elements.print(ListPrintOrder.FromHeadToTail);
-        return this;
+        return this._print();
     }
 
     clear(): this {
-        this._elements.clear();
+        return this.__init__();
+    }
+
+    protected _removeFromTail(): T {
+        const elem = this.tail;
+
+        if(!this._isValidValue(elem)) return null;
+
+        delete this._elements[--this._size];
+        return elem;
+    }
+
+    protected _addAtTail(value: T): number {
+        if(!this._isValidValue(value)){
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+        this._elements[this._size++] = value;
+        return this._size - 1;
+    }
+
+    protected _addAtPeak(value: T): this {        
+        if(!this._isValidValue(value)){
+            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        }
+        
+        if (this.isEmpty()) {
+            this._size += 1;
+        }
+        this._elements[0] = value;
         return this;
     }
 
@@ -63,15 +98,41 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
     }
 
     protected _hasleftChild(parentIndex: number): boolean {
-        return 2 * parentIndex + 1 <= this._elements.size - 1;
+        return 2 * parentIndex + 1 <= this._size - 1;
     }
 
     protected _hasRightChild(parentIndex: number): boolean {
-        return 2 * parentIndex + 2 <= this._elements.size - 1;
+        return 2 * parentIndex + 2 <= this._size - 1;
     }
 
     protected _numOfParentNodes() {
-        return Math.floor(this._elements.size / 2);
+        return Math.floor(this._size / 2);
+    }
+
+    private __init__(): this {
+        this._size = 0;
+        this._elements = {} as ISimpleArray<T>;
+        return this;
+    }
+
+    private _print(): this {
+        let str = "[ ";
+        for (let i = 0; i < this._size; i++) {
+            str += `${this._elements[i]}`;
+            if (i === this._size - 1) break;
+            str += `, `;
+        }
+        str += ` ]`;
+        Console.Warn(str);
+        return this;
+    }
+
+    protected _isValidValue(value: T) {
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== "";
     }
 
 }

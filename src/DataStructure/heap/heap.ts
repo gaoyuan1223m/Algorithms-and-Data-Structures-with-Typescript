@@ -11,76 +11,85 @@ class Factory implements IFactory {
     create<T>(capacity?: number, incremental?: number): IHeap<T>;
     create<T>(type?: BinaryHeapTypes, capacity?: number, incremental?: number): IHeap<T>;
     create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): any {
-        return new MaxBinaryHeap<T>(capacity, compare)
+        return new MaxBinaryHeap<T>(compare)
     }
 }
 
 const MaxBinaryHeap: IHeapConstructor = class Heap<T> extends AbstractHeap<T> {
 
     constructor(
-        protected capacity: number = 15,
         protected compare: ICompareFunc<T> = valueTypeComparison
     ) {
-        super(capacity, compare);
+        super(compare);
     }
 
     add(value: T): this {
-
-        let newElementIndex = this._elements.size;
-
-        this._elements.append(value);
-
-        while (this._hasParent(newElementIndex)) {
-
-            let parentIndex = this._getParentIdx(newElementIndex);
-            let parentValue = this._elements[parentIndex]
-
-            if (this.compare(parentValue).isLargerOrEqualTo(value)) break;
-
-            this._elements[newElementIndex] = parentValue;
-            newElementIndex = parentIndex;
-        }
-
-        this._elements[newElementIndex] = value
-
-        return this;
+        const newElementIndex = this._addAtTail(value);
+        return this._siftUp(newElementIndex);
     }
 
     removePeak(): T {
-
         const peak = this.peak;
-        const tail = this._elements.removeByIndex(this.size - 1);
+        if (!this._isValidValue(peak)) return peak;
 
+        const tail = this._removeFromTail();
         if (this.isEmpty()) return peak;
 
-        let currIndex = 0;
-        while (this._hasChild(currIndex)) {
-
-            // must have left node
-            let childIndex = this._getLeftChildIndex(currIndex);
-            let childValue = this._elements[childIndex];
-
-            let rightIndex = childIndex + 1;
-            
-            // in case right node is large than the left one
-            if (this._hasRightChild(currIndex)
-                && this.compare(this._elements[rightIndex]).isLargerThan(childValue)) {
-                    childValue = this._elements[childIndex = rightIndex];
-            }
-
-            if(this.compare(childValue).isLessThan(tail)) break;
-            
-            this._elements[currIndex] = childValue;
-            currIndex = childIndex;
-        }
-        
-        this._elements[currIndex] = tail;
+        this._addAtPeak(tail);
+        this._siftDown(0);
 
         return peak;
     }
 
-    replacePeakBy(value: T): this {
-        throw new Error("Method not implemented.");
+    replacePeakBy(value: T): T {
+        const peak = this.peak;
+
+        this._addAtPeak(value);
+
+        if (!this._isValidValue(peak) || this._size === 1) return peak;
+
+        this._siftDown(0);
+
+        return peak;
+    }
+
+    private _siftUp(index: number): this {
+        const value = this._elements[index];
+        while (this._hasParent(index)) {
+            let parentIndex = this._getParentIdx(index);
+            let parentValue = this._elements[parentIndex]
+
+            if (this.compare(parentValue).isLargerOrEqualTo(value)) break;
+
+            this._elements[index] = parentValue;
+            index = parentIndex;
+        }
+        this._elements[index] = value;
+        return this;
+    }
+
+    private _siftDown(index: number): void {
+        const value = this._elements[index];
+        while (this._hasChild(index)) {
+            // must have left node
+            let childIndex = this._getLeftChildIndex(index);
+            let childValue = this._elements[childIndex];
+
+            let rightIndex = childIndex + 1;
+
+            // in case right node is large than the left one
+            if (this._hasRightChild(index)
+                && this.compare(this._elements[rightIndex]).isLargerThan(childValue)) {
+                childValue = this._elements[childIndex = rightIndex];
+            }
+
+            if (this.compare(childValue).isLessThan(value)) break;
+
+            this._elements[index] = childValue;
+            index = childIndex;
+        }
+
+        this._elements[index] = value;
     }
 
 }
