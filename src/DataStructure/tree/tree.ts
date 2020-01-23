@@ -4,6 +4,7 @@ import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
+import { Queue } from "@DataStructure/stack-queue";
 
 /**
  * @BinarySearchTree
@@ -300,7 +301,18 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode) return;
 
+        const queue = new Queue<IBinaryTreeNode<T>>();
+        queue.enqueue(treeNode);
+
+        while (!queue.isEmpty()) {
+            const node = queue.dequeue();
+            this._printStr += `${node.value.toString()}, `;
+
+            node.left && queue.enqueue(node.left);
+            node.right && queue.enqueue(node.right);
+        }
     }
 
 }

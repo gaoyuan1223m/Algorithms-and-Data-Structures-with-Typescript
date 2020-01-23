@@ -60,6 +60,8 @@ describe(`Test for Binary Search Tree`, () => {
         // [3, 4, 5, 6, 7, 8, 9 ,10, 11, 12]
         BST.print(TreePrintOrder.PostOrder);
         // [3, 4, 6, 5, 8, 10, 12, 11, 9, 7]
+        BST.print(TreePrintOrder.LevelOrder);
+        // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
     });
 
 });
