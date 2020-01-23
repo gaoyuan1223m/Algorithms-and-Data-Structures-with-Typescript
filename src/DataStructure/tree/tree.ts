@@ -6,10 +6,6 @@ import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue } from "@DataStructure/stack-queue";
 
-/**
- * @BinarySearchTree
- * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
- */
 export class BinarySearchTree<T> implements ITree<T> {
 
     private _rootNode: IBinaryTreeNode<T>;
@@ -34,7 +30,7 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     constructor(private compare: ICompareFunc<T> = valueTypeComparison) {
-        this._size = 0;
+        this.__init__();
     }
 
     append(value: T): this {
@@ -44,6 +40,7 @@ export class BinarySearchTree<T> implements ITree<T> {
 
     appendRange(...values: T[]): this {
         for (const value of values) {
+            if (!this._isValidValue(value)) continue;
             this._rootNode = this._insertByRecursion(this._rootNode, value);
         }
         return this;
@@ -154,9 +151,7 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     clear(): this {
-        this._rootNode = undefined;
-        this._size = 0;
-        return this;
+        return this.__init__();
     }
 
     toArray(arrayType?: ArrayTypes): IArray<T> {
@@ -219,14 +214,15 @@ export class BinarySearchTree<T> implements ITree<T> {
         } else {
             if (!treeNode.left) {
                 treeNode = treeNode.right;
+                this._size -= 1;
             } else if (!treeNode.right) {
-                treeNode = treeNode.left
+                treeNode = treeNode.left;
+                this._size -= 1;
             } else {
                 treeNode.value = this._getMaxByRecursion(treeNode.left).value;
                 treeNode.left = this._removeByRecursion(treeNode.left, treeNode.value);
             }
         }
-
         return treeNode;
     }
 
@@ -315,5 +311,24 @@ export class BinarySearchTree<T> implements ITree<T> {
         }
     }
 
+    private __init__(): this {
+        this._rootNode = undefined;
+        this._size = 0;
+        return this;
+    }
+
+    private _isValidValue(value: T) {
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== ""
+    }
+
 }
+
+/**
+ * @BinarySearchTree
+ * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
+ */
 
