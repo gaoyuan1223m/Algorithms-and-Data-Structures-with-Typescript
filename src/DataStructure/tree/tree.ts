@@ -3,6 +3,7 @@ import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific
 import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
+import { Console } from "@Utils/emphasize";
 
 /**
  * @BinarySearchTree
@@ -12,6 +13,8 @@ export class BinarySearchTree<T> implements ITree<T> {
 
     private _rootNode: IBinaryTreeNode<T>;
     private _size: number;
+
+    private _printStr: string;
 
     get size(): number {
         return this._size;
@@ -117,12 +120,34 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     print(order: TreePrintOrder): this {
+        //root -> left -> right
+        if (order === TreePrintOrder.PreOrder) {
+            this._printStr = "";
+            this._printPreOrder(this._rootNode);
+            Console.OK(`[ ${this._printStr}]`);
+            return this;
+        }
+        //left -> root -> right
+        if (order === TreePrintOrder.InOrder) {
+            this._printStr = "";
+            this._printInOrder(this._rootNode);
+            Console.Warn(`[ ${this._printStr}]`);
+            return this;
+        }
+        // left -> right -> root
+        if (order === TreePrintOrder.PostOrder) {
+            this._printStr = "";
+            this._printPostOrder(this._rootNode);
+            Console.Err(`[ ${this._printStr}]`);
+            return this;
+        }
 
-        if(order === TreePrintOrder.PreOrder) return this._printPreOrder();
-
-        if(order === TreePrintOrder.InOrder) return this._printInOrder();
-
-        if(order === TreePrintOrder.PostOrder) return this._printPostOrder();
+        if(order === TreePrintOrder.LevelOrder) {
+            this._printStr = "";
+            this._printLevelOrder(this._rootNode);
+            Console.Err(`[${this._printStr}]`);
+            return this;
+        }
 
         throw new Errors.InvalidArgument(Errors.Msg.UnacceptablePrintOrder)
     }
@@ -149,7 +174,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         throw new Error("Method not implemented.");
     }
 
-    map<U>(callbackfn: (value: T, index: number, current: import("../../Interface/common").IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): import("../../Interface/common").IList<U> {
+    map<U>(callbackfn: (value: T, index: number, current: ITree<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): ITree<U> {
         throw new Error("Method not implemented.");
     }
 
@@ -243,17 +268,39 @@ export class BinarySearchTree<T> implements ITree<T> {
         }
         return treeNode;
     }
-    
-    private _printPreOrder(): this {
-        return this;
+
+    private _printPreOrder(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode) return;
+
+        this._printStr += `${treeNode.value.toString()}, `;
+
+        this._printPreOrder(treeNode.left);
+
+        this._printPreOrder(treeNode.right);
     }
 
-    private _printInOrder(): this {
-        return this;
+    private _printInOrder(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode) return;
+
+        this._printInOrder(treeNode.left);
+
+        this._printStr += `${treeNode.value.toString()}, `;
+
+        this._printInOrder(treeNode.right);
     }
 
-    private _printPostOrder(): this {
-        return this;
+    private _printPostOrder(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode) return;
+
+        this._printPostOrder(treeNode.left);
+
+        this._printPostOrder(treeNode.right);
+
+        this._printStr += `${treeNode.value.toString()}, `;
+    }
+
+    private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {
+
     }
 
 }

@@ -1,9 +1,10 @@
 import { ITree } from "@Interface/specific";
 import { BinarySearchTree } from "@DataStructure/tree";
+import { TreePrintOrder } from "@Utils/types";
 
 describe(`Test for Binary Search Tree`, () => {
 
-    const BST: ITree<number> = new BinarySearchTree<number>();
+    const BST: ITree<number> = new BinarySearchTree();
 
     beforeAll(() => {
         BST.appendRange([7, 5, 9, 4, 6, 3, 8, 11, 12, 10]);
@@ -39,17 +40,26 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.findPath(111)).toEqual([-1]);
     });
 
-    it(`#Contains a value`, () => {
+    it(`#Contains a value?`, () => {
         expect(BST.contains(12)).toBe(true);
         expect(BST.contains(8)).toBe(true);
         expect(BST.contains(14)).toBe(false);
     });
 
-    it(`#ByPath`, () => {
+    it(`#ByPath to find value`, () => {
         expect(BST.byPath()).toBe(7);
         expect(BST.byPath(1, 1, 0)).toBe(10);
         expect(BST.byPath(0, 0)).toBe(4);
         expect(BST.byPath(1, 0, 1)).toBe(null);
+    });
+
+    it(`#Print BST`,()=>{
+        BST.print(TreePrintOrder.PreOrder);
+        // [7, 5, 4, 3, 6, 9, 8, 11, 10, 12]
+        BST.print(TreePrintOrder.InOrder);
+        // [3, 4, 5, 6, 7, 8, 9 ,10, 11, 12]
+        BST.print(TreePrintOrder.PostOrder);
+        // [3, 4, 6, 5, 8, 10, 12, 11, 9, 7]
     });
 
 });
