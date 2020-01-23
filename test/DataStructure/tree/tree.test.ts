@@ -7,7 +7,7 @@ describe(`Test for Binary Search Tree`, () => {
     const BST: ITree<number> = new BinarySearchTree();
 
     beforeAll(() => {
-        BST.appendRange([7, 5, 9, 4, 6, 3, 8, 11, 12, 10]);
+        BST.appendRange(7, 5, 9, 4, 6, 3, 8, 11, 12, 10);
     });
 
     it(`#Get Size of BST`, () => {
@@ -53,7 +53,7 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.byPath(1, 0, 1)).toBe(null);
     });
 
-    it(`#Print BST`,()=>{
+    it(`#Print BST`, () => {
         BST.print(TreePrintOrder.PreOrder);
         // [7, 5, 4, 3, 6, 9, 8, 11, 10, 12]
         BST.print(TreePrintOrder.InOrder);

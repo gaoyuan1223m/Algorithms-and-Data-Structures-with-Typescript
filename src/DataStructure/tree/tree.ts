@@ -32,49 +32,49 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this._getNodeWithMinValue().value;
     }
 
-    constructor() {
+    constructor(private compare: ICompareFunc<T> = valueTypeComparison) {
         this._size = 0;
     }
 
-    append(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
-        this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
+    append(value: T): this {
+        this._rootNode = this._insertByRecursion(this._rootNode, value);
         return this;
     }
 
-    appendRange(values: T[], compare: ICompareFunc<T> = valueTypeComparison): this {
+    appendRange(...values: T[]): this {
         for (const value of values) {
-            this._rootNode = this._insertByRecursion(this._rootNode, value, compare);
+            this._rootNode = this._insertByRecursion(this._rootNode, value);
         }
         return this;
     }
 
-    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
+    contains(value: T): boolean {
         if (this._size === 0) return false;
 
         let pointer = this._rootNode;
 
         do {
-            if (compare(pointer.value).isEqualTo(value)) return true;
+            if (this.compare(pointer.value).isEqualTo(value)) return true;
 
-            if (compare(pointer.value).isLessThan(value)) {
+            if (this.compare(pointer.value).isLessThan(value)) {
                 pointer = pointer.right;
             } else {
                 pointer = pointer.left;
             }
         } while (pointer.left || pointer.right);
 
-        return compare(pointer.value).isEqualTo(value);
+        return this.compare(pointer.value).isEqualTo(value);
     }
 
-    findPath(value: T, compare: ICompareFunc<T> = valueTypeComparison): number[] {
+    findPath(value: T): number[] {
         let pathArr: number[] = [];
         let pointer = this._rootNode;
         if (!pointer) return [-1];
 
         do {
-            if (compare(pointer.value).isEqualTo(value)) return pathArr;
+            if (this.compare(pointer.value).isEqualTo(value)) return pathArr;
 
-            if (compare(pointer.value).isLessThan(value)) {
+            if (this.compare(pointer.value).isLessThan(value)) {
                 pathArr.push(1);
                 pointer = pointer.right;
             } else {
@@ -83,7 +83,7 @@ export class BinarySearchTree<T> implements ITree<T> {
             }
         } while (pointer.left || pointer.right)
 
-        if (compare(pointer.value).isEqualTo(value)) {
+        if (this.compare(pointer.value).isEqualTo(value)) {
             return pathArr;
         }
 
@@ -110,8 +110,8 @@ export class BinarySearchTree<T> implements ITree<T> {
         return pointer.value;
     }
 
-    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
-        this._rootNode = this._removeByRecursion(this._rootNode, value, compare);
+    remove(value: T): this {
+        this._rootNode = this._removeByRecursion(this._rootNode, value);
         return this;
     }
 
@@ -142,7 +142,7 @@ export class BinarySearchTree<T> implements ITree<T> {
             return this;
         }
 
-        if(order === TreePrintOrder.LevelOrder) {
+        if (order === TreePrintOrder.LevelOrder) {
             this._printStr = "";
             this._printLevelOrder(this._rootNode);
             Console.Err(`[${this._printStr}]`);
@@ -186,18 +186,18 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this._getMinByRecursion(this._rootNode);
     }
 
-    private _insertByRecursion(treeNode: IBinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): IBinaryTreeNode<T> {
+    private _insertByRecursion(treeNode: IBinaryTreeNode<T>, value: T): IBinaryTreeNode<T> {
         if (!treeNode) {
             this._size += 1;
             return new BinaryTreeNode<T>(value);
         }
 
-        if (compare(treeNode.value).isEqualTo(value)) return;
+        if (this.compare(treeNode.value).isEqualTo(value)) return;
 
-        if (compare(treeNode.value).isLessThan(value)) {
-            treeNode.right = this._insertByRecursion(treeNode.right, value, compare);
+        if (this.compare(treeNode.value).isLessThan(value)) {
+            treeNode.right = this._insertByRecursion(treeNode.right, value);
         } else {
-            treeNode.left = this._insertByRecursion(treeNode.left, value, compare);
+            treeNode.left = this._insertByRecursion(treeNode.left, value);
         }
 
         return treeNode;
@@ -208,13 +208,13 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     /// replace the deleted node (D_node) with the GetMax() of D_node.left;
-    private _removeByRecursion(treeNode: IBinaryTreeNode<T>, value: T, compare: ICompareFunc<T>): IBinaryTreeNode<T> {
+    private _removeByRecursion(treeNode: IBinaryTreeNode<T>, value: T): IBinaryTreeNode<T> {
         if (!treeNode) return;
 
-        if (compare(treeNode.value).isLessThan(value)) {
-            treeNode.right = this._removeByRecursion(treeNode.right, value, compare);
-        } else if (compare(treeNode.value).isLargerThan(value)) {
-            treeNode.left = this._removeByRecursion(treeNode.left, value, compare);
+        if (this.compare(treeNode.value).isLessThan(value)) {
+            treeNode.right = this._removeByRecursion(treeNode.right, value);
+        } else if (this.compare(treeNode.value).isLargerThan(value)) {
+            treeNode.left = this._removeByRecursion(treeNode.left, value);
         } else {
             if (!treeNode.left) {
                 treeNode = treeNode.right;
@@ -222,7 +222,7 @@ export class BinarySearchTree<T> implements ITree<T> {
                 treeNode = treeNode.left
             } else {
                 treeNode.value = this._getMaxByRecursion(treeNode.left).value;
-                treeNode.left = this._removeByRecursion(treeNode.left, treeNode.value, compare);
+                treeNode.left = this._removeByRecursion(treeNode.left, treeNode.value);
             }
         }
 

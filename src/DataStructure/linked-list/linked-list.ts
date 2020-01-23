@@ -233,11 +233,11 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>();
+        const tree = new BinarySearchTree<T>(compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
-        tree.appendRange(values, compare);
+        tree.appendRange(...values);
 
         this.insertAtTail(...values);
 
@@ -627,11 +627,11 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>();
+        const tree = new BinarySearchTree<T>(compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
-        tree.appendRange(values, compare);
+        tree.appendRange(...values);
 
         this.insertAtTail(...values);
 
