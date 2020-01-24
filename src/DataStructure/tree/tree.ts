@@ -4,7 +4,7 @@ import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
-import { Queue } from "@DataStructure/stack-queue";
+import { Queue, StackFactory } from "@DataStructure/stack-queue";
 
 export class BinarySearchTree<T> implements ITree<T> {
 
@@ -117,25 +117,41 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this._size === 0;
     }
 
-    print(order: TreePrintOrder): this {
+    print(order: TreePrintOrder, isByRecursion: boolean = true): this {
         //root -> left -> right
         if (order === TreePrintOrder.PreOrder) {
             this._printStr = "";
-            this._printPreOrder(this._rootNode);
-            Console.OK(`[ ${this._printStr}]`);
+
+            if (isByRecursion) {
+                this._printPreOrderByRecursion(this._rootNode);
+                Console.OK(`PreOder Printing by Recursion: [ ${this._printStr}]`);
+            } else {
+                this._printPreOrderByIteration(this._rootNode);
+                Console.OK(`PreOder Printing by Iteration: [ ${this._printStr}]`);
+            }
+
             return this;
         }
+
         //left -> root -> right
         if (order === TreePrintOrder.InOrder) {
             this._printStr = "";
-            this._printInOrder(this._rootNode);
-            Console.Warn(`[ ${this._printStr}]`);
+
+            if (isByRecursion) {
+                this._printInOrderByRecursion(this._rootNode);
+                Console.Warn(`InOrder Printing by Recursion: [ ${this._printStr}]`);
+            } else {
+                this._printInOrderByIteration(this._rootNode);
+                Console.Warn(`InOrder Printing by Iteration: [ ${this._printStr}]`);
+            }
+
             return this;
         }
+
         // left -> right -> root
         if (order === TreePrintOrder.PostOrder) {
             this._printStr = "";
-            this._printPostOrder(this._rootNode);
+            this._printPostOrderByRecursion(this._rootNode);
             Console.Err(`[ ${this._printStr}]`);
             return this;
         }
@@ -266,34 +282,73 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _printPreOrder(treeNode: IBinaryTreeNode<T>): void {
+    private _printPreOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
         this._printStr += `${treeNode.value.toString()}, `;
 
-        this._printPreOrder(treeNode.left);
+        this._printPreOrderByRecursion(treeNode.left);
 
-        this._printPreOrder(treeNode.right);
+        this._printPreOrderByRecursion(treeNode.right);
     }
 
-    private _printInOrder(treeNode: IBinaryTreeNode<T>): void {
+    private _printPreOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
-        this._printInOrder(treeNode.left);
+        const stack = StackFactory.create<IBinaryTreeNode<T>>();
 
-        this._printStr += `${treeNode.value.toString()}, `;
+        stack.push(treeNode);
 
-        this._printInOrder(treeNode.right);
+        while (!stack.isEmpty()) {
+            const node = stack.pop();
+            this._printStr += `${node.value.toString()}, `;
+
+            node.right && stack.push(node.right);
+            node.left && stack.push(node.left);
+        }
     }
 
-    private _printPostOrder(treeNode: IBinaryTreeNode<T>): void {
+    private _printInOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
-        this._printPostOrder(treeNode.left);
-
-        this._printPostOrder(treeNode.right);
+        this._printInOrderByRecursion(treeNode.left);
 
         this._printStr += `${treeNode.value.toString()}, `;
+
+        this._printInOrderByRecursion(treeNode.right);
+    }
+
+    private _printInOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+        let pointer = treeNode;
+
+        if (!pointer) return;
+
+        const stack = StackFactory.create<IBinaryTreeNode<T>>();
+
+        while (!stack.isEmpty() || pointer) {
+            if (pointer) {
+                stack.push(pointer);
+                pointer = pointer.left;
+            } else {
+                pointer = stack.pop();
+                this._printStr += `${pointer.value.toString()}, `;
+                pointer = pointer.right;
+            }
+        }
+    }
+
+    private _printPostOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode) return;
+
+        this._printPostOrderByRecursion(treeNode.left);
+
+        this._printPostOrderByRecursion(treeNode.right);
+
+        this._printStr += `${treeNode.value.toString()}, `;
+    }
+
+    private _printPostOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+
     }
 
     private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {

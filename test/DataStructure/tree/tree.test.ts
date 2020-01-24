@@ -54,30 +54,36 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.byPath(1, 0, 1)).toBe(null);
     });
 
-    xit(`#Print BST`, () => {
-        BST.print(TreePrintOrder.PreOrder);
+    it(`#Print BST`, () => {
+        BST.print(TreePrintOrder.PreOrder, true);
+        BST.print(TreePrintOrder.PreOrder, false);
         // [7, 5, 4, 3, 6, 9, 8, 11, 10, 12]
-        BST.print(TreePrintOrder.InOrder);
+
+        BST.print(TreePrintOrder.InOrder, true);
+        BST.print(TreePrintOrder.InOrder, false);
         // [3, 4, 5, 6, 7, 8, 9 ,10, 11, 12]
-        BST.print(TreePrintOrder.PostOrder);
-        // [3, 4, 6, 5, 8, 10, 12, 11, 9, 7]
-        BST.print(TreePrintOrder.LevelOrder);
-        // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
+
+        // BST.print(TreePrintOrder.PostOrder, true);
+        // BST.print(TreePrintOrder.PostOrder, false);
+        // // [3, 4, 6, 5, 8, 10, 12, 11, 9, 7]
+
+        // BST.print(TreePrintOrder.LevelOrder);
+        // // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
     });
 
-    it(`#remove LEAF elements if existed`, () => {
+    xit(`#remove LEAF elements if existed`, () => {
         expect(BST.remove(6).size).toBe(elements.length - 1);
         BST.print(TreePrintOrder.InOrder);
         // [3, 4, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    it(`#remove PARENT elements with ONE child if existed`, () => {
+    xit(`#remove PARENT elements with ONE child if existed`, () => {
         expect(BST.remove(4).size).toBe(elements.length - 2);
         BST.print(TreePrintOrder.InOrder);
         // [3, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    it(`#remove PARENT elements with TWO Children if existed`, () => {
+    xit(`#remove PARENT elements with TWO Children if existed`, () => {
         expect(BST.remove(9).size).toBe(elements.length - 3);
         BST.print(TreePrintOrder.InOrder);
         // [3, 5, 7, 8, 10, 11, 12]
