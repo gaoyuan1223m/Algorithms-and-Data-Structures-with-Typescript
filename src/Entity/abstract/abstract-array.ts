@@ -79,11 +79,11 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
         const currLength = this._capacity;
-        const tree = new BinarySearchTree<T>();
+        const tree = new BinarySearchTree<T>(compare);
 
         for (let index = 0; index < currLength; index++) {
             if (!this[index]) continue;
-            tree.append(this[index], compare);
+            tree.append(this[index]);
         }
 
         return tree;

@@ -4,11 +4,11 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  // collectCoverage: true,
-  // collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
   coverageThreshold: {
     global: {
-      branches: 75,
+      branches: 69,
       functions: 75,
       lines: 75,
       statements: 75
