@@ -36,14 +36,14 @@ export interface ITree<T> extends ICollection<T> {
      * @param value the value of Tree Node that needs to search 
      * @param compare control elements to search on the Tree
      */
-    findPath(value: T, compare?: ICompareFunc<T>): number[];
+    findPath(value: T): number[];
 
     /**
      * Insert a number of element (T[]) on the Tree 
      * @param values elements to add
      * @param compare control elements to add on the Tree
      */
-    appendRange(values: T[], compare?: ICompareFunc<T>): this;
+    appendRange(...values: T[]): this;
 
     /**
      * *Return an element by the given path.*

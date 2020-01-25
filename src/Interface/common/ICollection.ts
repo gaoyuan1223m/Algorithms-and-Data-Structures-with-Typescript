@@ -17,7 +17,7 @@ export interface ICollectionBase {
     /**
      * *Print all elements on the Collection*
      */
-    print(order?: PrintOrder): this;
+    print(order?: PrintOrder, isByRecursion?: boolean): this;
 
     /**
      * *Clear all elements from the Collection*

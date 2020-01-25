@@ -6,7 +6,7 @@ class InvalidIndex implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name?: string) {
+    constructor(message: string, name: string = "Invalid Index") {
         this.message = message;
         this.name = name;
     }
@@ -18,7 +18,7 @@ class InvalidArgument implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name?: string) {
+    constructor(message: string, name: string = "Invalid Argument") {
         this.message = message;
         this.name = name;
     }
@@ -30,7 +30,7 @@ class InvalidDataType implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name?: string) {
+    constructor(message: string, name: string = "Invalid Data Type") {
         this.message = message;
         this.name = name;
     }
@@ -42,7 +42,7 @@ class OutOfBoundary implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name?: string ) {
+    constructor(message: string, name: string = "Out of the Boundary") {
         this.message = message;
         this.name = name;
     }
@@ -54,7 +54,7 @@ class ELementNotExisted implements IError {
     readonly message: string;
     readonly stack?: string;
 
-    constructor(message: string, name?: string) {
+    constructor(message: string, name: string = "Not Existed") {
         this.message = message;
         this.name = name;
     }
@@ -70,8 +70,12 @@ enum Msg {
     UnacceptablePrintOrder = "Print order is NOT acceptable",
     BeyondBoundary = 'Index is out of boundary',
     NotExisted = 'ELement to query does NOT exist',
-    NoElements ='No elements in current collection',
-    NotSafeInteger = 'is NOT an INTEGER, or it is BUT UNSAFE'
+    NoElements = 'No elements in current collection',
+    NotSafeNum = 'is NOT SAFE',
+    NotSafeInteger = 'is NOT an Integer, or it is But UNSAFE',
+    NotPositiveInteger = 'is NOT a Positive Integer',
+    BeyondLowerLimit = "It is less than Lower Limit",
+    BeyondUppperLimit = "It is over Upper Limit"
 }
 
 export const Errors = {

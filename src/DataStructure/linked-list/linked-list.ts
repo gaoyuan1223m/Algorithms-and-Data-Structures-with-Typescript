@@ -11,17 +11,18 @@ import { IFactory } from "@Interface/common";
 
 export class Factory implements IFactory {
 
-    create<T>(type: ListTypes): ILinkedList<T> {
+    create<T>(capacity: number, comapre?: ICompareFunc<T>): ILinkedList<T>;
+    create<T>(capacity?: number, incremental?: number): ILinkedList<T>;
+    create<T>(type?: ListTypes, capacity?: number, incremental?: number, compare?: ICompareFunc<T>): ILinkedList<T>;
+    create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): any {
+        if (!type || type === ListTypes.SINGLY) return new SinglyLinkedList<T>();
 
-        if (type === ListTypes.Singly) return new SinglyLinkedList();
-
-        if (type === ListTypes.Doubly) return new DoublyLinkedList();
+        if (type === ListTypes.Doubly) return new DoublyLinkedList<T>();
 
         // if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
-
 }
 
 class SinglyLinkedList<T> implements ILinkedList<T> {
@@ -192,7 +193,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         let nextPointer: ISinglyListNode<T> = null;
 
         while (pointer.next) {
-            nextPointer = pointer.next; // reserver next pointer
+            nextPointer = pointer.next; // reserve next pointer
             pointer.next = prevPointer; // reverse
             prevPointer = pointer; // prev point moves forward
             pointer = nextPointer; // pointer moves forward
@@ -232,11 +233,11 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>();
+        const tree = new BinarySearchTree<T>(compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
-        tree.appendRange(values, compare);
+        tree.appendRange(...values);
 
         this.insertAtTail(...values);
 
@@ -626,11 +627,11 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>();
+        const tree = new BinarySearchTree<T>(compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
-        tree.appendRange(values, compare);
+        tree.appendRange(...values);
 
         this.insertAtTail(...values);
 

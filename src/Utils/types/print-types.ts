@@ -1,7 +1,8 @@
 export enum TreePrintOrder {
     PreOrder = "PRE",
     InOrder = "IN",
-    PostOrder = "POST"
+    PostOrder = "POST",
+    LevelOrder = "LEVEL"
 }
 
 export enum ListPrintOrder {

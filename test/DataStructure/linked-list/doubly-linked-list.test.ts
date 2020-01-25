@@ -136,7 +136,7 @@ describe(`Test for Doubly-Linked-List`, () => {
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
-        const array = dll.toArray(ArrayTypes.Static);
+        const array = dll.toArray(ArrayTypes.STATIC);
 
         expect(array.size).toBe(dll.size);
     });
@@ -147,7 +147,7 @@ describe(`Test for Doubly-Linked-List`, () => {
             .insertAtHead(34, 24, 11, 31)
             .insertAtTail(18, 19, null, 21);
 
-        const list = dll.toList(ListTypes.Singly);
+        const list = dll.toList(ListTypes.SINGLY);
 
         expect(list.size).toBe(dll.size);
     });
