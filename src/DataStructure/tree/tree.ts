@@ -17,6 +17,11 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this._size;
     }
 
+    get height(): number {
+        // return this._getHeightOfTreeNodeByRecursion(this._rootNode);
+        return this._getHeightOfTreeNodeByIteration(this._rootNode);
+    }
+
     get rootValue(): T {
         return this._rootNode.value
     }
@@ -34,6 +39,8 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     append(value: T): this {
+        if (!this._isValidValue(value)) return this;
+
         this._rootNode = this._insertByRecursion(this._rootNode, value);
         return this;
     }
@@ -178,15 +185,20 @@ export class BinarySearchTree<T> implements ITree<T> {
         // left -> right -> root
         if (order === TreePrintOrder.PostOrder) {
             this._printStr = "";
-            this._printPostOrderByRecursion(this._rootNode);
-            Console.Err(`[ ${this._printStr}]`);
+            if (isByRecursion) {
+                this._printPostOrderByRecursion(this._rootNode);
+                Console.Err(`PostOrder Printing by Recursion: [ ${this._printStr}]`);
+            } else {
+                this._printPostOrderByIteration(this._rootNode);
+                Console.Err(`PostOrder Printing by Iteration: [ ${this._printStr}]`);
+            }
             return this;
         }
 
         if (order === TreePrintOrder.LevelOrder) {
             this._printStr = "";
             this._printLevelOrder(this._rootNode);
-            Console.Err(`[${this._printStr}]`);
+            Console.Warn(`Level-order printing by Iteration: [${this._printStr}]`);
             return this;
         }
 
@@ -376,6 +388,37 @@ export class BinarySearchTree<T> implements ITree<T> {
 
     private _printPostOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
 
+    }
+
+    private _getHeightOfTreeNodeByRecursion(treeNode: IBinaryTreeNode<T>): number {
+        if (!treeNode) return 0;
+
+        return 1 + Math.max(this._getHeightOfTreeNodeByRecursion(treeNode.left), this._getHeightOfTreeNodeByRecursion(treeNode.right));
+    }
+
+    private _getHeightOfTreeNodeByIteration(treeNode: IBinaryTreeNode<T>): number {
+        if (!treeNode) return 0;
+
+        let height = 0;
+        let levelSize = 1;
+
+        const queue = new Queue<IBinaryTreeNode<T>>();
+        queue.enqueue(treeNode);
+
+        while (!queue.isEmpty()) {
+            const node = queue.dequeue();
+            levelSize -= 1;
+
+            node.left && queue.enqueue(node.left);
+            node.right && queue.enqueue(node.right);
+
+            // levelsize === 0, it's going to move to next level;
+            if (levelSize != 0) continue;
+
+            levelSize = queue.size;
+            height += 1;
+        }
+        return height;
     }
 
     private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {

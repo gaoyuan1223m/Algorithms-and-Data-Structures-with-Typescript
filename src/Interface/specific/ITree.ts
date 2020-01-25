@@ -9,6 +9,11 @@ export interface ITree<T> extends ICollection<T> {
      * @return {T} root value in the Tree
      */
     readonly rootValue: T; // O(1)
+    
+    /**
+     * @return {number} height of the ROOT tree node
+     */
+    readonly height: number;
 
     /**
      * @return {T} the maximum value in the Tree
