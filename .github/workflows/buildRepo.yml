@@ -1,4 +1,4 @@
-name: CI
+name: Build Repo
 
 on: [push]
 
