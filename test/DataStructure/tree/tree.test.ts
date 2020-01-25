@@ -1,11 +1,10 @@
-import { ITree } from "@Interface/specific";
 import { BinarySearchTree } from "@DataStructure/tree";
 import { TreePrintOrder } from "@Utils/types";
 
 describe(`Test for Binary Search Tree`, () => {
 
-    const BST: ITree<number> = new BinarySearchTree();
     const elements = [7, 5, 9, 4, 6, 3, 8, 11, 12, 10];
+    const BST = new BinarySearchTree<number>();
     const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
     beforeAll(() => {
@@ -37,9 +36,24 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.findPath(10)).toEqual([1, 1, 0]);
     });
 
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(BST.getDepth(12)).toEqual(3);
+        expect(BST.getDepth(3)).toEqual(3);
+        expect(BST.getDepth(7)).toEqual(0);
+        expect(BST.getDepth(9)).toEqual(1);
+        expect(BST.getDepth(5)).toEqual(1);
+        expect(BST.getDepth(4)).toEqual(2);
+        expect(BST.getDepth(6)).toEqual(2);
+        expect(BST.getDepth(8)).toEqual(2);
+        expect(BST.getDepth(11)).toEqual(2);
+        expect(BST.getDepth(10)).toEqual(3);
+        expect(BST.getDepth(13)).toEqual(-1);
+        expect(BST.getDepth(111)).toEqual(-1);
+    })
+
     it(`#Find a Path of values NOT on the Tree`, () => {
-        expect(BST.findPath(13)).toEqual([-1]);
-        expect(BST.findPath(111)).toEqual([-1]);
+        expect(BST.findPath(13)).toEqual(null);
+        expect(BST.findPath(111)).toEqual(null);
     });
 
     it(`#Contains a value?`, () => {
@@ -109,7 +123,7 @@ describe(`Test for Binary Search Tree`, () => {
         BST
             .clear()
             .appendRange(...elements2)
-            // .print(TreePrintOrder.InOrder, false);
+        // .print(TreePrintOrder.InOrder, false);
 
         expect(BST.size).toBe(elements2.length);
         expect(BST.isComplete()).toBe(true)
@@ -136,7 +150,7 @@ describe(`Test for Binary Search Tree`, () => {
 * *       5      10        *
 *        /  \   /  \
 * *     3    7 9    11     *
-*      / \  /          
+*      / \  /
 * *   2   4 6              *
 */
 

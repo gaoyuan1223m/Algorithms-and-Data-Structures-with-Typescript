@@ -1,21 +1,25 @@
 
-import { IBinaryTreeNodeConstructor, IBinaryTreeNode, IRedBlackNodeConstructor, IRedBlackTreeNode } from "@Interface/specific";
+import { IBinarySearchTreeNodeConstructor, IBinarySearchTreeNode, IRedBlackTreeNodeConstructor, IRedBlackTreeNode } from "@Interface/specific";
 import { TreeNodeColor } from "@Utils/types";
 
-export const BinaryTreeNode: IBinaryTreeNodeConstructor = class BinaryTreeNode<T> implements IBinaryTreeNode<T> {
+export const BinaryTreeNode: IBinarySearchTreeNodeConstructor = class BinaryTreeNode<T> implements IBinarySearchTreeNode<T> {
 
     value: T;
-    left: IBinaryTreeNode<T>;
-    right: IBinaryTreeNode<T>;
+    left: IBinarySearchTreeNode<T>;
+    right: IBinarySearchTreeNode<T>;
 
-    constructor(value: T, left: BinaryTreeNode<T> = null, right: BinaryTreeNode<T> = null) {
+    constructor(
+        value: T,
+        left: BinaryTreeNode<T> = null,
+        right: BinaryTreeNode<T> = null
+    ) {
         this.value = value;
         this.left = left;
         this.right = right;
     }
 }
 
-export const RedBlackTreeNode: IRedBlackNodeConstructor = class RedBlackTreeNode<T> implements IRedBlackTreeNode<T> {
+export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = class RedBlackTreeNode<T> implements IRedBlackTreeNode<T> {
     color: TreeNodeColor;
     left: IRedBlackTreeNode<T>;
     right: IRedBlackTreeNode<T>;
@@ -27,7 +31,7 @@ export const RedBlackTreeNode: IRedBlackNodeConstructor = class RedBlackTreeNode
         left: IRedBlackTreeNode<T> = null,
         right: IRedBlackTreeNode<T> = null,
         parent: IRedBlackTreeNode<T> = null,
-        color: TreeNodeColor = TreeNodeColor.Red 
+        color: TreeNodeColor = TreeNodeColor.Red
     ) {
         this.value = value;
         this.left = left;

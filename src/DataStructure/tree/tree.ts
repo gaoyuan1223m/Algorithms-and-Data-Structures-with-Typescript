@@ -1,17 +1,18 @@
 import { BinaryTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific";
+import { ITree, IArray, ILinkedList, IBinarySearchTreeNode, IBinarySearchTreeConstructor } from "@Interface/specific";
 import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
 
-export class BinarySearchTree<T> implements ITree<T> {
+export const BinarySearchTree: IBinarySearchTreeConstructor = class BST<T> implements ITree<T> {
 
-    private _rootNode: IBinaryTreeNode<T>;
+    private _rootNode: IBinarySearchTreeNode<T>;
     private _size: number;
-
+    // private compare: ICompareFunc<T>;
     private _printStr: string;
+
 
     get size(): number {
         return this._size;
@@ -46,11 +47,21 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     appendRange(...values: T[]): this {
+        if (!values) return this;
+
         for (const value of values) {
             if (!this._isValidValue(value)) continue;
             this._rootNode = this._insertByRecursion(this._rootNode, value);
         }
         return this;
+    }
+
+    getDepth(value: T): number {
+        const path = this.findPath(value);
+
+        if (!path) return -1;
+
+        return path?.length;
     }
 
     contains(value: T): boolean {
@@ -74,7 +85,7 @@ export class BinarySearchTree<T> implements ITree<T> {
     findPath(value: T): number[] {
         let pathArr: number[] = [];
         let pointer = this._rootNode;
-        if (!pointer) return [-1];
+        if (!pointer) return null;
 
         do {
             if (this.compare(pointer.value).isEqualTo(value)) return pathArr;
@@ -92,7 +103,7 @@ export class BinarySearchTree<T> implements ITree<T> {
             return pathArr;
         }
 
-        return [-1];
+        return null;
     }
 
     byPath(...path: number[]): T {
@@ -119,7 +130,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         if (!this._rootNode) return false;
 
         let isLeaf = false;
-        const queue = new Queue<IBinaryTreeNode<T>>();
+        const queue = new Queue<IBinarySearchTreeNode<T>>();
         queue.enqueue(this._rootNode);
 
         while (!queue.isEmpty()) {
@@ -135,7 +146,7 @@ export class BinarySearchTree<T> implements ITree<T> {
             left && queue.enqueue(left);
             right && queue.enqueue(right);
 
-            // if no right, next node must be LEAF node
+            // if right is NULL, next node must be LEAF node
             if (!right) isLeaf = true;
         }
 
@@ -229,15 +240,15 @@ export class BinarySearchTree<T> implements ITree<T> {
         throw new Error("Method not implemented.");
     }
 
-    private _getNodeWithMaxValue(): IBinaryTreeNode<T> {
+    private _getNodeWithMaxValue(): IBinarySearchTreeNode<T> {
         return this._getMaxByRecursion(this._rootNode);
     }
 
-    private _getNodeWithMinValue(): IBinaryTreeNode<T> {
+    private _getNodeWithMinValue(): IBinarySearchTreeNode<T> {
         return this._getMinByRecursion(this._rootNode);
     }
 
-    private _insertByRecursion(treeNode: IBinaryTreeNode<T>, value: T): IBinaryTreeNode<T> {
+    private _insertByRecursion(treeNode: IBinarySearchTreeNode<T>, value: T): IBinarySearchTreeNode<T> {
         if (!treeNode) {
             this._size += 1;
             return new BinaryTreeNode<T>(value);
@@ -254,12 +265,12 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _insertByIteraton(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
+    private _insertByIteraton(treeNode: IBinarySearchTreeNode<T>, node: T): IBinarySearchTreeNode<T> {
         return treeNode;
     }
 
     /// replace the deleted node (D_node) with the GetMax() of D_node.left;
-    private _removeByRecursion(treeNode: IBinaryTreeNode<T>, value: T): IBinaryTreeNode<T> {
+    private _removeByRecursion(treeNode: IBinarySearchTreeNode<T>, value: T): IBinarySearchTreeNode<T> {
         if (!treeNode) return;
 
         if (this.compare(treeNode.value).isLessThan(value)) {
@@ -281,25 +292,25 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _removeByIteration(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
+    private _removeByIteration(treeNode: IBinarySearchTreeNode<T>, node: T): IBinarySearchTreeNode<T> {
         return treeNode;
     }
 
-    private _findPathByRecursion(treeNode: IBinaryTreeNode<T>, node: T): number {
+    private _findPathByRecursion(treeNode: IBinarySearchTreeNode<T>, node: T): number {
         return -1;
     }
 
-    private _findPathByIteration(treeNode: IBinaryTreeNode<T>, node: T): number {
+    private _findPathByIteration(treeNode: IBinarySearchTreeNode<T>, node: T): number {
         return -1;
     }
 
-    private _getMaxByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+    private _getMaxByRecursion(treeNode: IBinarySearchTreeNode<T>): IBinarySearchTreeNode<T> {
         if (!treeNode.right) return treeNode;
 
         return this._getMaxByRecursion(treeNode.right);
     }
 
-    private _getMaxByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+    private _getMaxByIteration(treeNode: IBinarySearchTreeNode<T>): IBinarySearchTreeNode<T> {
 
         while (treeNode.right) {
             treeNode = treeNode.right;
@@ -307,13 +318,13 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _getMinByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+    private _getMinByRecursion(treeNode: IBinarySearchTreeNode<T>): IBinarySearchTreeNode<T> {
         if (!treeNode.left) return treeNode;
 
         return this._getMinByRecursion(treeNode.left);
     }
 
-    private _getMinByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+    private _getMinByIteration(treeNode: IBinarySearchTreeNode<T>): IBinarySearchTreeNode<T> {
 
         while (treeNode.left) {
             treeNode = treeNode.left;
@@ -321,7 +332,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _printPreOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _printPreOrderByRecursion(treeNode: IBinarySearchTreeNode<T>): void {
         if (!treeNode) return;
 
         this._printStr += `${treeNode.value.toString()}, `;
@@ -331,10 +342,10 @@ export class BinarySearchTree<T> implements ITree<T> {
         this._printPreOrderByRecursion(treeNode.right);
     }
 
-    private _printPreOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _printPreOrderByIteration(treeNode: IBinarySearchTreeNode<T>): void {
         if (!treeNode) return;
 
-        const stack = StackFactory.create<IBinaryTreeNode<T>>();
+        const stack = StackFactory.create<IBinarySearchTreeNode<T>>();
 
         stack.push(treeNode);
 
@@ -347,7 +358,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         }
     }
 
-    private _printInOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _printInOrderByRecursion(treeNode: IBinarySearchTreeNode<T>): void {
         if (!treeNode) return;
 
         this._printInOrderByRecursion(treeNode.left);
@@ -357,12 +368,12 @@ export class BinarySearchTree<T> implements ITree<T> {
         this._printInOrderByRecursion(treeNode.right);
     }
 
-    private _printInOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _printInOrderByIteration(treeNode: IBinarySearchTreeNode<T>): void {
         let pointer = treeNode;
 
         if (!pointer) return;
 
-        const stack = StackFactory.create<IBinaryTreeNode<T>>();
+        const stack = StackFactory.create<IBinarySearchTreeNode<T>>();
 
         while (!stack.isEmpty() || pointer) {
             if (pointer) {
@@ -376,7 +387,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         }
     }
 
-    private _printPostOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _printPostOrderByRecursion(treeNode: IBinarySearchTreeNode<T>): void {
         if (!treeNode) return;
 
         this._printPostOrderByRecursion(treeNode.left);
@@ -386,23 +397,23 @@ export class BinarySearchTree<T> implements ITree<T> {
         this._printStr += `${treeNode.value.toString()}, `;
     }
 
-    private _printPostOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _printPostOrderByIteration(treeNode: IBinarySearchTreeNode<T>): void {
 
     }
 
-    private _getHeightOfTreeNodeByRecursion(treeNode: IBinaryTreeNode<T>): number {
+    private _getHeightOfTreeNodeByRecursion(treeNode: IBinarySearchTreeNode<T>): number {
         if (!treeNode) return 0;
 
         return 1 + Math.max(this._getHeightOfTreeNodeByRecursion(treeNode.left), this._getHeightOfTreeNodeByRecursion(treeNode.right));
     }
 
-    private _getHeightOfTreeNodeByIteration(treeNode: IBinaryTreeNode<T>): number {
+    private _getHeightOfTreeNodeByIteration(treeNode: IBinarySearchTreeNode<T>): number {
         if (!treeNode) return 0;
 
         let height = 0;
         let levelSize = 1;
 
-        const queue = new Queue<IBinaryTreeNode<T>>();
+        const queue = new Queue<IBinarySearchTreeNode<T>>();
         queue.enqueue(treeNode);
 
         while (!queue.isEmpty()) {
@@ -421,10 +432,10 @@ export class BinarySearchTree<T> implements ITree<T> {
         return height;
     }
 
-    private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {
+    private _printLevelOrder(treeNode: IBinarySearchTreeNode<T>): void {
         if (!treeNode) return;
 
-        const queue = new Queue<IBinaryTreeNode<T>>();
+        const queue = new Queue<IBinarySearchTreeNode<T>>();
         queue.enqueue(treeNode);
 
         while (!queue.isEmpty()) {
