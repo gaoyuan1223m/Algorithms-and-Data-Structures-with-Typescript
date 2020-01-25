@@ -50,7 +50,12 @@ export interface ITree<T> extends ICollection<T> {
      * **0** means going left, while **1** referst to going right, and other numbers will be ignored.
      * @param path a Number Array that only comprises of 0 and 1
      */
-    byPath(...path: number[]): T
+    byPath(...path: number[]): T;
+
+    /**
+     * *Return TRUE if it's a COMPLETE Binary Tree, else FALSE*
+     */
+    isComplete(): boolean;
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {

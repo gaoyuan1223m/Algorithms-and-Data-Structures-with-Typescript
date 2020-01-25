@@ -108,6 +108,33 @@ export class BinarySearchTree<T> implements ITree<T> {
         return pointer.value;
     }
 
+    isComplete(): boolean {
+        if (!this._rootNode) return true;
+
+        let isLeaf = false;
+        const queue = new Queue<IBinaryTreeNode<T>>();
+        queue.enqueue(this._rootNode);
+
+        while (!queue.isEmpty()) {
+            let node = queue.dequeue();
+            let { left, right } = node;
+
+            /**
+             * 1 - if no left but right, it isn't
+             * 2 - if leaf node but left or right is available, it isn't
+             */
+            if ((!left && right) || (isLeaf && (left || right))) return false;
+
+            left && queue.enqueue(left);
+            right && queue.enqueue(right);
+
+            // if no right, next node must be LEAF node
+            if (!right) isLeaf = true;
+        }
+
+        return true;
+    }
+
     remove(value: T): this {
         this._rootNode = this._removeByRecursion(this._rootNode, value);
         return this;

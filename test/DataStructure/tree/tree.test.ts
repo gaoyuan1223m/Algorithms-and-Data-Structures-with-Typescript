@@ -6,6 +6,7 @@ describe(`Test for Binary Search Tree`, () => {
 
     const BST: ITree<number> = new BinarySearchTree();
     const elements = [7, 5, 9, 4, 6, 3, 8, 11, 12, 10];
+    const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
     beforeAll(() => {
         BST.appendRange(...elements);
@@ -54,7 +55,7 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.byPath(1, 0, 1)).toBe(null);
     });
 
-    it(`#Print BST`, () => {
+    xit(`#Print BST`, () => {
         BST.print(TreePrintOrder.PreOrder, true);
         BST.print(TreePrintOrder.PreOrder, false);
         // [7, 5, 4, 3, 6, 9, 8, 11, 10, 12]
@@ -71,22 +72,36 @@ describe(`Test for Binary Search Tree`, () => {
         // // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
     });
 
-    xit(`#remove LEAF elements if existed`, () => {
+    it(`#remove LEAF elements if existed`, () => {
         expect(BST.remove(6).size).toBe(elements.length - 1);
-        BST.print(TreePrintOrder.InOrder);
+        // BST.print(TreePrintOrder.InOrder);
         // [3, 4, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    xit(`#remove PARENT elements with ONE child if existed`, () => {
+    it(`#remove PARENT elements with ONE child if existed`, () => {
         expect(BST.remove(4).size).toBe(elements.length - 2);
-        BST.print(TreePrintOrder.InOrder);
+        // BST.print(TreePrintOrder.InOrder);
         // [3, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    xit(`#remove PARENT elements with TWO Children if existed`, () => {
+    it(`#remove PARENT elements with TWO Children if existed`, () => {
         expect(BST.remove(9).size).toBe(elements.length - 3);
-        BST.print(TreePrintOrder.InOrder);
+        // BST.print(TreePrintOrder.InOrder);
         // [3, 5, 7, 8, 10, 11, 12]
+    });
+
+    it(`#Is it COMPLETE?`, () => {
+        expect(BST.isComplete()).toBe(false);
+    });
+
+    it(`#Build a new BST and judge whether it's COMPLETE`, () => {
+        BST
+            .clear()
+            .appendRange(...elements2)
+            // .print(TreePrintOrder.InOrder, false);
+
+        expect(BST.size).toBe(elements2.length);
+        expect(BST.isComplete()).toBe(true)
     });
 
 });
@@ -102,5 +117,15 @@ describe(`Test for Binary Search Tree`, () => {
  *      /         /    \
  * *   3         10     12 *
  */
+
+/**
+* *           8            *
+*          /    \
+* *       5      10        *
+*        /  \   /  \
+* *     3    7 9    11     *
+*      / \  /          
+* *   2   4 6      *
+*/
 
 
