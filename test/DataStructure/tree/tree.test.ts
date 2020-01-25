@@ -137,7 +137,7 @@ describe(`Test for Binary Search Tree`, () => {
 *        /  \   /  \
 * *     3    7 9    11     *
 *      / \  /          
-* *   2   4 6      *
+* *   2   4 6              *
 */
 
 

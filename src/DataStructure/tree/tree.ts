@@ -116,7 +116,7 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     isComplete(): boolean {
-        if (!this._rootNode) return true;
+        if (!this._rootNode) return false;
 
         let isLeaf = false;
         const queue = new Queue<IBinaryTreeNode<T>>();
