@@ -1,5 +1,12 @@
 
-import { IBinarySearchTreeNodeConstructor, IBinarySearchTreeNode, IRedBlackTreeNodeConstructor, IRedBlackTreeNode } from "@Interface/specific";
+import {
+    IBinarySearchTreeNodeConstructor,
+    IBinarySearchTreeNode,
+    IRedBlackTreeNodeConstructor,
+    IRedBlackTreeNode,
+    IAVLTreeNodeConstructor,
+    IAVLTreeNode
+} from "@Interface/specific";
 import { TreeNodeColor } from "@Utils/types";
 
 export const BinaryTreeNode: IBinarySearchTreeNodeConstructor = class BinaryTreeNode<T> implements IBinarySearchTreeNode<T> {
@@ -10,13 +17,37 @@ export const BinaryTreeNode: IBinarySearchTreeNodeConstructor = class BinaryTree
 
     constructor(
         value: T,
-        left: BinaryTreeNode<T> = null,
-        right: BinaryTreeNode<T> = null
+        left: IBinarySearchTreeNode<T> = null,
+        right: IBinarySearchTreeNode<T> = null
     ) {
         this.value = value;
         this.left = left;
         this.right = right;
     }
+}
+
+export const AVLTreeNode: IAVLTreeNodeConstructor = class AVLTreeNode<T> implements IAVLTreeNode<T> {
+    height: number;
+    value: T;
+    left: IAVLTreeNode<T>;
+    right: IAVLTreeNode<T>;
+
+    constructor(
+        value: T,
+        left: IAVLTreeNode<T> = null,
+        right: IAVLTreeNode<T> = null,
+        height: number = 0
+    ) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+        this.height = height;
+    }
+
+    getBalanceFactor(): number {
+        return (this.left?.height || 0) - (this.right?.height || 0);
+    }
+
 }
 
 export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = class RedBlackTreeNode<T> implements IRedBlackTreeNode<T> {

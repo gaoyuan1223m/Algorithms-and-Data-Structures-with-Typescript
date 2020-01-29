@@ -78,6 +78,12 @@ export interface IBinarySearchTreeNode<T> extends INode<T> {
     right: IBinarySearchTreeNode<T>;
 }
 
+export interface IAVLTreeNode<T> extends IBinarySearchTreeNode<T> {
+    height: number;
+
+    getBalanceFactor(): number;
+}
+
 export interface IRedBlackTreeNode<T> extends INode<T> {
     color: TreeNodeColor;
     left: IRedBlackTreeNode<T>;
@@ -98,6 +104,10 @@ export interface IRedBlackTreeNodeConstructor {
         parent?: IRedBlackTreeNode<T>,
         color?: TreeNodeColor
     ): IRedBlackTreeNode<T>
+}
+
+export interface IAVLTreeNodeConstructor {
+    new <T>(value: T, left?: IAVLTreeNode<T>, right?: IAVLTreeNode<T>, height?: number): IAVLTreeNode<T>
 }
 
 export interface IBinarySearchTreeConstructor {

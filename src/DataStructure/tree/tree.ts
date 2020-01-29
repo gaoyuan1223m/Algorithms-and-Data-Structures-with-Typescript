@@ -1,5 +1,5 @@
-import { BinaryTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinarySearchTreeNode, IBinarySearchTreeConstructor } from "@Interface/specific";
+import { BinaryTreeNode, AVLTreeNode } from "@Entity/concrete";
+import { ITree, IArray, ILinkedList, IBinarySearchTreeNode, IBinarySearchTreeConstructor, IAVLTreeNode } from "@Interface/specific";
 import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
@@ -97,7 +97,7 @@ export const BinarySearchTree: IBinarySearchTreeConstructor = class BST<T> imple
                 pathArr.push(0);
                 pointer = pointer.left;
             }
-        } while (pointer.left || pointer.right)
+        } while (pointer?.left || pointer?.right)
 
         if (this.compare(pointer.value).isEqualTo(value)) {
             return pathArr;
@@ -466,5 +466,158 @@ export const BinarySearchTree: IBinarySearchTreeConstructor = class BST<T> imple
 /**
  * @BinarySearchTree
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
+ */
+
+
+export class AVLBinaryTree<T> implements ITree<T> {
+
+    private _rootNode: IAVLTreeNode<T>;
+    private _size: number;
+
+    get rootValue(): T {
+        return this._rootNode.value || null;
+    };
+
+    get height(): number {
+        return 0;
+    }
+    
+    maxValue: T;
+    minValue: T;
+
+    get size(): number {
+        return this._size;
+    }
+
+    constructor(private compare: ICompareFunc<T> = valueTypeComparison) {
+        this.__init__();
+    }
+
+    append(value: T): this {
+        if (!this._isValidValue(value)) return this;
+
+        return this._insertValidElementByIteration(value);
+    }
+
+    private _insertValidElementByIteration(value: T): this {
+        const newNode = new AVLTreeNode<T>(value);
+
+        if (!this._rootNode) {
+            this._rootNode = newNode;
+            this._size += 1;
+            return this;
+        }
+
+        let pointer = this._rootNode;
+        while (true) {
+            if (this.compare(value).isEqualTo(pointer.value)) {
+                pointer.value = value;
+                return this;
+            }
+            if (this.compare(value).isLargerThan(pointer.value)) {
+                if (pointer.right) {
+                    pointer = pointer.right as IAVLTreeNode<T>;
+                } else {
+                    pointer.right = newNode;
+                    this._size += 1;
+                    return this;
+                }
+            } else {
+                if (pointer.left) {
+                    pointer = pointer.left as IAVLTreeNode<T>;
+                } else {
+                    pointer.left = newNode;
+                    this._size += 1;
+                    return this;
+                }
+            }
+        }
+    }
+
+    private __init__(): this {
+        this._rootNode = undefined;
+        this._size = 0;
+        return this;
+    }
+
+    findPath(value: T): number[] {
+        let pathArr: number[] = [];
+        let pointer = this._rootNode;
+        if (!pointer) return null;
+
+        do {
+            if (this.compare(pointer.value).isEqualTo(value)) return pathArr;
+
+            if (this.compare(pointer.value).isLessThan(value)) {
+                pathArr.push(1);
+                pointer = pointer.right as IAVLTreeNode<T>;
+            } else {
+                pathArr.push(0);
+                pointer = pointer.left as IAVLTreeNode<T>;
+            }
+        } while (pointer?.left || pointer?.right)
+
+        if (this.compare(pointer?.value).isEqualTo(value)) {
+            return pathArr;
+        }
+
+        return null;
+    }
+
+    appendRange(...values: T[]): this {
+        throw new Error("Method not implemented.");
+    }
+    getDepth(value: T): number {
+        throw new Error("Method not implemented.");
+    }
+    byPath(...path: number[]): T {
+        throw new Error("Method not implemented.");
+    }
+    isComplete(): boolean {
+        throw new Error("Method not implemented.");
+    }
+    contains(value: T, compare?: ICompareFunc<T>): boolean {
+        throw new Error("Method not implemented.");
+    }
+    remove(value: T, compare?: ICompareFunc<T>): this {
+        throw new Error("Method not implemented.");
+    }
+    isEmpty(): boolean {
+        throw new Error("Method not implemented.");
+    }
+    print(order?: TreePrintOrder, isByRecursion?: boolean): this {
+        throw new Error("Method not implemented.");
+    }
+    clear(): this {
+        throw new Error("Method not implemented.");
+    }
+    toArray(arrayType: ArrayTypes): IArray<T> {
+        throw new Error("Method not implemented.");
+    }
+    toList(listType: ListTypes): ILinkedList<T> {
+        throw new Error("Method not implemented.");
+    }
+    toTree(treeType: TreeTypes): ITree<T> {
+        throw new Error("Method not implemented.");
+    }
+    forEach(callbackfn: (value: T, index: number, current: ITree<T>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+    map<U = T>(callbackfn: (value: T, index: number, current: ITree<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): ITree<U> {
+        throw new Error("Method not implemented.");
+    }
+
+    private _isValidValue(value: T) {
+        return value !== undefined
+            && value !== null
+            && Number(value) !== NaN
+            && Number(value) !== Infinity
+            && String(value) !== ""
+    }
+}
+
+/**
+ * @AVL
+ * *时间复杂度：O(lgn)*
  */
 
