@@ -5,7 +5,7 @@ import { TreePrintOrder } from "@Utils/types";
 describe(`Test for AVL Tree`, () => {
 
     // const elements = [7, 5, 9, null, 4, 6, 3, 8, 11, 10];
-    const elements = [7, 5, 3, null, 1, 2]
+    const elements = [8, 4, 3, null, 1, 2, 11, 15, 10, 9]
     const AVL = new AVLBinaryTree<number>();
     const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
@@ -20,35 +20,27 @@ describe(`Test for AVL Tree`, () => {
     });
 
     it(`#Get AVL Tree Height`, () => {
-        expect(AVL.height).toBe(3)
+        expect(AVL.height).toBe(4)
     })
 
-    xit(`#Get Max Value on the Tree`, () => {
-        expect(AVL.maxValue).toBe(12);
+    it(`#Get Max Value on the AVL Tree`, () => {
+        expect(AVL.maxValue).toBe(15);
     });
 
-    xit(`#Get Min Value on the Tree`, () => {
-        expect(AVL.minValue).toBe(3);
+    it(`#Get Min Value on the AVL Tree`, () => {
+        expect(AVL.minValue).toBe(1);
     });
 
     it(`#Find a Path of values on the Tree`, () => {
-        expect(AVL.findPath(7)).toEqual([1]);
-        expect(AVL.findPath(6)).toBe(null);
-        expect(AVL.findPath(5)).toEqual([]);
+        expect(AVL.findPath(15)).toEqual([1, 1]);
+        expect(AVL.findPath(11)).toEqual([1]);
+        expect(AVL.findPath(10)).toEqual([1, 0, 1]);
+        expect(AVL.findPath(9)).toEqual([1, 0]);
+        expect(AVL.findPath(8)).toEqual([1, 0, 0]);
+        expect(AVL.findPath(4)).toEqual([]);
         expect(AVL.findPath(3)).toEqual([0, 1]);
         expect(AVL.findPath(2)).toEqual([0]);
         expect(AVL.findPath(1)).toEqual([0, 0]);
-
-        // expect(AVL.findPath(12)).toEqual(null);
-        // expect(AVL.findPath(3)).toEqual([0, 0, 0]);
-        // expect(AVL.findPath(7)).toEqual([]);
-        // expect(AVL.findPath(9)).toEqual([1]);
-        // expect(AVL.findPath(5)).toEqual([0]);
-        // expect(AVL.findPath(4)).toEqual([0, 0]);
-        // expect(AVL.findPath(6)).toEqual([0, 1]);
-        // expect(AVL.findPath(8)).toEqual([1, 0]);
-        // expect(AVL.findPath(11)).toEqual([1, 1]);
-        // expect(AVL.findPath(10)).toEqual([1, 1, 0]);
     });
 
     xit(`#Get Depth of the Nodes on the Tree`, () => {

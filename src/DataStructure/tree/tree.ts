@@ -475,15 +475,20 @@ export class AVLBinaryTree<T> implements ITree<T> {
     private _size: number;
 
     get rootValue(): T {
-        return this._rootNode.value || null;
+        return this._rootNode?.value || null;
     };
 
     get height(): number {
         return this._rootNode?.height || 0;
     }
 
-    maxValue: T;
-    minValue: T;
+    get maxValue(): T {
+        return this._getNodeWithMaxValue()?.value || null;
+    }
+
+    get minValue(): T {
+        return this._getNodeWithMinValue()?.value || null;
+    }
 
     get size(): number {
         return this._size;
@@ -517,7 +522,7 @@ export class AVLBinaryTree<T> implements ITree<T> {
             }
 
             parentPointer = currentPointer;
-            
+
             if (this.compare(value).isLargerThan(currentPointer.value)) {
                 currentPointer = currentPointer.right
             } else {
@@ -590,14 +595,23 @@ export class AVLBinaryTree<T> implements ITree<T> {
             }
         }
     }
+
     private _rotateToLeft(parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>): void {
         if (childNode.left) {
             childNode.left.parent = parentNode;
         }
         parentNode.right = childNode.left;
 
-        childNode.parent = parentNode.parent;
-        parentNode.parent.left = childNode;
+        if (!parentNode.parent) {
+            this._rootNode = childNode;
+            childNode.parent = null;
+        } else if (this.compare(parentNode.parent.left?.value).isEqualTo(parentNode.value)) {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.left = childNode;
+        } else {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.right = childNode;
+        }
 
         parentNode.parent = childNode;
         childNode.left = parentNode;
@@ -610,15 +624,17 @@ export class AVLBinaryTree<T> implements ITree<T> {
         if (childNode.right) {
             childNode.right.parent = parentNode;
         }
-
         parentNode.left = childNode.right;
 
-        if (parentNode.parent) {
+        if (!parentNode.parent) {
+            this._rootNode = childNode;
+            childNode.parent = null;
+        } else if (this.compare(parentNode.parent.left?.value).isEqualTo(parentNode.value)) {
             childNode.parent = parentNode.parent;
             parentNode.parent.left = childNode;
         } else {
-            this._rootNode = childNode;
-            childNode.parent = null;
+            childNode.parent = parentNode.parent;
+            parentNode.parent.right = childNode;
         }
 
         parentNode.parent = childNode;
@@ -702,6 +718,29 @@ export class AVLBinaryTree<T> implements ITree<T> {
             && Number(value) !== Infinity
             && String(value) !== ""
     }
+
+    private _getNodeWithMaxValue(): IAVLTreeNode<T> {
+        return this._getMaxByIteration(this._rootNode);
+    }
+
+    private _getNodeWithMinValue(): IAVLTreeNode<T> {
+        return this._getMinByIteration(this._rootNode);
+    }
+
+    private _getMaxByIteration(treeNode: IAVLTreeNode<T>): IAVLTreeNode<T> {
+        while (treeNode?.right) {
+            treeNode = treeNode.right;
+        }
+        return treeNode;
+    }
+
+    private _getMinByIteration(treeNode: IAVLTreeNode<T>): IAVLTreeNode<T> {
+        while (treeNode?.left) {
+            treeNode = treeNode.left;
+        }
+        return treeNode;
+    }
+
 }
 
 /**
