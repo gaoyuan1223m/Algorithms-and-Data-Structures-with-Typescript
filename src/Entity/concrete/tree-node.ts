@@ -31,21 +31,32 @@ export const AVLTreeNode: IAVLTreeNodeConstructor = class AVLTreeNode<T> impleme
     value: T;
     left: IAVLTreeNode<T>;
     right: IAVLTreeNode<T>;
+    parent: IAVLTreeNode<T>;
+
+    get balanceFactor(): number {
+        return (this.left?.height || 0) - (this.right?.height || 0);
+    }
+
+    get isBalanced(): boolean {
+        return Math.abs(this.balanceFactor) <= 1;
+    }
+
+    updateHeight(): void {
+        this.height = 1 + Math.max(this.left?.height || 0, this.right?.height || 0);
+    }
 
     constructor(
         value: T,
+        parent: IAVLTreeNode<T> = null,
         left: IAVLTreeNode<T> = null,
         right: IAVLTreeNode<T> = null,
-        height: number = 0
+        height: number = 1
     ) {
         this.value = value;
+        this.parent = parent;
         this.left = left;
         this.right = right;
         this.height = height;
-    }
-
-    getBalanceFactor(): number {
-        return (this.left?.height || 0) - (this.right?.height || 0);
     }
 
 }

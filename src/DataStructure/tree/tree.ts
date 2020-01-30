@@ -479,9 +479,9 @@ export class AVLBinaryTree<T> implements ITree<T> {
     };
 
     get height(): number {
-        return 0;
+        return this._rootNode?.height || 0;
     }
-    
+
     maxValue: T;
     minValue: T;
 
@@ -500,44 +500,132 @@ export class AVLBinaryTree<T> implements ITree<T> {
     }
 
     private _insertValidElementByIteration(value: T): this {
-        const newNode = new AVLTreeNode<T>(value);
 
         if (!this._rootNode) {
-            this._rootNode = newNode;
+            this._rootNode = new AVLTreeNode<T>(value);;
             this._size += 1;
+            this._getReadyForRotation(this._rootNode);
             return this;
         }
 
-        let pointer = this._rootNode;
-        while (true) {
-            if (this.compare(value).isEqualTo(pointer.value)) {
-                pointer.value = value;
+        let currentPointer = this._rootNode;
+        let parentPointer;
+        do {
+            if (this.compare(value).isEqualTo(currentPointer.value)) {
+                currentPointer.value = value;
                 return this;
             }
-            if (this.compare(value).isLargerThan(pointer.value)) {
-                if (pointer.right) {
-                    pointer = pointer.right as IAVLTreeNode<T>;
-                } else {
-                    pointer.right = newNode;
-                    this._size += 1;
-                    return this;
-                }
+
+            parentPointer = currentPointer;
+            
+            if (this.compare(value).isLargerThan(currentPointer.value)) {
+                currentPointer = currentPointer.right
             } else {
-                if (pointer.left) {
-                    pointer = pointer.left as IAVLTreeNode<T>;
-                } else {
-                    pointer.left = newNode;
-                    this._size += 1;
-                    return this;
-                }
+                currentPointer = currentPointer.left;
             }
+
+        } while (currentPointer)
+
+        const newNode = new AVLTreeNode<T>(value, parentPointer);
+
+        if (this.compare(value).isLargerThan(parentPointer.value)) {
+            parentPointer.right = newNode;
+        } else {
+            parentPointer.left = newNode;
         }
+        this._getReadyForRotation(newNode);
+        this._size += 1;
+
+        return this;
     }
 
     private __init__(): this {
         this._rootNode = undefined;
         this._size = 0;
         return this;
+    }
+
+    private _getReadyForRotation(treeNode: IAVLTreeNode<T>) {
+        let pointer = treeNode;
+
+        while (pointer = pointer.parent) {
+            if (pointer.isBalanced) {
+                pointer.updateHeight();
+            } else {
+                this._rebalanceTree(pointer);
+                break;
+            }
+        }
+    }
+
+    private _rebalanceTree(treeNode: IAVLTreeNode<T>) {
+        let grandParentNode = treeNode;
+        let parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>;
+
+        if (treeNode.balanceFactor > 0) {
+            parentNode = grandParentNode.left// L
+
+            if (parentNode.balanceFactor > 0) {
+                childNode = parentNode.left;
+                // LL -> rotate to right (grandParentNode)
+                this._rotateToRight(grandParentNode, parentNode);
+            } else {
+                childNode = parentNode.right;
+                // LR
+                this._rotateToLeft(parentNode, childNode);
+                this._rotateToRight(grandParentNode, childNode);
+            }
+        } else {
+            parentNode = grandParentNode.right // R
+
+            if (parentNode.balanceFactor > 0) {
+                childNode = parentNode.left;
+                //RL
+                this._rotateToRight(parentNode, childNode);
+                this._rotateToLeft(grandParentNode, childNode);
+            } else {
+                childNode = parentNode.right;
+                // RR
+                this._rotateToLeft(grandParentNode, parentNode);
+            }
+        }
+    }
+    private _rotateToLeft(parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>): void {
+        if (childNode.left) {
+            childNode.left.parent = parentNode;
+        }
+        parentNode.right = childNode.left;
+
+        childNode.parent = parentNode.parent;
+        parentNode.parent.left = childNode;
+
+        parentNode.parent = childNode;
+        childNode.left = parentNode;
+
+        parentNode.updateHeight();
+        childNode.updateHeight();
+    }
+
+    private _rotateToRight(parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>): void {
+        if (childNode.right) {
+            childNode.right.parent = parentNode;
+        }
+
+        parentNode.left = childNode.right;
+
+        if (parentNode.parent) {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.left = childNode;
+        } else {
+            this._rootNode = childNode;
+            childNode.parent = null;
+        }
+
+        parentNode.parent = childNode;
+        childNode.right = parentNode;
+
+        parentNode.updateHeight();
+        childNode.updateHeight();
     }
 
     findPath(value: T): number[] {
