@@ -116,6 +116,6 @@ export interface IAVLTreeNodeConstructor {
     new <T>(value: T, parent?: IAVLTreeNode<T>, left?: IAVLTreeNode<T>, right?: IAVLTreeNode<T>, height?: number): IAVLTreeNode<T>
 }
 
-export interface IBinarySearchTreeConstructor {
-    new <T>(compare?: ICompareFunc<T>): ITree<T>;
+export interface ITreeConstructor {
+    new <T>(compare?: ICompareFunc<T>): ITree<T>
 }

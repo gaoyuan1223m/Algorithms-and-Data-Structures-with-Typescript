@@ -1,12 +1,12 @@
 import { BinaryTreeNode, AVLTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinarySearchTreeNode, IBinarySearchTreeConstructor, IAVLTreeNode } from "@Interface/specific";
+import { ITree, IArray, ILinkedList, IBinarySearchTreeNode, IAVLTreeNode, ITreeConstructor } from "@Interface/specific";
 import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
 
-export const BinarySearchTree: IBinarySearchTreeConstructor = class BST<T> implements ITree<T> {
+export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<T> {
 
     private _rootNode: IBinarySearchTreeNode<T>;
     private _size: number;
@@ -463,12 +463,6 @@ export const BinarySearchTree: IBinarySearchTreeConstructor = class BST<T> imple
 
 }
 
-/**
- * @BinarySearchTree
- * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
- */
-
-
 export class AVLBinaryTree<T> implements ITree<T> {
 
     private _rootNode: IAVLTreeNode<T>;
@@ -744,7 +738,12 @@ export class AVLBinaryTree<T> implements ITree<T> {
 }
 
 /**
- * @AVL
+ * @BinarySearchTree
+ * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
+ */
+
+/**
+ * @AVL_Tree
  * *时间复杂度：O(lgn)*
  */
 
