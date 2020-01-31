@@ -73,16 +73,18 @@ export interface ITree<T> extends ICollection<T> {
      */
 }
 
-export interface IBinarySearchTreeNode<T> extends INode<T> {
-    left: IBinarySearchTreeNode<T>;
-    right: IBinarySearchTreeNode<T>;
+export interface ITreeConstructor {
+    new <T>(compare?: ICompareFunc<T>): ITree<T>
 }
 
-export interface IAVLTreeNode<T> extends INode<T> {
+export interface IBinaryTreeNode<T> extends INode<T> {
+    left: IBinaryTreeNode<T>;
+    right: IBinaryTreeNode<T>;
+    parent: IBinaryTreeNode<T>;
+}
+
+export interface IAVLTreeNode<T> extends IBinaryTreeNode<T> {
     height: number;
-    left: IAVLTreeNode<T>;
-    right: IAVLTreeNode<T>;
-    parent: IAVLTreeNode<T>;
 
     readonly isBalanced: boolean;
     readonly balanceFactor: number;
@@ -90,32 +92,20 @@ export interface IAVLTreeNode<T> extends INode<T> {
     updateHeight(): void;
 }
 
-export interface IRedBlackTreeNode<T> extends INode<T> {
+export interface IRedBlackTreeNode<T> extends IAVLTreeNode<T> {
     color: TreeNodeColor;
-    left: IRedBlackTreeNode<T>;
-    right: IRedBlackTreeNode<T>;
-    parent: IRedBlackTreeNode<T>
 }
 
 
-export interface IBinarySearchTreeNodeConstructor {
-    new <T>(value: T, left?: IBinarySearchTreeNode<T>, right?: IBinarySearchTreeNode<T>): IBinarySearchTreeNode<T>;
-}
-
-export interface IRedBlackTreeNodeConstructor {
-    new <T>(
-        value: T,
-        left?: IRedBlackTreeNode<T>,
-        right?: IRedBlackTreeNode<T>,
-        parent?: IRedBlackTreeNode<T>,
-        color?: TreeNodeColor
-    ): IRedBlackTreeNode<T>
+export interface IBinaryTreeNodeConstructor {
+    new <T>(value: T, parent?: IBinaryTreeNode<T>, left?: IBinaryTreeNode<T>, right?: IBinaryTreeNode<T>): IBinaryTreeNode<T>;
 }
 
 export interface IAVLTreeNodeConstructor {
     new <T>(value: T, parent?: IAVLTreeNode<T>, left?: IAVLTreeNode<T>, right?: IAVLTreeNode<T>, height?: number): IAVLTreeNode<T>
 }
 
-export interface ITreeConstructor {
-    new <T>(compare?: ICompareFunc<T>): ITree<T>
+export interface IRedBlackTreeNodeConstructor {
+    new <T>(value: T, parent?: IRedBlackTreeNode<T>, left?: IRedBlackTreeNode<T>, right?: IRedBlackTreeNode<T>, color?: TreeNodeColor, height?: number): IRedBlackTreeNode<T>
 }
+

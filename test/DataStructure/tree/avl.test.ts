@@ -1,12 +1,11 @@
-import { AVLBinaryTree } from "@DataStructure/tree";
+import { BinaryAVLTree } from "@DataStructure/tree";
 import { TreePrintOrder } from "@Utils/types";
 
 
 describe(`Test for AVL Tree`, () => {
 
-    // const elements = [7, 5, 9, null, 4, 6, 3, 8, 11, 10];
     const elements = [8, 4, 3, null, 1, 2, 11, 15, 10, 9]
-    const AVL = new AVLBinaryTree<number>();
+    const AVL = new BinaryAVLTree<number>();
     const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
     beforeAll(() => {
@@ -43,17 +42,16 @@ describe(`Test for AVL Tree`, () => {
         expect(AVL.findPath(1)).toEqual([0, 0]);
     });
 
-    xit(`#Get Depth of the Nodes on the Tree`, () => {
-        expect(AVL.getDepth(12)).toEqual(3);
-        expect(AVL.getDepth(3)).toEqual(3);
-        expect(AVL.getDepth(7)).toEqual(0);
-        expect(AVL.getDepth(9)).toEqual(1);
-        expect(AVL.getDepth(5)).toEqual(1);
-        expect(AVL.getDepth(4)).toEqual(2);
-        expect(AVL.getDepth(6)).toEqual(2);
-        expect(AVL.getDepth(8)).toEqual(2);
-        expect(AVL.getDepth(11)).toEqual(2);
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(AVL.getDepth(15)).toEqual(2);
+        expect(AVL.getDepth(11)).toEqual(1);
         expect(AVL.getDepth(10)).toEqual(3);
+        expect(AVL.getDepth(9)).toEqual(2);
+        expect(AVL.getDepth(8)).toEqual(3);
+        expect(AVL.getDepth(4)).toEqual(0);
+        expect(AVL.getDepth(3)).toEqual(2);
+        expect(AVL.getDepth(2)).toEqual(1);
+        expect(AVL.getDepth(1)).toEqual(2);
         expect(AVL.getDepth(13)).toEqual(-1);
         expect(AVL.getDepth(111)).toEqual(-1);
     })
