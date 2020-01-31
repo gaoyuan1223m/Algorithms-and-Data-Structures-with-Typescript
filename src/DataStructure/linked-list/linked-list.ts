@@ -644,7 +644,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         let str = 'HEAD -> ';
         while (pointer && idx < this._size) {
             str += `[${pointer.value.toString()}] -> `
-            pointer = pointer.next;
+            pointer = pointer.next as IDoublyListNode<T>;
             idx++;
         }
         str += `TAIL`;
@@ -717,7 +717,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
 
         const value = this._headPointer.value;
 
-        let nextPointer = this._headPointer.next;
+        let nextPointer = this._headPointer.next as IDoublyListNode<T>;
 
         this._headPointer.next = null;
         nextPointer.prev = null;
@@ -806,7 +806,8 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         const prevPointer = currPointer.prev;
 
         prevPointer.next = currPointer.next;
-        currPointer.next.prev = prevPointer;
+        let pointer = currPointer.next as IDoublyListNode<T>;
+        pointer.prev = prevPointer;
 
         currPointer.next = null;
         currPointer.prev = null;
@@ -849,7 +850,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         while (p && i < this._size) {
             i += 1;
             if (compare(p.value).isEqualTo(validValue)) return i;
-            p = p.next;
+            p = p.next as IDoublyListNode<T>;
         }
         return -1;
     }
@@ -866,7 +867,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
             pointer = this._headPointer;
 
             while (idx > 0) {
-                pointer = pointer.next;
+                pointer = pointer.next as IDoublyListNode<T>;
                 idx -= 1;
             }
 
