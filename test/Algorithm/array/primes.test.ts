@@ -1,5 +1,5 @@
 import {
-    primeSum, primes, generateAllPrimes
+    primeSum, numOfPrimes, generateAllPrimes, isPrime
 } from "@Algorithm/array";
 
 describe(`Test for Primes Generation`, () => {
@@ -39,7 +39,33 @@ xdescribe(`Test for Largest Prime`, () => {
 
     testCases.forEach(({ upperLimit, prime }) => {
         it(`If uppperLimit: "${upperLimit}", the largest prime is expected to be "${prime}"`, () => {
-            expect(primes(upperLimit)).toBe(prime);
+            expect(numOfPrimes(upperLimit)).toBe(prime);
+        });
+    });
+})
+
+describe(`Test for numOfPrime`, () => {
+    const testCases = [
+        { upperLimit: 15, num: 6 }
+    ];
+
+    testCases.forEach(({ upperLimit, num: expected }) => {
+        it(`If uppperLimit: "${upperLimit}", the number of primes less than is: "${expected}"`, () => {
+            let received = numOfPrimes(upperLimit);
+            expect(received).toBe(expected);
+        });
+    });
+})
+
+describe(`Test for isPrime`, () => {
+    const testCases = [
+        { num: 15, expected: false }
+    ];
+
+    testCases.forEach(({ num, expected }) => {
+        it(`Is number "${num}" prime? Answer: "${expected}"`, () => {
+            let received = isPrime(num);
+            expect(received).toBe(expected);
         });
     });
 })

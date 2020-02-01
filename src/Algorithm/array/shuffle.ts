@@ -1,6 +1,6 @@
 
 /**
- * Fisher–Yates shuffle 算法
+ * Fisher–Yates shuffle Algorithm
  */
 export const shuffle = (arr: any[]): any[] => {
     const a = [...arr];

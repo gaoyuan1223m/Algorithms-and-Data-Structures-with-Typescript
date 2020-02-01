@@ -69,7 +69,7 @@ export const primeSum = (n: number): number[][] => {
  * @param n given a random integer
  * @ For LeetCode Solutions
  */
-export const primes = (n: number): number => {
+export const numOfPrimes = (n: number): number => {
     let count = 0;
     let l = Math.floor(n / 32) + 1;
     let arr = [];
@@ -88,7 +88,19 @@ export const primes = (n: number): number => {
 }
 
 export const isPrime = (n: number): boolean => {
-    return false;
+    if (n < 2) return false;
+
+    const sqrt = ~~Math.sqrt(n);
+
+    for (let i = 2; i <= sqrt; i++) {
+
+        if (n % i) continue;
+
+        return false;
+    }
+
+    return true;
+
 }
 
 
