@@ -22,7 +22,7 @@ class StaticStack<T> extends AbstractStack<T> {
     push(...values: T[]): this {
         for (const value of values) {
             if (this._list.size >= this._capacity) {
-                throw new Errors.OutOfBoundary(Errors.Msg.NoMoreSpace);
+                return this;
             }
             this._list.insertAtHead(value);
         }

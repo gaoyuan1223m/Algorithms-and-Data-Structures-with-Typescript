@@ -1,7 +1,6 @@
 import { IQueue, ILinkedList } from "@Interface/specific";
 import { ListTypes, PrintOrder, ListPrintOrder } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
-// import { LimitedLinkedList } from "@Entity/concrete/limited-linked-list";
 
 /**Implement common QUEUE by Singly Linked List */
 

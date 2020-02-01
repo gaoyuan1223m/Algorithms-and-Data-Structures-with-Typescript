@@ -625,7 +625,7 @@ export const BinaryAVLTree: ITreeConstructor = class AVL<T> extends BinarySearch
 
 }
 
-export const BinaryRBTree: ITreeConstructor = class RBT<T> extends BinaryAVLTree<T> {
+export const BinaryRedBlackTree: ITreeConstructor = class RBT<T> extends BinaryAVLTree<T> {
     
 }
 /**

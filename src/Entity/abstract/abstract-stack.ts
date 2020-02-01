@@ -2,6 +2,7 @@ import { ILinkedList, IStack } from "@Interface/specific";
 import { ListTypes } from "@Utils/types";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 
+/**Implement common STACK by Singly Linked List */
 export abstract class AbstractStack<T> implements IStack<T> {
 
     protected _list: ILinkedList<T>;
