@@ -52,7 +52,7 @@ export interface IList<T> extends IListBase<T>, ICollection<T> {
      * *Look up the index of the element on the List, if it's not there, return -1*
      * @param value element to search 
      */
-    indexOf(value: T, compare?: ICompareFunc<T>): number;
+    indexOf(value: T): number;
 
     /**
      * *Reverse the whole list*
@@ -62,5 +62,5 @@ export interface IList<T> extends IListBase<T>, ICollection<T> {
     /**
      * *Sort element elements on the List Increaingly or Decreasingly*
      */
-    sort(compare?: ICompareFunc<T>, method?: SortMethods): this;
+    sort(method?: SortMethods): this;
 }

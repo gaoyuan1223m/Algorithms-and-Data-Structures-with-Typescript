@@ -26,6 +26,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
     @SafeInt()
     protected _idxOfLastElm: number;
 
+    protected _compare: ICompareFunc<T>;
+
     get length(): number {
         return this._capacity;
     };
@@ -42,11 +44,12 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this[this._capacity - 1];
     }
 
-    constructor(capacity: number, incrementals: number) {
+    constructor(capacity: number, compare: ICompareFunc<T>, incrementals: number) {
         this._size = 0;
-        this._incrementals = incrementals
         this._idxOfLastElm = -1;
         this._capacity = capacity;
+        this._compare = compare;
+        this._incrementals = incrementals
     }
 
     abstract insertByIndex(value: T, index: number): this
@@ -55,7 +58,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     toArray(arrayType: ArrayTypes): IArray<T> {
         const currLength = this._capacity;
-        const array = ArrayFactory.create<T>(arrayType, currLength);
+        const array = ArrayFactory.create<T>(arrayType, this._compare, currLength);
 
         for (let index = 0; index < currLength; index++) {
             if (!this[index]) continue;
@@ -136,15 +139,15 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return this[this._getValidIndex(index)]
     }
 
-    sort(compare: ICompareFunc<T> = valueTypeComparison, sortMethod: SortMethods = SortMethods.Quick): this {
-        return this._quickSort(compare);
+    sort(sortMethod: SortMethods = SortMethods.Quick): this {
+        return this._quickSort(this._compare);
     }
 
     @Validation('value')
-    indexOf(@ValidateParams() value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
+    indexOf(@ValidateParams() value: T): number {
 
         for (let i = 0; i < this._capacity; i++) {
-            if (compare(this[i]).isEqualTo(value)) {
+            if (this._compare(this[i]).isEqualTo(value)) {
                 return i
             }
         }
@@ -176,13 +179,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     @Validation('value')
-    contains(@ValidateParams() value: T, compare?: ICompareFunc<T>): boolean {
-        return this.indexOf(value, compare) !== -1;
+    contains(@ValidateParams() value: T): boolean {
+        return this.indexOf(value) !== -1;
     }
 
     @Validation('value')
-    remove(@ValidateParams() value: T, compare?: ICompareFunc<T>): this {
-        const idx = this.indexOf(value, compare);
+    remove(@ValidateParams() value: T): this {
+        const idx = this.indexOf(value);
 
         if (idx === -1) return this;
 

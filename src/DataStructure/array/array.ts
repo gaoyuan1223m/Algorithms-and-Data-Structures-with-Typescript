@@ -1,4 +1,4 @@
-import { IArray } from "@Interface/specific";
+import { IArray, IArrayConstructor } from "@Interface/specific";
 import { IFactory } from "@Interface/common";
 import { AbstractArray } from "@Entity/abstract/abstract-array";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
@@ -9,17 +9,14 @@ import { Validation, ValidateParams } from "@Utils/decorator";
 
 class Factory implements IFactory {
 
-    create<T>(capacity: number, compare?: ICompareFunc<T>): IArray<T>; 
-    create<T>(capacity: number, incremental?: number): IArray<T>;
-    create<T>(type: ArrayTypes, capacity: number, incremental?: number): IArray<T>;
-    create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): IArray<T> {
+    create<T>(type: ArrayTypes, compare: ICompareFunc<T> = valueTypeComparison, capacity: number = 7, incremental: number = capacity): IArray<T> {
 
         if (!type || type === ArrayTypes.STATIC || incremental === 0) {
-            return new StaticArray<T>(capacity);
+            return new StaticArray<T>(capacity, compare);
         }
 
         if (type === ArrayTypes.DYNAMIC) {
-            return new DynamicArray<T>(capacity, incremental);
+            return new DynamicArray<T>(capacity, compare, incremental);
         }
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
@@ -27,10 +24,10 @@ class Factory implements IFactory {
 
 }
 
-class StaticArray<T> extends AbstractArray<T> {
+class SA<T> extends AbstractArray<T> {
 
-    constructor(capacity: number) {
-        super(capacity, 0)
+    constructor(capacity: number, compare: ICompareFunc<T>) {
+        super(capacity, compare, 0)
     }
 
     // O(1)
@@ -116,7 +113,7 @@ class StaticArray<T> extends AbstractArray<T> {
     // O(n)
     map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IArray<U> {
         const capacity = this._capacity;
-        const newStaticArray: IArray<U> = new StaticArray<U>(capacity);
+        const newStaticArray: IArray<U> = new StaticArray<U>(capacity, ICompareFunc);
         for (let idx = 0; idx < capacity; idx++) {
             newStaticArray[idx] = callbackfn(this[idx], idx, this);
             newStaticArray[idx - capacity] = newStaticArray[idx];
@@ -129,12 +126,12 @@ class StaticArray<T> extends AbstractArray<T> {
     }
 
 }
+const StaticArray: IArrayConstructor = SA;
 
+class DA<T> extends AbstractArray<T> {
 
-class DynamicArray<T> extends AbstractArray<T> {
-
-    constructor(capacity: number, incremental: number = capacity) {
-        super(capacity, incremental);
+    constructor(capacity: number, compare: ICompareFunc<T>, incremental: number = capacity) {
+        super(capacity, compare, incremental);
     }
 
     @Validation('value')
@@ -267,5 +264,6 @@ class DynamicArray<T> extends AbstractArray<T> {
     }
 
 }
+const DynamicArray: IArrayConstructor = DA;
 
 export const ArrayFactory = new Factory();
