@@ -49,11 +49,6 @@ export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<
     appendRange(...values: T[]): this {
         if (!values) return this;
 
-        // for (const value of values) {
-        //     if (!this._isValidValue(value)) continue;
-        //     this._rootNode = this._insertByRecursion(this._rootNode, value);
-        // }
-        // return this;
         values.forEach(val => { this.append(val) });
         return this;
     }
@@ -72,16 +67,16 @@ export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<
         let pointer = this._rootNode;
 
         do {
-            if (this.compare(pointer.value).isEqualTo(value)) return true;
+            if (this.compare(pointer?.value).isEqualTo(value)) return true;
 
             if (this.compare(pointer.value).isLessThan(value)) {
                 pointer = pointer.right;
             } else {
                 pointer = pointer.left;
             }
-        } while (pointer.left || pointer.right);
+        } while (pointer?.left || pointer?.right);
 
-        return this.compare(pointer.value).isEqualTo(value);
+        return this.compare(pointer?.value).isEqualTo(value);
     }
 
     findPath(value: T): number[] {
@@ -90,7 +85,7 @@ export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<
         if (!pointer) return null;
 
         do {
-            if (this.compare(pointer.value).isEqualTo(value)) return pathArr;
+            if (this.compare(pointer?.value).isEqualTo(value)) return pathArr;
 
             if (this.compare(pointer.value).isLessThan(value)) {
                 pathArr.push(1);
@@ -101,7 +96,7 @@ export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<
             }
         } while (pointer?.left || pointer?.right)
 
-        if (this.compare(pointer.value).isEqualTo(value)) {
+        if (this.compare(pointer?.value).isEqualTo(value)) {
             return pathArr;
         }
 
@@ -125,7 +120,7 @@ export const BinarySearchTree: ITreeConstructor = class BST<T> implements ITree<
             }
         }
 
-        return pointer.value;
+        return pointer?.value;
     }
 
     isComplete(): boolean {

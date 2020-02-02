@@ -1,5 +1,5 @@
 import { Validator } from "./utils";
-import { Err } from "@Utils/emphasize";
+import { inRed } from "@Utils/emphasize";
 
 export function Validation(type?: string) {
 
@@ -43,7 +43,7 @@ export function Validation(type?: string) {
                 msg += `err ${i}: ${err}\n`;
             }
 
-            throw Err(msg);
+            throw inRed(msg);
         }
     }
 }

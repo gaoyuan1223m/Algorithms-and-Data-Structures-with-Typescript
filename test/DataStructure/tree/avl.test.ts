@@ -1,8 +1,9 @@
 import { BinaryAVLTree } from "@DataStructure/tree";
 import { TreePrintOrder } from "@Utils/types";
+import { inRed, inYellow, inGreen, inBlue } from "@Utils/emphasize";
 
 
-describe(`Test for AVL Tree`, () => {
+describe(`Test for AVL Tree [BASCIS]`, () => {
 
     const elements = [8, 4, 3, null, 1, 2, 11, 15, 10, 9]
     const AVL = new BinaryAVLTree<number>();
@@ -138,6 +139,149 @@ describe(`Test for AVL Tree`, () => {
 });
 
 
+describe(`Test for AVL Tree ${inYellow('[Complex LL]')}`, () => {
+    const elements = [50, 70, 30, 10, 40, 5];
+    const AVL = new BinaryAVLTree<number>();
+
+    beforeAll(() => {
+        elements.forEach(e => { AVL.append(e) });
+    });
+
+    it(`#Should have right size`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+
+    it(`#Find a Path of values on the Tree`, () => {
+        expect(AVL.findPath(50)).toEqual([1]);
+        expect(AVL.findPath(70)).toEqual([1, 1]);
+        expect(AVL.findPath(30)).toEqual([]);
+        expect(AVL.findPath(10)).toEqual([0]);
+        expect(AVL.findPath(20)).toEqual(null);
+        expect(AVL.findPath(40)).toEqual([1, 0]);
+        expect(AVL.findPath(5)).toEqual([0, 0]);
+    });
+
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(AVL.getDepth(50)).toEqual(1);
+        expect(AVL.getDepth(70)).toEqual(2);
+        expect(AVL.getDepth(30)).toEqual(0);
+        expect(AVL.getDepth(10)).toEqual(1);
+        expect(AVL.getDepth(20)).toEqual(-1);
+        expect(AVL.getDepth(40)).toEqual(2);
+        expect(AVL.getDepth(5)).toEqual(2);
+    });
+
+    it(`#Find value by given path`, () => {
+        expect(AVL.byPath()).toBe(30);
+        expect(AVL.byPath(1, 0)).toBe(40);
+        expect(AVL.byPath(0, 0)).toBe(5);
+        expect(AVL.byPath(0, 1, 1)).toBe(null);
+        expect(AVL.byPath(1, 1, 2)).toBe(70);
+    });
+});
+
+
+describe(`Test for AVL Tree ${inBlue('[Complex RR]')}`, () => {
+    const elements = [50, 70, 30, 60, 80, 90];
+    const AVL = new BinaryAVLTree<number>();
+
+    beforeAll(() => {
+        elements.forEach(e => { AVL.append(e) });
+    });
+
+    it(`#Should have right size`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+
+    it(`#Find a Path of values on the Tree`, () => {
+        expect(AVL.findPath(50)).toEqual([0]);
+        expect(AVL.findPath(70)).toEqual([]);
+        expect(AVL.findPath(30)).toEqual([0, 0]);
+        expect(AVL.findPath(60)).toEqual([0, 1]);
+        expect(AVL.findPath(5)).toEqual(null);
+        expect(AVL.findPath(90)).toEqual([1, 1]);
+        expect(AVL.findPath(80)).toEqual([1]);
+    });
+
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(AVL.getDepth(50)).toEqual(1);
+        expect(AVL.getDepth(70)).toEqual(0);
+        expect(AVL.getDepth(30)).toEqual(2);
+        expect(AVL.getDepth(60)).toEqual(2);
+        expect(AVL.getDepth(5)).toEqual(-1);
+        expect(AVL.getDepth(90)).toEqual(2);
+        expect(AVL.getDepth(80)).toEqual(1);
+    });
+
+});
+
+describe(`Test for AVL Tree ${inGreen('[Complex LR]')}`, () => {
+    const elements = [70, 50, 80, 72, 90, 75];
+    const AVL = new BinaryAVLTree<number>();
+
+    beforeAll(() => {
+        elements.forEach(e => { AVL.append(e) });
+    });
+
+    it(`#Should have right size`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+
+    it(`#Find a Path of values on the Tree`, () => {
+        expect(AVL.findPath(70)).toEqual([0]);
+        expect(AVL.findPath(50)).toEqual([0, 0]);
+        expect(AVL.findPath(80)).toEqual([1]);
+        expect(AVL.findPath(60)).toEqual(null);
+        expect(AVL.findPath(72)).toEqual([]);
+        expect(AVL.findPath(90)).toEqual([1, 1]);
+        expect(AVL.findPath(75)).toEqual([1, 0]);
+    });
+
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(AVL.getDepth(70)).toEqual(1);
+        expect(AVL.getDepth(50)).toEqual(2);
+        expect(AVL.getDepth(80)).toEqual(1);
+        expect(AVL.getDepth(60)).toEqual(-1);
+        expect(AVL.getDepth(72)).toEqual(0);
+        expect(AVL.getDepth(90)).toEqual(2);
+        expect(AVL.getDepth(75)).toEqual(2);
+    });
+
+});
+
+describe(`Test for AVL Tree ${inRed('[Complex RL]')}`, () => {
+    const elements = [50, 70, 30, 10, 40, 35];
+    const AVL = new BinaryAVLTree<number>();
+
+    beforeAll(() => {
+        elements.forEach(e => { AVL.append(e) });
+    });
+
+    it(`#Should have right size`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+
+    it(`#Find a Path of values on the Tree`, () => {
+        expect(AVL.findPath(50)).toEqual([1]);
+        expect(AVL.findPath(70)).toEqual([1, 1]);
+        expect(AVL.findPath(30)).toEqual([0]);
+        expect(AVL.findPath(10)).toEqual([0, 0]);
+        expect(AVL.findPath(5)).toEqual(null);
+        expect(AVL.findPath(40)).toEqual([]);
+        expect(AVL.findPath(35)).toEqual([0, 1]);
+    });
+
+    it(`#Get Depth of the Nodes on the Tree`, () => {
+        expect(AVL.getDepth(50)).toBe(1);
+        expect(AVL.getDepth(70)).toBe(2);
+        expect(AVL.getDepth(30)).toBe(1);
+        expect(AVL.getDepth(10)).toBe(2);
+        expect(AVL.getDepth(5)).toBe(-1);
+        expect(AVL.getDepth(40)).toBe(0);
+        expect(AVL.getDepth(35)).toBe(2);
+    });
+
+});
 
 /**
  * *          7            *
