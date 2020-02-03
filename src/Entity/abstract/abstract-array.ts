@@ -270,7 +270,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             str += `, `
         }
         str += ` ]`;
-        Console.Warn(str);
+        Console.OK(str);
         return this;
     }
 
@@ -282,7 +282,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             str += `, `
         }
         str += ` ]`;
-        Console.Err(str);
+        Console.OK(str);
         return this;
     }
 

@@ -94,6 +94,18 @@ export interface IAVLTreeNode<T> extends IBinaryTreeNode<T> {
 
 export interface IRedBlackTreeNode<T> extends IAVLTreeNode<T> {
     color: TreeNodeColor;
+
+    isRed(): boolean;
+    isBlack(): boolean;
+
+    setRed(): void;
+    setBlack(): void;
+
+    isLeftChild(compare: ICompareFunc<T>): boolean;
+    isRightChild(compare: ICompareFunc<T>): boolean;
+
+    getUncle(compare: ICompareFunc<T>): IRedBlackTreeNode<T>
+    getSibling(compare: ICompareFunc<T>): IRedBlackTreeNode<T>;
 }
 
 
@@ -106,6 +118,6 @@ export interface IAVLTreeNodeConstructor {
 }
 
 export interface IRedBlackTreeNodeConstructor {
-    new <T>(value: T, parent?: IRedBlackTreeNode<T>, left?: IRedBlackTreeNode<T>, right?: IRedBlackTreeNode<T>, color?: TreeNodeColor, height?: number): IRedBlackTreeNode<T>
+    new <T>(value: T, parent?: IRedBlackTreeNode<T>, color?: TreeNodeColor, left?: IRedBlackTreeNode<T>, right?: IRedBlackTreeNode<T>): IRedBlackTreeNode<T>
 }
 

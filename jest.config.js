@@ -14,6 +14,6 @@ module.exports = {
       statements: 75
     }
   },
-  // testRegex: 'avl.test.ts', /**Run Single Unit Test, PLEASE Remove // at the head of this line */
+  // testRegex: 'rbt.test.ts', /**Run Single Unit Test, PLEASE Remove // at the head of this line */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };

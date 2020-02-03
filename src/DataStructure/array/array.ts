@@ -264,6 +264,6 @@ class DA<T> extends AbstractArray<T> {
     }
 
 }
-const DynamicArray: IArrayConstructor = DA;
+const DynamicArray: IArrayConstructor = DA; // in order to apply decorator
 
 export const ArrayFactory = new Factory();

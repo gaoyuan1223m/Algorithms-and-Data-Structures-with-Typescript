@@ -8,6 +8,7 @@ import {
     IAVLTreeNode
 } from "@Interface/specific";
 import { TreeNodeColor } from "@Utils/types";
+import { ICompareFunc } from "@Utils/compare";
 
 export const BinaryTreeNode: IBinaryTreeNodeConstructor = class BinaryTreeNode<T> implements IBinaryTreeNode<T> {
 
@@ -47,15 +48,50 @@ export const AVLTreeNode: IAVLTreeNodeConstructor = class AVLTreeNode<T> extends
 
 export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = class RedBlackTreeNode<T> extends AVLTreeNode<T> implements IRedBlackTreeNode<T> {
 
+    isLeftChild(compare: ICompareFunc<T>): boolean {
+        return compare(this.value).isEqualTo(this.parent?.left?.value);
+    }
+
+    isRightChild(compare: ICompareFunc<T>): boolean {
+        return compare(this.value).isEqualTo(this.parent?.right?.value);
+    }
+
+    setRed(): void {
+        this.color = TreeNodeColor.Red;
+    }
+
+    setBlack(): void {
+        this.color = TreeNodeColor.Black;
+    }
+
+    getUncle(compare: ICompareFunc<T>): IRedBlackTreeNode<T> {
+        return this.parent.getSibling(compare);
+    }
+
+    getSibling(compare: ICompareFunc<T>): IRedBlackTreeNode<T> {
+        if (this.isLeftChild(compare)) return this.parent?.right as IRedBlackTreeNode<T>;
+
+        if (this.isRightChild(compare)) return this.parent?.left as IRedBlackTreeNode<T>;
+
+        return null;
+    }
+
+    isRed(): boolean {
+        return this.color === TreeNodeColor.Red;
+    }
+
+    isBlack(): boolean {
+        return this.color === TreeNodeColor.Black;
+    }
+
     constructor(
         public value: T,
         public parent: IRedBlackTreeNode<T> = null,
-        public left: IRedBlackTreeNode<T> = null,
-        public right: IRedBlackTreeNode<T> = null,
         public color: TreeNodeColor = TreeNodeColor.Red,
-        public height: number = 1
+        public left: IRedBlackTreeNode<T> = null,
+        public right: IRedBlackTreeNode<T> = null
     ) {
-        super(value, parent, left, right, height);
+        super(value, parent, left, right, NaN);
     }
 
 }

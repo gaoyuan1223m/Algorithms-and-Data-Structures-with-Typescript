@@ -123,7 +123,7 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
             str += `, `;
         }
         str += ` ]`;
-        Console.Warn(str);
+        Console.Info(str);
         return this;
     }
 

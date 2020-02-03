@@ -1,4 +1,4 @@
-import { inRed, inGreen, inYellow } from "./string.highlight";
+import { inRed, inGreen, inYellow, inBlue } from "./string.highlight";
 
 function OK(text: any) {
     console.log(inGreen(text));
@@ -12,8 +12,13 @@ function Err(text: any) {
     console.log(inRed(text));
 }
 
+function Info(text: any) {
+    console.log(inBlue(text));
+}
+
 export let Console = {
     OK,
     Warn,
-    Err
+    Err,
+    Info
 }

@@ -57,7 +57,7 @@ export class UniqueSet<T> implements IUniqueSet<T> {
             str += `${this._map[key]}, `
         }
 
-        Console.Warn(`< ${str}>`);
+        Console.OK(`< ${str}>`);
 
         return this;
     }

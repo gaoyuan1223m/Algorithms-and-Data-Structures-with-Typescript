@@ -7,3 +7,5 @@ export const inGreen = (text: any) => chalk.greenBright(text.toString());
 export const inYellow = (text: any) => chalk.yellowBright(text.toString());
 
 export const inBlue = (text: any) => chalk.blueBright(text.toString());
+
+export const inBlack = (text: any) => chalk.black(text.toString());
