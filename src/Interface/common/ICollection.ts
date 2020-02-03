@@ -1,5 +1,4 @@
 import { ITraversable, ITransformable } from "@Interface/common";
-import { ICompareFunc } from "@Utils/compare";
 import { PrintOrder } from "@Utils/types";
 
 export interface ICollectionBase {
@@ -35,7 +34,7 @@ export interface ICollection<T> extends ICollectionBase, ITransformable<T>, ITra
      * 
      * @exception InvalidArgException
      */
-    append(value: T, compare?: ICompareFunc<T>): this;
+    append(value: T): this;
 
     /**
      * *Return True if the element is on the Collection, else False. 
@@ -43,7 +42,7 @@ export interface ICollection<T> extends ICollectionBase, ITransformable<T>, ITra
      * @param value element to search
      * @param compare funtion used to compare elements
      */
-    contains(value: T, compare?: ICompareFunc<T>): boolean;
+    contains(value: T): boolean;
 
     /**
      * *Remove the element from the current Collection. 
@@ -52,6 +51,6 @@ export interface ICollection<T> extends ICollectionBase, ITransformable<T>, ITra
      * @param value element to remove
      * @param compare funtion used to compare elements
      */
-    remove(value: T, compare?: ICompareFunc<T>): this;
+    remove(value: T): this;
 
 }

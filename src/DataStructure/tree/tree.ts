@@ -1,49 +1,64 @@
-import { BinaryTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinaryTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
+import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
+import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode } from "@Interface/specific";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
 
-export class BinarySearchTree<T> implements ITree<T> {
+class BST<T> implements ITree<T> {
 
-    private _rootNode: IBinaryTreeNode<T>;
-    private _size: number;
-
+    protected _rootNode: IBinaryTreeNode<T>;
+    protected _size: number;
     private _printStr: string;
+
 
     get size(): number {
         return this._size;
     }
 
+    get height(): number {
+        // return this._getHeightOfTreeNodeByRecursion(this._rootNode);
+        return this._getHeightOfTreeNodeByIteration(this._rootNode);
+    }
+
     get rootValue(): T {
-        return this._rootNode.value
+        return this._rootNode?.value || null;
     }
 
     get maxValue(): T {
-        return this._getNodeWithMaxValue().value;
+        return this._getNodeWithMaxValue()?.value || null;
     }
 
     get minValue(): T {
-        return this._getNodeWithMinValue().value;
+        return this._getNodeWithMinValue()?.value || null;
     }
 
-    constructor(private compare: ICompareFunc<T> = valueTypeComparison) {
+    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
         this.__init__();
     }
 
     append(value: T): this {
-        this._rootNode = this._insertByRecursion(this._rootNode, value);
-        return this;
+        if (!this._isValidValue(value)) return this;
+
+        return this._insertByIteraton(value);
+        // this._rootNode = this._insertByRecursion(this._rootNode, value);
+        // return this;
     }
 
     appendRange(...values: T[]): this {
-        for (const value of values) {
-            if (!this._isValidValue(value)) continue;
-            this._rootNode = this._insertByRecursion(this._rootNode, value);
-        }
+        if (!values) return this;
+
+        values.forEach(val => { this.append(val) });
         return this;
+    }
+
+    getDepth(value: T): number {
+        const path = this.findPath(value);
+
+        if (!path) return -1;
+
+        return path?.length;
     }
 
     contains(value: T): boolean {
@@ -52,25 +67,25 @@ export class BinarySearchTree<T> implements ITree<T> {
         let pointer = this._rootNode;
 
         do {
-            if (this.compare(pointer.value).isEqualTo(value)) return true;
+            if (this.compare(pointer?.value).isEqualTo(value)) return true;
 
             if (this.compare(pointer.value).isLessThan(value)) {
                 pointer = pointer.right;
             } else {
                 pointer = pointer.left;
             }
-        } while (pointer.left || pointer.right);
+        } while (pointer?.left || pointer?.right);
 
-        return this.compare(pointer.value).isEqualTo(value);
+        return this.compare(pointer?.value).isEqualTo(value);
     }
 
     findPath(value: T): number[] {
         let pathArr: number[] = [];
         let pointer = this._rootNode;
-        if (!pointer) return [-1];
+        if (!pointer) return null;
 
         do {
-            if (this.compare(pointer.value).isEqualTo(value)) return pathArr;
+            if (this.compare(pointer?.value).isEqualTo(value)) return pathArr;
 
             if (this.compare(pointer.value).isLessThan(value)) {
                 pathArr.push(1);
@@ -79,13 +94,13 @@ export class BinarySearchTree<T> implements ITree<T> {
                 pathArr.push(0);
                 pointer = pointer.left;
             }
-        } while (pointer.left || pointer.right)
+        } while (pointer?.left || pointer?.right)
 
-        if (this.compare(pointer.value).isEqualTo(value)) {
+        if (this.compare(pointer?.value).isEqualTo(value)) {
             return pathArr;
         }
 
-        return [-1];
+        return null;
     }
 
     byPath(...path: number[]): T {
@@ -105,7 +120,34 @@ export class BinarySearchTree<T> implements ITree<T> {
             }
         }
 
-        return pointer.value;
+        return pointer?.value;
+    }
+
+    isComplete(): boolean {
+        if (!this._rootNode) return false;
+
+        let isLeaf = false;
+        const queue = new Queue<IBinaryTreeNode<T>>();
+        queue.enqueue(this._rootNode);
+
+        while (!queue.isEmpty()) {
+            let node = queue.dequeue();
+            let { left, right } = node;
+
+            /**
+             * 1 - if no left but right, it isn't
+             * 2 - if leaf node but left or right is available, it isn't
+             */
+            if ((!left && right) || (isLeaf && (left || right))) return false;
+
+            left && queue.enqueue(left);
+            right && queue.enqueue(right);
+
+            // if right is NULL, next node must be LEAF node
+            if (!right) isLeaf = true;
+        }
+
+        return true;
     }
 
     remove(value: T): this {
@@ -151,15 +193,20 @@ export class BinarySearchTree<T> implements ITree<T> {
         // left -> right -> root
         if (order === TreePrintOrder.PostOrder) {
             this._printStr = "";
-            this._printPostOrderByRecursion(this._rootNode);
-            Console.Err(`[ ${this._printStr}]`);
+            if (isByRecursion) {
+                this._printPostOrderByRecursion(this._rootNode);
+                Console.Err(`PostOrder Printing by Recursion: [ ${this._printStr}]`);
+            } else {
+                this._printPostOrderByIteration(this._rootNode);
+                Console.Err(`PostOrder Printing by Iteration: [ ${this._printStr}]`);
+            }
             return this;
         }
 
         if (order === TreePrintOrder.LevelOrder) {
             this._printStr = "";
             this._printLevelOrder(this._rootNode);
-            Console.Err(`[${this._printStr}]`);
+            Console.Info(`Level-order printing by Iteration: [${this._printStr}]`);
             return this;
         }
 
@@ -191,11 +238,13 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     private _getNodeWithMaxValue(): IBinaryTreeNode<T> {
-        return this._getMaxByRecursion(this._rootNode);
+        return this._getMaxByIteration(this._rootNode);
+        // return this._getMaxByRecursion(this._rootNode);
     }
 
     private _getNodeWithMinValue(): IBinaryTreeNode<T> {
-        return this._getMinByRecursion(this._rootNode);
+        return this._getMinByIteration(this._rootNode);
+        // return this._getMinByRecursion(this._rootNode);
     }
 
     private _insertByRecursion(treeNode: IBinaryTreeNode<T>, value: T): IBinaryTreeNode<T> {
@@ -215,8 +264,50 @@ export class BinarySearchTree<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _insertByIteraton(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
-        return treeNode;
+    protected _insertByIteraton(value: T): this {
+        if (!this._rootNode) {
+            this._rootNode = this._createTreeNode(value)
+            this._size += 1;
+            return this._afterAddTreeNode(this._rootNode);
+        }
+
+        let currentPointer = this._rootNode;
+        let parentPointer: IBinaryTreeNode<T>
+        do {
+            if (this.compare(value).isEqualTo(currentPointer.value)) {
+                currentPointer.value = value;
+                return this;
+            }
+
+            parentPointer = currentPointer;
+
+            if (this.compare(value).isLargerThan(currentPointer.value)) {
+                currentPointer = currentPointer.right;
+            } else {
+                currentPointer = currentPointer.left;
+            }
+
+        } while (currentPointer)
+
+        const newNode = this._createTreeNode(value, parentPointer);
+
+        if (this.compare(value).isLargerThan(parentPointer.value)) {
+            parentPointer.right = newNode;
+        } else {
+            parentPointer.left = newNode;
+        }
+        this._size += 1;
+        return this._afterAddTreeNode(newNode);
+    }
+
+    //@override
+    protected _afterAddTreeNode(treeNode: IBinaryTreeNode<T>): this {
+        return this;
+    }
+
+    //@override
+    protected _createTreeNode(value: T, parent: IBinaryTreeNode<T> = null): IBinaryTreeNode<T> {
+        return new BinaryTreeNode<T>(value, parent);
     }
 
     /// replace the deleted node (D_node) with the GetMax() of D_node.left;
@@ -255,28 +346,28 @@ export class BinarySearchTree<T> implements ITree<T> {
     }
 
     private _getMaxByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
-        if (!treeNode.right) return treeNode;
+        if (!treeNode?.right) return treeNode;
 
         return this._getMaxByRecursion(treeNode.right);
     }
 
     private _getMaxByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
 
-        while (treeNode.right) {
+        while (treeNode?.right) {
             treeNode = treeNode.right;
         }
         return treeNode;
     }
 
     private _getMinByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
-        if (!treeNode.left) return treeNode;
+        if (!treeNode?.left) return treeNode;
 
         return this._getMinByRecursion(treeNode.left);
     }
 
     private _getMinByIteration(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
 
-        while (treeNode.left) {
+        while (treeNode?.left) {
             treeNode = treeNode.left;
         }
         return treeNode;
@@ -351,6 +442,37 @@ export class BinarySearchTree<T> implements ITree<T> {
 
     }
 
+    private _getHeightOfTreeNodeByRecursion(treeNode: IBinaryTreeNode<T>): number {
+        if (!treeNode) return 0;
+
+        return 1 + Math.max(this._getHeightOfTreeNodeByRecursion(treeNode.left), this._getHeightOfTreeNodeByRecursion(treeNode.right));
+    }
+
+    private _getHeightOfTreeNodeByIteration(treeNode: IBinaryTreeNode<T>): number {
+        if (!treeNode) return 0;
+
+        let height = 0;
+        let levelSize = 1;
+
+        const queue = new Queue<IBinaryTreeNode<T>>();
+        queue.enqueue(treeNode);
+
+        while (!queue.isEmpty()) {
+            const node = queue.dequeue();
+            levelSize -= 1;
+
+            node.left && queue.enqueue(node.left);
+            node.right && queue.enqueue(node.right);
+
+            // levelsize === 0, it's going to move to next level;
+            if (levelSize != 0) continue;
+
+            levelSize = queue.size;
+            height += 1;
+        }
+        return height;
+    }
+
     private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
@@ -372,7 +494,7 @@ export class BinarySearchTree<T> implements ITree<T> {
         return this;
     }
 
-    private _isValidValue(value: T) {
+    protected _isValidValue(value: T) {
         return value !== undefined
             && value !== null
             && Number(value) !== NaN
@@ -382,8 +504,272 @@ export class BinarySearchTree<T> implements ITree<T> {
 
 }
 
+class AVL<T> extends BST<T> {
+
+    protected _rootNode: IAVLTreeNode<T>;
+
+    get height(): number {
+        return this._rootNode?.height || 0;
+    }
+
+
+    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
+        super(compare)
+    }
+
+    // override
+    protected _afterAddTreeNode(treeNode: IAVLTreeNode<T>): this {
+        let pointer = treeNode;
+
+        while (pointer = pointer.parent as IAVLTreeNode<T>) {
+            if (pointer.isBalanced) {
+                pointer.updateHeight();
+            } else {
+                return this._rebalanceTree(pointer);
+            }
+        }
+        return this;
+    }
+
+    //@override
+    protected _createTreeNode(value: T, parent: IAVLTreeNode<T> = null): IAVLTreeNode<T> {
+        return new AVLTreeNode<T>(value, parent);
+    }
+
+    protected _rebalanceTree(treeNode: IAVLTreeNode<T>): this {
+        let grandParentNode = treeNode;
+        let parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>;
+
+        if (treeNode.balanceFactor > 0) {
+            parentNode = grandParentNode.left as IAVLTreeNode<T>// L
+
+            if (parentNode.balanceFactor > 0) {
+                childNode = parentNode.left as IAVLTreeNode<T>;
+                // LL -> rotate to right (grandParentNode)
+                this._rotateToRight(grandParentNode, parentNode);
+            } else {
+                childNode = parentNode.right as IAVLTreeNode<T>;
+                // LR
+                this._rotateToLeft(parentNode, childNode);
+                this._rotateToRight(grandParentNode, childNode);
+            }
+        } else {
+            parentNode = grandParentNode.right as IAVLTreeNode<T>; // R
+
+            if (parentNode.balanceFactor > 0) {
+                childNode = parentNode.left as IAVLTreeNode<T>;
+                //RL
+                this._rotateToRight(parentNode, childNode);
+                this._rotateToLeft(grandParentNode, childNode);
+            } else {
+                childNode = parentNode.right as IAVLTreeNode<T>;
+                // RR
+                this._rotateToLeft(grandParentNode, parentNode);
+            }
+        }
+        return this;
+    }
+
+    protected _rotateToLeft(parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>): void {
+        if (childNode.left) {
+            childNode.left.parent = parentNode;
+        }
+        parentNode.right = childNode.left;
+
+        if (!parentNode.parent) {
+            this._rootNode = childNode;
+            childNode.parent = null;
+        } else if (this.compare(parentNode.parent.left?.value).isEqualTo(parentNode.value)) {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.left = childNode;
+        } else {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.right = childNode;
+        }
+
+        parentNode.parent = childNode;
+        childNode.left = parentNode;
+
+        parentNode.updateHeight();
+        childNode.updateHeight();
+    }
+
+    protected _rotateToRight(parentNode: IAVLTreeNode<T>, childNode: IAVLTreeNode<T>): void {
+        if (childNode.right) {
+            childNode.right.parent = parentNode;
+        }
+        parentNode.left = childNode.right;
+
+        if (!parentNode.parent) {
+            this._rootNode = childNode;
+            childNode.parent = null;
+        } else if (this.compare(parentNode.parent.left?.value).isEqualTo(parentNode.value)) {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.left = childNode;
+        } else {
+            childNode.parent = parentNode.parent;
+            parentNode.parent.right = childNode;
+        }
+
+        parentNode.parent = childNode;
+        childNode.right = parentNode;
+
+        parentNode.updateHeight();
+        childNode.updateHeight();
+    }
+
+}
+
+class RBT<T> extends AVL<T> {
+
+    protected _rootNode: IRedBlackTreeNode<T>;
+
+    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
+        super(compare);
+    }
+
+    //override
+    protected _afterAddTreeNode(treeNode: IRedBlackTreeNode<T>): this {
+        let child = treeNode;
+        let parent = child.parent as IRedBlackTreeNode<T>;
+
+        if (!parent) {
+            child.setBlack();
+            return this;
+        }
+
+        if (parent.isBlack()) {
+            return this;
+        }
+
+        let uncle = child.getUncle(this.compare);
+
+        let grand = parent.parent as IRedBlackTreeNode<T>;
+
+        if (uncle?.isRed()) {
+            parent.setBlack();
+            uncle.setBlack();
+            grand.setRed();
+            return this._afterAddTreeNode(grand);
+        };
+
+        if (parent.isLeftChild(this.compare)) {
+            if (child.isLeftChild(this.compare)) { // LL
+
+                this._rotateToRight(grand, parent);
+            } else { // LR
+                this._rotateToLeft(parent, child);
+                this._rotateToRight(grand, child);
+            }
+        } else {
+            if (child.isLeftChild(this.compare)) { // RL
+                this._rotateToRight(parent, child);
+                this._rotateToLeft(grand, child);
+            } else { // RR
+                this._rotateToLeft(grand, parent);
+            }
+        }
+        return this;
+    }
+
+    // override
+    protected _createTreeNode(value: T, parent: IRedBlackTreeNode<T> = null): IRedBlackTreeNode<T> {
+        return new RedBlackTreeNode<T>(value, parent);
+    }
+
+    protected _rebalanceTree(treeNode: IRedBlackTreeNode<T>): this {
+        let child = treeNode;
+        let parent = child.parent as IRedBlackTreeNode<T>
+        let grand = parent.parent as IRedBlackTreeNode<T>;
+
+        if (child.isLeftChild(this.compare)) {
+            if (parent.isLeftChild(this.compare)) {
+                // LL -> rotate to right (grandParentNode)
+                this._rotateToRight(grand, parent);
+            } else {
+                // LR
+                this._rotateToLeft(parent, child);
+                this._rotateToRight(grand, child);
+            }
+        } else {
+            if (parent.isLeftChild(this.compare)) {
+                //RL
+                this._rotateToRight(parent, child);
+                this._rotateToLeft(grand, child);
+            } else {
+                // RR
+                this._rotateToLeft(grand, parent);
+            }
+        }
+        return this;
+    }
+
+    protected _rotateToLeft(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
+        if (child.left) {
+            child.left.parent = parent;
+        }
+        parent.right = child.left;
+
+        if (!parent.parent) {
+            this._rootNode = child;
+            child.parent = null;
+        } else if (parent.isLeftChild(this.compare)) {
+            child.parent = parent.parent;
+            parent.parent.left = child;
+        } else {
+            child.parent = parent.parent;
+            parent.parent.right = child;
+        }
+
+        parent.parent = child;
+        child.left = parent;
+
+        parent.setRed();
+        child.setBlack();
+    }
+
+    protected _rotateToRight(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
+        if (child.right) {
+            child.right.parent = parent;
+        }
+        parent.left = child.right;
+
+        if (!parent.parent) {
+            this._rootNode = child;
+            child.parent = null;
+        } else if (parent.isLeftChild(this.compare)) {
+            child.parent = parent.parent;
+            parent.parent.left = child;
+        } else {
+            child.parent = parent.parent;
+            parent.parent.right = child;
+        }
+
+        parent.parent = child;
+        child.right = parent;
+
+        parent.setRed();
+        child.setBlack();
+    }
+}
+
+
+
+export const BinaryAVLTree: ITreeConstructor = AVL;
+export const BinarySearchTree: ITreeConstructor = BST;
+export const BinaryRedBlackTree: ITreeConstructor = RBT;
+/**
+ * export const ****: ICtor = ClassName,
+ * cannot use Protected method derived from its parent
+ */
+
 /**
  * @BinarySearchTree
  * *搜索: 时间复杂度： Average-> O(lgn), WorstCase->O(n)*
+ */
+
+/**
+ * @AVL_Tree
+ * *时间复杂度：O(lgn)*
  */
 

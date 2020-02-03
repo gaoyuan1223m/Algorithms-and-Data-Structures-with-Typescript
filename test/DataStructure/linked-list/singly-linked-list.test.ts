@@ -129,7 +129,7 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.tail).toBe(54);
     });
 
-    xit(`#print the linked list - FIRST`, () => {
+    it(`#print the linked list - FIRST`, () => {
         sll.print();
     });
 
@@ -172,7 +172,7 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.size).toBe(2);
     });
 
-    xit(`#print the linked list - SECOND`, () => {
+    it(`#print the linked list - SECOND`, () => {
         sll.print();
     });
 

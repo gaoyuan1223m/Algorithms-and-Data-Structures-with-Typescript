@@ -1,10 +1,12 @@
 import { ArrayFactory } from "@DataStructure/array"
 import { ArrayTypes } from "@Utils/types";
+import { valueTypeComparison } from "@Utils/compare";
+import { IArray } from "@Interface/specific";
 
 describe(`Test for Dynamic Array`, () => {
 
     const capacity = 5;
-    const dynamicArray = ArrayFactory.create<number>(ArrayTypes.DYNAMIC, capacity);
+    const dynamicArray: IArray<number> = ArrayFactory.create(ArrayTypes.DYNAMIC, valueTypeComparison, capacity);
 
 
     beforeAll(() => {
@@ -13,7 +15,7 @@ describe(`Test for Dynamic Array`, () => {
             .append(3)
             .append(2)
             .append(1)
-            .append(4);
+            .append(4)
     })
 
     it(`#should return right size`, () => {

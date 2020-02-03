@@ -11,13 +11,10 @@ import { IFactory } from "@Interface/common";
 
 export class Factory implements IFactory {
 
-    create<T>(capacity: number, comapre?: ICompareFunc<T>): ILinkedList<T>;
-    create<T>(capacity?: number, incremental?: number): ILinkedList<T>;
-    create<T>(type?: ListTypes, capacity?: number, incremental?: number, compare?: ICompareFunc<T>): ILinkedList<T>;
-    create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): any {
-        if (!type || type === ListTypes.SINGLY) return new SinglyLinkedList<T>();
+    create<T>(type: ListTypes, compare: ICompareFunc<T> = valueTypeComparison): ILinkedList<T> {
+        if (!type || type === ListTypes.SINGLY) return new SinglyLinkedList<T>(compare);
 
-        if (type === ListTypes.Doubly) return new DoublyLinkedList<T>();
+        if (type === ListTypes.Doubly) return new DoublyLinkedList<T>(compare);
 
         // if (type === ListTypes.Circular) return new CircularSinglyLinkedList();
 
@@ -33,7 +30,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     protected _tailPointer: ISinglyListNode<T>; // Tail Node Pointer 尾元素指针
     protected _size: number;
 
-    constructor() {
+    constructor(protected compare: ICompareFunc<T>) {
         this._headSentry = new SinglyListNode<T>();
         this._tailSentry = new SinglyListNode<T>();
         this._headSentry.next = this._tailSentry;
@@ -136,20 +133,20 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return pointer.value;
     }
 
-    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
+    indexOf(value: T): number {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
-        return this._indexOf(value, compare);
+        return this._indexOf(value);
     }
 
-    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
-        return this.indexOf(value, compare) !== NOT_EXISTED;
+    contains(value: T): boolean {
+        return this.indexOf(value) !== NOT_EXISTED;
     }
 
-    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
-        const idx = this.indexOf(value, compare);
+    remove(value: T): this {
+        const idx = this.indexOf(value);
 
         if (idx === NOT_EXISTED) return this;
 
@@ -162,7 +159,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._size === 0;
     }
 
-    sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
+    sort(method: SortMethods = SortMethods.Quick): this {
         throw new Error("Method not implemented.");
     }
 
@@ -176,7 +173,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
             idx++;
         }
         str += `END`;
-        Console.Warn(str);
+        Console.OK(str);
         return this;
     }
 
@@ -210,7 +207,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
 
     // O(n)
     toArray(arrayType: ArrayTypes): IArray<T> {
-        const array = ArrayFactory.create<T>(arrayType, this._size);
+        const array = ArrayFactory.create<T>(arrayType);
         const currLength = this._size;
         for (let index = 0; index < currLength; index++) {
             let value = this._removeHeadNode();
@@ -400,12 +397,12 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
-    protected _indexOf(validValue: T, compare: ICompareFunc<T>): number {
+    protected _indexOf(validValue: T): number {
         let i = -1;
         let p = this._headPointer;
         while (p && i < this._size) {
             i += 1;
-            if (compare(p.value).isEqualTo(validValue)) return i;
+            if (this.compare(p.value).isEqualTo(validValue)) return i;
             p = p.next;
         }
         return -1;
@@ -467,7 +464,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
     protected _tailPointer: IDoublyListNode<T>;
     protected _size: number;
 
-    constructor() {
+    constructor(protected compare: ICompareFunc<T>) {
         this._headPointer = null;
         this._tailPointer = null;
         this._size = 0;
@@ -550,12 +547,12 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return pointer.value;
     }
 
-    indexOf(value: T, compare: ICompareFunc<T> = valueTypeComparison): number {
+    indexOf(value: T): number {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
 
-        return this._indexOf(value, compare);
+        return this._indexOf(value);
     }
 
     reverse(): this {
@@ -566,12 +563,12 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return this.insertAtHead(value);
     }
 
-    contains(value: T, compare: ICompareFunc<T> = valueTypeComparison): boolean {
-        return this.indexOf(value, compare) !== NOT_EXISTED;
+    contains(value: T): boolean {
+        return this.indexOf(value) !== NOT_EXISTED;
     }
 
-    remove(value: T, compare: ICompareFunc<T> = valueTypeComparison): this {
-        const idx = this.indexOf(value, compare);
+    remove(value: T): this {
+        const idx = this.indexOf(value);
 
         if (idx === NOT_EXISTED) return this;
 
@@ -579,7 +576,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return this;
     }
 
-    sort(compare: ICompareFunc<T> = valueTypeComparison, method: SortMethods = SortMethods.Quick): this {
+    sort(method: SortMethods = SortMethods.Quick): this {
         throw new Error("Method not implemented.");
     }
 
@@ -603,7 +600,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
 
     toArray(arrayType: ArrayTypes): IArray<T> {
         const currLength = this._size;
-        const array = ArrayFactory.create<T>(arrayType, currLength);
+        const array = ArrayFactory.create<T>(arrayType, this.compare, currLength);
 
         for (let index = 0; index < currLength; index++) {
             let value = this._removeHeadNode();
@@ -626,8 +623,8 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return list;
     }
 
-    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>(compare);
+    toTree(treeType: TreeTypes): ITree<T> {
+        const tree = new BinarySearchTree<T>(this.compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
@@ -644,11 +641,11 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         let str = 'HEAD -> ';
         while (pointer && idx < this._size) {
             str += `[${pointer.value.toString()}] -> `
-            pointer = pointer.next;
+            pointer = pointer.next as IDoublyListNode<T>;
             idx++;
         }
         str += `TAIL`;
-        Console.Warn(str);
+        Console.OK(str);
         return this;
     }
 
@@ -717,7 +714,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
 
         const value = this._headPointer.value;
 
-        let nextPointer = this._headPointer.next;
+        let nextPointer = this._headPointer.next as IDoublyListNode<T>;
 
         this._headPointer.next = null;
         nextPointer.prev = null;
@@ -806,7 +803,8 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         const prevPointer = currPointer.prev;
 
         prevPointer.next = currPointer.next;
-        currPointer.next.prev = prevPointer;
+        let pointer = currPointer.next as IDoublyListNode<T>;
+        pointer.prev = prevPointer;
 
         currPointer.next = null;
         currPointer.prev = null;
@@ -842,14 +840,14 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
         return index;
     }
 
-    protected _indexOf(validValue: T, compare: ICompareFunc<T>): number {
+    protected _indexOf(validValue: T): number {
         let i = -1;
         let p = this._headPointer;
         // (i < this._size) to avoid circular Linked List
         while (p && i < this._size) {
             i += 1;
-            if (compare(p.value).isEqualTo(validValue)) return i;
-            p = p.next;
+            if (this.compare(p.value).isEqualTo(validValue)) return i;
+            p = p.next as IDoublyListNode<T>;
         }
         return -1;
     }
@@ -866,7 +864,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
             pointer = this._headPointer;
 
             while (idx > 0) {
-                pointer = pointer.next;
+                pointer = pointer.next as IDoublyListNode<T>;
                 idx -= 1;
             }
 

@@ -4,16 +4,16 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  // collectCoverage: true,
-  // collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
   coverageThreshold: {
     global: {
-      branches: 75,
+      branches: 65,
       functions: 75,
       lines: 75,
       statements: 75
     }
   },
-  // testRegex: 'singly-linked-list.test.ts', /**Run Single Unit Test */
+  // testRegex: 'rbt.test.ts', /**Run Single Unit Test, PLEASE Remove // at the head of this line */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };

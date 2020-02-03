@@ -2,12 +2,13 @@ import { ArrayFactory } from "@DataStructure/array";
 import { Errors, catchErr } from "@Utils/error-handling";
 import { ArrayTypes, ListTypes, TreeTypes } from "@Utils/types";
 import { valueTypeComparison } from "@Utils/compare";
+import { IArray } from "@Interface/specific";
 
 
 describe(`Test for Static Array`, () => {
 
     const capacity = 7;
-    const staticArray = ArrayFactory.create<number>(ArrayTypes.STATIC, capacity);
+    const staticArray: IArray<number> = ArrayFactory.create(ArrayTypes.STATIC);
 
     beforeAll(() => {
         staticArray
@@ -30,7 +31,7 @@ describe(`Test for Static Array`, () => {
 
     it(`#Get size/length of the array`, () => {
         expect(staticArray.size).toBe(4);
-        expect(staticArray.length).toBe(7);
+        expect(staticArray.length).toBe(capacity);
     });
 
     it(`#Append invalid value but no exception throw`, () => {
@@ -120,7 +121,7 @@ describe(`Test for Static Array`, () => {
         expect(staticArray[-4]).toBe(2);
     });
 
-    xit(`print the array`, () => {
+    it(`print the array`, () => {
         staticArray.print();
     });
 

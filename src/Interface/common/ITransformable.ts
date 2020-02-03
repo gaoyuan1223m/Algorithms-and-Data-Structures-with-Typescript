@@ -20,6 +20,6 @@ export interface ITransformable<T> {
      * *Transform current collection to a specific Tree, BST, AVL, or Red/Black.*
      * @param treeType BST, AVL or Red/Back Tree 
      */
-    toTree(treeType: TreeTypes, compare?: ICompareFunc<T>): ITree<T>;
+    toTree(treeType: TreeTypes): ITree<T>;
 
 }

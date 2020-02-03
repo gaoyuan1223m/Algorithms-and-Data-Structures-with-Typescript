@@ -1,20 +1,24 @@
-
-import chalk from "chalk";
+import { inRed, inGreen, inYellow, inBlue } from "./string.highlight";
 
 function OK(text: any) {
-    console.log(chalk.bgGreenBright.bold.redBright(text.toString()));
+    console.log(inGreen(text));
 }
 
 function Warn(text: any) {
-    console.log(chalk.bgYellowBright.bold.redBright(text.toString()));
+    console.log(inYellow(text));
 }
 
 function Err(text: any) {
-    console.log(chalk.bgRedBright.bold.whiteBright(text.toString()));
+    console.log(inRed(text));
+}
+
+function Info(text: any) {
+    console.log(inBlue(text));
 }
 
 export let Console = {
     OK,
     Warn,
-    Err
+    Err,
+    Info
 }

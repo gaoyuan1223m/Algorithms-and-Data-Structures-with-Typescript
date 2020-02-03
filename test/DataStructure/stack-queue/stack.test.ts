@@ -111,7 +111,7 @@ describe(`Test for Static Stack`, () => {
     });
 
     it(`#Push more value to Stack`, () => {
-        expect(catchErr(stack.push.bind(stack))(11, 2, 9, 3, 18, 4, 7)).toBe(Errors.Msg.NoMoreSpace);
+        stack.push(11, 2, 9, 3, 18, 4, 7); // 7 cannot be pushed into Stack
         expect(stack.size).toBe(capacity);
         expect(stack.peek).toBe(18);
     });

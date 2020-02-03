@@ -82,7 +82,7 @@ describe(`Test for Doubly-Linked-List`, () => {
         expect(dll.size).toBe(7);
     });
 
-    xit(`#Print current elements on the List`, () => {
+    it(`#Print current elements on the List`, () => {
         dll.print(ListPrintOrder.FromHeadToTail);
     });
 

@@ -1,3 +1,5 @@
+import { Errors } from "@Utils/error-handling";
+
 /**
  * @二分搜索
  *   数字第一次出现的位置（R = M）
@@ -9,31 +11,41 @@
  */
 
 /**
- * @平方根SQRT
+ * @SQRT_TO_Integer
  */
 
 export const mySqrt = (n: number): number => {
-    n = ~~n; // 取整数部分
 
-    if (n < 0) return NaN;
+    if (!n && n !== 0) {
+        throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+    }
+
+    if (n > Number.MAX_SAFE_INTEGER || n < Number.MIN_SAFE_INTEGER) {
+        throw new Errors.InvalidArgument(Errors.Msg.NotSafeNum);
+    }
+
+    if (n < 0) {
+        throw new Errors.InvalidArgument(Errors.Msg.NotPositiveInteger)
+    }
+
     if (n === 0) return 0;
 
+    n = Math.floor(n);
+
     let left = 1, right = n;
-    
+
     while (left <= right) {
         let mid = left + Math.floor((right - left) / 2);
         let quotient = Math.floor(n / mid)
         if (mid === quotient) return mid;
 
         if (mid < quotient) {
-            left = mid + 1; 
+            left = mid + 1;
         } else {
             right = mid - 1;
         }
-        
-        console.log(left, right);
+
     }
     return right;
 }
 
-console.log(mySqrt(43));

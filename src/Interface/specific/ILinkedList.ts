@@ -40,8 +40,7 @@ export interface ISinglyListNode<T> extends INode<T> {
     next: ISinglyListNode<T>;
 }
 
-export interface IDoublyListNode<T> extends INode<T> {
-    next: IDoublyListNode<T>;
+export interface IDoublyListNode<T> extends ISinglyListNode<T> {
     prev: IDoublyListNode<T>;
 }
 

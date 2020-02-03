@@ -4,22 +4,24 @@ import { IHeapConstructor, IHeap } from "@Interface/specific";
 import { valueTypeComparison, ICompareFunc } from "@Utils/compare";
 import { IFactory } from "@Interface/common";
 import { BinaryHeapTypes } from "@Utils/types";
+import { Errors } from "@Utils/error-handling";
 
 class Factory implements IFactory {
 
-    create<T>(capacity: number, compare?: ICompareFunc<T>): IHeap<T>;
-    create<T>(capacity?: number, incremental?: number): IHeap<T>;
-    create<T>(type?: BinaryHeapTypes, capacity?: number, incremental?: number): IHeap<T>;
-    create<T>(type?: any, capacity?: any, incremental?: any, compare?: any): any {
-        return new MaxBinaryHeap<T>(compare)
+    create<T>(type: BinaryHeapTypes, compare: ICompareFunc<T> = valueTypeComparison): IHeap<T> {
+        if (type === BinaryHeapTypes.MAX) return new MaxBinaryHeap<T>(compare);
+
+        if (type === BinaryHeapTypes.MIN) return new MaxBinaryHeap<T>(compare); //need to revised
+
+        throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
 }
+/**
+ * @MaxBinaryHeap
+ */
+class MaxBH<T> extends AbstractHeap<T> {
 
-const MaxBinaryHeap: IHeapConstructor = class Heap<T> extends AbstractHeap<T> {
-
-    constructor(
-        protected compare: ICompareFunc<T> = valueTypeComparison
-    ) {
+    constructor(protected compare: ICompareFunc<T>) {
         super(compare);
     }
 
@@ -93,5 +95,7 @@ const MaxBinaryHeap: IHeapConstructor = class Heap<T> extends AbstractHeap<T> {
     }
 
 }
+
+const MaxBinaryHeap: IHeapConstructor = MaxBH
 
 export const HeapFactory = new Factory();
