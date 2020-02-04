@@ -6,10 +6,9 @@ describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")}`, () =
     const RBT = new BinaryRedBlackTree<number>();
 
     beforeAll(() => {
-        // for (const elem of elements) {
-        //     RBT.append(elem);
-        // }
-        RBT.appendRange(...elements);
+        for (const elem of elements) {
+            RBT.append(elem);
+        }
     });
 
     it(`#Should return right ${inRed("SIZE")}`, () => {

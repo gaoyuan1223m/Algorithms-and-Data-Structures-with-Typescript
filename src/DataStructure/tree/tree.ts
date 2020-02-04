@@ -5,12 +5,13 @@ import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
+import { override } from "@Utils/decorator";
 
 class BST<T> implements ITree<T> {
 
     protected _rootNode: IBinaryTreeNode<T>;
     protected _size: number;
-    private _printStr: string;
+    protected _printStr: string;
 
 
     get size(): number {
@@ -512,12 +513,11 @@ class AVL<T> extends BST<T> {
         return this._rootNode?.height || 0;
     }
 
-
     constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
         super(compare)
     }
 
-    // override
+    @override()
     protected _afterAddTreeNode(treeNode: IAVLTreeNode<T>): this {
         let pointer = treeNode;
 
@@ -531,7 +531,7 @@ class AVL<T> extends BST<T> {
         return this;
     }
 
-    //@override
+    @override()
     protected _createTreeNode(value: T, parent: IAVLTreeNode<T> = null): IAVLTreeNode<T> {
         return new AVLTreeNode<T>(value, parent);
     }
@@ -628,7 +628,7 @@ class RBT<T> extends AVL<T> {
         super(compare);
     }
 
-    //override
+    @override()
     protected _afterAddTreeNode(treeNode: IRedBlackTreeNode<T>): this {
         let child = treeNode;
         let parent = child.parent as IRedBlackTreeNode<T>;
@@ -672,11 +672,12 @@ class RBT<T> extends AVL<T> {
         return this;
     }
 
-    // override
+    @override()
     protected _createTreeNode(value: T, parent: IRedBlackTreeNode<T> = null): IRedBlackTreeNode<T> {
         return new RedBlackTreeNode<T>(value, parent);
     }
 
+    @override()
     protected _rebalanceTree(treeNode: IRedBlackTreeNode<T>): this {
         let child = treeNode;
         let parent = child.parent as IRedBlackTreeNode<T>
@@ -704,6 +705,7 @@ class RBT<T> extends AVL<T> {
         return this;
     }
 
+    @override()
     protected _rotateToLeft(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.left) {
             child.left.parent = parent;
@@ -728,6 +730,7 @@ class RBT<T> extends AVL<T> {
         child.setBlack();
     }
 
+    @override()
     protected _rotateToRight(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.right) {
             child.right.parent = parent;
