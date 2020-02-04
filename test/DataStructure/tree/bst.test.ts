@@ -34,6 +34,8 @@ describe(`Test for Binary Search Tree`, () => {
         expect(BST.findPath(8)).toEqual([1, 0]);
         expect(BST.findPath(11)).toEqual([1, 1]);
         expect(BST.findPath(10)).toEqual([1, 1, 0]);
+        expect(BST.findPath(13)).toBe(null);
+        expect(BST.findPath(111)).toEqual(null);
     });
 
     it(`#Get Depth of the Nodes on the Tree`, () => {
@@ -59,6 +61,15 @@ describe(`Test for Binary Search Tree`, () => {
     it(`#Contains a value?`, () => {
         expect(BST.contains(12)).toBe(true);
         expect(BST.contains(8)).toBe(true);
+        expect(BST.contains(3)).toBe(true);
+        expect(BST.contains(7)).toBe(true);
+        expect(BST.contains(9)).toBe(true);
+        expect(BST.contains(5)).toBe(true);
+        expect(BST.contains(4)).toBe(true);
+        expect(BST.contains(6)).toBe(true);
+        expect(BST.contains(11)).toBe(true);
+        expect(BST.contains(10)).toBe(true);
+        expect(BST.contains(13)).toBe(false);
         expect(BST.contains(14)).toBe(false);
     });
 
