@@ -6,8 +6,8 @@ import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { SortMethods } from "@Algorithm/sort";
 import { ArrayFactory } from "@DataStructure/array";
-import { BinarySearchTree } from "@DataStructure/tree";
 import { IFactory } from "@Interface/common";
+import { BinaryTreeFactory } from "@DataStructure/tree";
 
 export class Factory implements IFactory {
 
@@ -207,7 +207,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
 
     // O(n)
     toArray(arrayType: ArrayTypes): IArray<T> {
-        const array = ArrayFactory.create<T>(arrayType);
+        const array = ArrayFactory.create<T>(arrayType, this.compare);
         const currLength = this._size;
         for (let index = 0; index < currLength; index++) {
             let value = this._removeHeadNode();
@@ -218,7 +218,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     toList(listType: ListTypes): ILinkedList<T> {
-        const list = LinkedListFactory.create<T>(listType);
+        const list = LinkedListFactory.create<T>(listType, this.compare);
         const currLength = this._size;
 
         const values = this.removeFromHead(currLength);
@@ -229,8 +229,8 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return list;
     }
 
-    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
-        const tree = new BinarySearchTree<T>(compare);
+    toTree(treeType: TreeTypes): ITree<T> {
+        const tree = BinaryTreeFactory.create<T>(treeType, this.compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);
@@ -624,7 +624,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
     }
 
     toTree(treeType: TreeTypes): ITree<T> {
-        const tree = new BinarySearchTree<T>(this.compare);
+        const tree = BinaryTreeFactory.create<T>(treeType, this.compare);
 
         const currLength = this._size;
         const values = this.removeFromHead(currLength);

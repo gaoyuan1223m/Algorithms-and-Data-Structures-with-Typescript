@@ -1,12 +1,12 @@
-import { BinaryAVLTree } from "@DataStructure/tree";
-import { TreePrintOrder } from "@Utils/types";
+import { TreePrintOrder, TreeTypes } from "@Utils/types";
 import { inRed, inYellow, inGreen, inBlue } from "@Utils/emphasize";
+import { BinaryTreeFactory } from "@DataStructure/tree";
 
 
 describe(`Test for AVL Tree [BASCIS]`, () => {
 
     const elements = [8, 4, 3, null, 1, 2, 11, 15, 10, 9]
-    const AVL = new BinaryAVLTree<number>();
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
     const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
     beforeAll(() => {
@@ -141,7 +141,7 @@ describe(`Test for AVL Tree [BASCIS]`, () => {
 
 describe(`Test for AVL Tree ${inYellow('[Complex LL]')}`, () => {
     const elements = [50, 70, 30, 10, 40, 5];
-    const AVL = new BinaryAVLTree<number>();
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
 
     beforeAll(() => {
         elements.forEach(e => { AVL.append(e) });
@@ -183,7 +183,7 @@ describe(`Test for AVL Tree ${inYellow('[Complex LL]')}`, () => {
 
 describe(`Test for AVL Tree ${inBlue('[Complex RR]')}`, () => {
     const elements = [50, 70, 30, 60, 80, 90];
-    const AVL = new BinaryAVLTree<number>();
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
 
     beforeAll(() => {
         elements.forEach(e => { AVL.append(e) });
@@ -217,7 +217,7 @@ describe(`Test for AVL Tree ${inBlue('[Complex RR]')}`, () => {
 
 describe(`Test for AVL Tree ${inGreen('[Complex LR]')}`, () => {
     const elements = [70, 50, 80, 72, 90, 75];
-    const AVL = new BinaryAVLTree<number>();
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
 
     beforeAll(() => {
         elements.forEach(e => { AVL.append(e) });
@@ -251,7 +251,7 @@ describe(`Test for AVL Tree ${inGreen('[Complex LR]')}`, () => {
 
 describe(`Test for AVL Tree ${inRed('[Complex RL]')}`, () => {
     const elements = [50, 70, 30, 10, 40, 35];
-    const AVL = new BinaryAVLTree<number>();
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
 
     beforeAll(() => {
         elements.forEach(e => { AVL.append(e) });

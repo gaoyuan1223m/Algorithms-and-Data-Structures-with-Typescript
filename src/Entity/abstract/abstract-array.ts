@@ -8,7 +8,7 @@ import { QuickSort, SortMethods } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
-import { BinarySearchTree } from "@DataStructure/tree";
+import { BinaryTreeFactory } from "@DataStructure/tree";
 
 export abstract class AbstractArray<T> implements IArray<T> {
 
@@ -80,9 +80,9 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return list;
     }
 
-    toTree(treeType: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+    toTree(treeType: TreeTypes): ITree<T> {
         const currLength = this._capacity;
-        const tree = new BinarySearchTree<T>(compare);
+        const tree = BinaryTreeFactory.create<T>(treeType, this._compare);
 
         for (let index = 0; index < currLength; index++) {
             if (!this[index]) continue;

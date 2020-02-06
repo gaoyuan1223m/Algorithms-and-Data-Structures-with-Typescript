@@ -6,6 +6,7 @@ import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
 import { override } from "@Utils/decorator";
+import { IFactory } from "@Interface/common";
 
 class BST<T> implements ITree<T> {
 
@@ -35,7 +36,7 @@ class BST<T> implements ITree<T> {
         return this._getNodeWithMinValue()?.value || null;
     }
 
-    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
+    constructor(protected compare: ICompareFunc<T>) {
         this.__init__();
     }
 
@@ -223,7 +224,7 @@ class BST<T> implements ITree<T> {
         }
 
         let currentPointer = this._rootNode;
-        let parentPointer: IBinaryTreeNode<T>
+        let parentPointer: IBinaryTreeNode<T>;
         do {
             if (this.compare(value).isEqualTo(currentPointer.value)) {
                 currentPointer.value = value;
@@ -295,7 +296,22 @@ class BST<T> implements ITree<T> {
         const node = this._getTreeNodeByValue(value);
         if (!node) return this;
 
-        let { pointer, path } = node;
+        let { pointer } = node;
+
+        if (pointer.isLeaf()) {
+            if (!pointer.parent) return this.__init__();
+
+            if (pointer.isLeftChild(this.compare)) {
+                pointer.parent.left = null;
+            } else {
+                pointer.parent.right = null;
+            }
+
+            this._size -= 1;
+            return this;
+        }
+
+
 
         return this;
     }
@@ -338,6 +354,30 @@ class BST<T> implements ITree<T> {
             }
         }
         return pointer;
+    }
+
+    protected _getPredecessorNode(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+        if (!treeNode) return null;
+
+        if (treeNode.left) return this._getMaxByIteration(treeNode.left);
+
+        while (treeNode.parent && this.compare(treeNode.value).isEqualTo(treeNode.parent.left?.value)) {
+            treeNode = treeNode.parent;
+        }
+
+        return treeNode.parent;
+    }
+
+    protected _getSuccessorNode(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+        if (!treeNode) return null;
+
+        if (treeNode.right) return this._getMinByIteration(treeNode.right);
+
+        while (treeNode.parent && this.compare(treeNode.value).isEqualTo(treeNode.parent.right?.value)) {
+            treeNode = treeNode.parent
+        }
+
+        return treeNode.parent;
     }
 
     private _findPathByRecursion(treeNode: IBinaryTreeNode<T>, node: T): number {
@@ -515,7 +555,7 @@ class AVL<T> extends BST<T> {
         return this._rootNode?.height || 0;
     }
 
-    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
+    constructor(protected compare: ICompareFunc<T>) {
         super(compare)
     }
 
@@ -626,7 +666,7 @@ class RBT<T> extends AVL<T> {
 
     protected _rootNode: IRedBlackTreeNode<T>;
 
-    constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
+    constructor(protected compare: ICompareFunc<T>) {
         super(compare);
     }
 
@@ -758,11 +798,22 @@ class RBT<T> extends AVL<T> {
     }
 }
 
+const BinarySearchTree: ITreeConstructor = BST;
+const BinaryAVLTree: ITreeConstructor = AVL;
+const BinaryRedBlackTree: ITreeConstructor = RBT;
 
+class Factory implements IFactory {
 
-export const BinaryAVLTree: ITreeConstructor = AVL;
-export const BinarySearchTree: ITreeConstructor = BST;
-export const BinaryRedBlackTree: ITreeConstructor = RBT;
+    create<T>(type: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+        if (type === TreeTypes.BST) return new BinarySearchTree(compare);
+        if (type === TreeTypes.AVL) return new BinaryAVLTree(compare);
+        if (type === TreeTypes.RBT) return new BinaryRedBlackTree(compare);
+
+        throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
+    }
+}
+
+export const BinaryTreeFactory = new Factory();
 /**
  * export const ****: ICtor = ClassName,
  * cannot use Protected method derived from its parent
