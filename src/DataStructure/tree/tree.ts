@@ -103,7 +103,8 @@ class BST<T> implements ITree<T> {
     }
 
     remove(value: T): this {
-        this._rootNode = this._removeByRecursion(this._rootNode, value);
+        // this._rootNode = this._removeByRecursion(this._rootNode, value);
+        this._removeByIteration(value);
         return this;
     }
 
@@ -296,24 +297,85 @@ class BST<T> implements ITree<T> {
         const node = this._getTreeNodeByValue(value);
         if (!node) return this;
 
-        let { pointer } = node;
+        let { pointer: delNode } = node;
 
-        if (pointer.isLeaf()) {
-            if (!pointer.parent) return this.__init__();
+        if (delNode.isLeaf()) {
+            this._removeNodeWithZeroDegree(delNode)
+            return this._afterRemoveTreeNode(delNode);
+        }
 
-            if (pointer.isLeftChild(this.compare)) {
-                pointer.parent.left = null;
-            } else {
-                pointer.parent.right = null;
-            }
+        if (!delNode.left || !delNode.right) {
+            this._removeNodeWithOneDegree(delNode);
+            return this._afterRemoveTreeNode(delNode);
+        }
 
+        this._removeNodeWithTwoDegree(delNode);
+        return this._afterRemoveTreeNode(delNode);
+    }
+
+    private _removeNodeWithZeroDegree(treeNode: IBinaryTreeNode<T>): void {
+        if (!treeNode.parent) {
+            this.__init__(); // it's root node
+        }
+
+        if (treeNode.isLeftChild(this.compare)) {
+            treeNode.parent.left = null;
+        } else {
+            treeNode.parent.right = null;
+        }
+
+        this._size -= 1;
+    }
+
+    private _removeNodeWithOneDegree(treeNode: IBinaryTreeNode<T>): void {
+
+        if (!treeNode.parent) {
+            this._rootNode = treeNode.left || treeNode.right;
+            this._rootNode.parent = null;
             this._size -= 1;
-            return this;
+            return;
         }
 
 
+        if (!treeNode.left) { // left is null
 
-        return this;
+            treeNode.right.parent = treeNode.parent;
+
+            if (treeNode.isLeftChild(this.compare)) {
+                treeNode.parent.left = treeNode.right;
+            } else {
+                treeNode.parent.right = treeNode.right;
+            }
+
+            treeNode.right = null;
+
+        } else {
+
+            treeNode.left.parent = treeNode.parent;
+
+            if (treeNode.isLeftChild(this.compare)) {
+                treeNode.parent.left = treeNode.left;
+            } else {
+                treeNode.parent.right = treeNode.left;
+            }
+
+            treeNode.left = null;
+        }
+
+        this._size -= 1;
+
+    }
+
+    private _removeNodeWithTwoDegree(treeNode: IBinaryTreeNode<T>): void {
+        const predecessor = this._getPredecessorNode(treeNode);
+
+        treeNode.value = predecessor.value;
+
+        if (predecessor.isLeaf()) {
+            this._removeNodeWithZeroDegree(predecessor)
+        } else {
+            this._removeNodeWithOneDegree(predecessor);
+        }
     }
 
     protected _getTreeNodeByValue(value: T): { pointer: IBinaryTreeNode<T>, path: number[] } {
@@ -355,25 +417,25 @@ class BST<T> implements ITree<T> {
         }
         return pointer;
     }
-
+    // Previous node in In-order Printing
     protected _getPredecessorNode(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         if (!treeNode) return null;
 
         if (treeNode.left) return this._getMaxByIteration(treeNode.left);
 
-        while (treeNode.parent && this.compare(treeNode.value).isEqualTo(treeNode.parent.left?.value)) {
+        while (treeNode.isLeftChild(this.compare)) {
             treeNode = treeNode.parent;
         }
 
         return treeNode.parent;
     }
-
+    // Next node in In-order Printing
     protected _getSuccessorNode(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         if (!treeNode) return null;
 
         if (treeNode.right) return this._getMinByIteration(treeNode.right);
 
-        while (treeNode.parent && this.compare(treeNode.value).isEqualTo(treeNode.parent.right?.value)) {
+        while (treeNode.isRightChild(this.compare)) {
             treeNode = treeNode.parent
         }
 

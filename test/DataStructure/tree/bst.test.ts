@@ -1,6 +1,7 @@
 
 import { TreePrintOrder, TreeTypes } from "@Utils/types";
 import { BinaryTreeFactory } from "@DataStructure/tree";
+import { inRed } from "@Utils/emphasize";
 
 describe(`Test for Binary Search Tree`, () => {
 
@@ -102,21 +103,21 @@ describe(`Test for Binary Search Tree`, () => {
         // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
     });
 
-    it(`#remove LEAF elements if existed`, () => {
+    it(`#remove LEAF elements if existed ${inRed('[0-Degree]')}`, () => {
         expect(BST.remove(6).size).toBe(elements.length - 1);
         expect(BST.height).toBe(4);
         // BST.print(TreePrintOrder.InOrder);
         // [3, 4, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    it(`#remove PARENT elements with ONE child if existed`, () => {
+    it(`#remove PARENT elements with ONE child ${inRed('[1-Degree]')}`, () => {
         expect(BST.remove(4).size).toBe(elements.length - 2);
         expect(BST.height).toBe(4);
         // BST.print(TreePrintOrder.InOrder);
         // [3, 5, 7, 8, 9 ,10, 11, 12]
     });
 
-    it(`#remove PARENT elements with TWO Children if existed`, () => {
+    it(`#remove PARENT elements with TWO Children ${inRed('[2-Degree]')}`, () => {
         expect(BST.remove(9).size).toBe(elements.length - 3);
         expect(BST.height).toBe(4);
         // BST.print(TreePrintOrder.InOrder);
@@ -126,6 +127,10 @@ describe(`Test for Binary Search Tree`, () => {
     it(`#remove 10 and 12 and check the current the height of tree`, () => {
         expect(BST.remove(10).remove(11).height).toBe(3);
     })
+
+    it(`#remove 2-Degree Node with 1-Degree Predecessor`, () => {
+        expect(BST.remove(7).size).toBe(elements.length - 6);
+    });
 
     it(`#Is it COMPLETE?`, () => {
         expect(BST.isComplete()).toBe(false);
@@ -154,6 +159,16 @@ describe(`Test for Binary Search Tree`, () => {
  * *     4   6 8    11     *
  *      /         /    \
  * *   3         10     12 *
+ */
+ // After removal
+ /**
+ * *          5            *
+ *          /   \
+ * *       3      8        *
+ *        / \   /   \
+ * *                12     *
+ *      /         /    \
+ * *                       *
  */
 
 /**
