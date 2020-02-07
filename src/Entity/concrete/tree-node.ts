@@ -10,7 +10,7 @@ import {
 import { TreeNodeColor } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
 
-export const BinaryTreeNode: IBinaryTreeNodeConstructor = class BinaryTreeNode<T> implements IBinaryTreeNode<T> {
+class BSTNode<T> implements IBinaryTreeNode<T> {
 
     constructor(
         public value: T,
@@ -18,9 +18,22 @@ export const BinaryTreeNode: IBinaryTreeNodeConstructor = class BinaryTreeNode<T
         public left: IBinaryTreeNode<T> = null,
         public right: IBinaryTreeNode<T> = null
     ) { }
+
+    isLeftChild(compare: ICompareFunc<T>): boolean {
+        return compare(this.value).isEqualTo(this.parent?.left?.value);
+    }
+
+    isRightChild(compare: ICompareFunc<T>): boolean {
+        return compare(this.value).isEqualTo(this.parent?.right?.value);
+    }
+
+    isLeaf(): boolean {
+        return !this.left && !this.right;
+    }
+
 }
 
-export const AVLTreeNode: IAVLTreeNodeConstructor = class AVLTreeNode<T> extends BinaryTreeNode<T> implements IAVLTreeNode<T> {
+class AVLNode<T> extends BSTNode<T> implements IAVLTreeNode<T> {
 
     get balanceFactor(): number {
         return (this.left?.height || 0) - (this.right?.height || 0);
@@ -45,8 +58,7 @@ export const AVLTreeNode: IAVLTreeNodeConstructor = class AVLTreeNode<T> extends
     }
 
 }
-
-export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = class RedBlackTreeNode<T> extends AVLTreeNode<T> implements IRedBlackTreeNode<T> {
+class RBTNode<T> extends AVLNode<T> implements IRedBlackTreeNode<T> {
 
     isLeftChild(compare: ICompareFunc<T>): boolean {
         return compare(this.value).isEqualTo(this.parent?.left?.value);
@@ -95,3 +107,7 @@ export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = class RedBlackTree
     }
 
 }
+
+export const BinaryTreeNode: IBinaryTreeNodeConstructor = BSTNode;
+export const AVLTreeNode: IAVLTreeNodeConstructor = AVLNode;
+export const RedBlackTreeNode: IRedBlackTreeNodeConstructor = RBTNode;

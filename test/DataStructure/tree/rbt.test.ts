@@ -1,9 +1,10 @@
 import { inRed, inBlack, inGreen } from "@Utils/emphasize";
-import { BinaryRedBlackTree } from "@DataStructure/tree";
+import { BinaryTreeFactory } from "@DataStructure/tree";
+import { TreeTypes } from "@Utils/types";
 
 describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")}`, () => {
     const elements = [8, 4, 3, 1, 2, 11, 15, 10, 9]
-    const RBT = new BinaryRedBlackTree<number>();
+    const RBT = BinaryTreeFactory.create<number>(TreeTypes.RBT);
 
     beforeAll(() => {
         for (const elem of elements) {

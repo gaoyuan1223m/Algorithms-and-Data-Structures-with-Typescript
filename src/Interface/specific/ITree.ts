@@ -74,13 +74,18 @@ export interface ITree<T> extends ICollection<T> {
 }
 
 export interface ITreeConstructor {
-    new <T>(compare?: ICompareFunc<T>): ITree<T>
+    new <T>(compare: ICompareFunc<T>): ITree<T>
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {
     left: IBinaryTreeNode<T>;
     right: IBinaryTreeNode<T>;
     parent: IBinaryTreeNode<T>;
+
+    isLeftChild(compare: ICompareFunc<T>): boolean;
+    isRightChild(compare: ICompareFunc<T>): boolean;
+
+    isLeaf(): boolean;
 }
 
 export interface IAVLTreeNode<T> extends IBinaryTreeNode<T> {

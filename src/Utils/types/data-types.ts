@@ -13,7 +13,7 @@ export enum ListTypes {
 export enum TreeTypes {
     BST = "BINARY SEARCH TREE",
     AVL = "AVL TREE",
-    R_B = "RED BLACK TREE"
+    RBT = "RED BLACK TREE"
 }
 
 export enum TreeNodeColor {

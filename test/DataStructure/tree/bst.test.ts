@@ -1,10 +1,11 @@
-import { BinarySearchTree } from "@DataStructure/tree";
-import { TreePrintOrder } from "@Utils/types";
+
+import { TreePrintOrder, TreeTypes } from "@Utils/types";
+import { BinaryTreeFactory } from "@DataStructure/tree";
 
 describe(`Test for Binary Search Tree`, () => {
 
     const elements = [7, 5, 9, 4, 6, 3, 8, 11, 12, 10];
-    const BST = new BinarySearchTree<number>();
+    const BST = BinaryTreeFactory.create<number>(TreeTypes.BST);
     const elements2 = [8, 5, 10, 3, 7, 9, 11, 2, 4, 6];
 
     beforeAll(() => {

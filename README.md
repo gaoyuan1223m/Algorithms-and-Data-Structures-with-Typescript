@@ -81,11 +81,13 @@ const dynamicArray = ArrayFactory.create<number>(capacity, incremental);
 
 - AVL
 
-- Red-Black
+- RBT
 
 ### Hashing
 
 - Dictionary
+
+- UniqueSet
 
 ### Graph
 
