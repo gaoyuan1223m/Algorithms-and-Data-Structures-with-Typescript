@@ -20,11 +20,11 @@ class BSTNode<T> implements IBinaryTreeNode<T> {
     ) { }
 
     isLeftChild(compare: ICompareFunc<T>): boolean {
-        return compare(this.value).isEqualTo(this.parent?.left?.value);
+        return !!this.parent && compare(this.value).isEqualTo(this.parent.left?.value);
     }
 
     isRightChild(compare: ICompareFunc<T>): boolean {
-        return compare(this.value).isEqualTo(this.parent?.right?.value);
+        return !!this.parent && compare(this.value).isEqualTo(this.parent.right?.value);
     }
 
     isLeaf(): boolean {
