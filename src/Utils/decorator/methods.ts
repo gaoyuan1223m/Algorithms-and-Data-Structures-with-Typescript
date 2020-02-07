@@ -1,5 +1,6 @@
 import { Validator } from "./utils";
 import { inRed } from "@Utils/emphasize";
+import { Errors } from "@Utils/error-handling";
 
 export function Validation(type?: string) {
 
@@ -47,3 +48,22 @@ export function Validation(type?: string) {
         }
     }
 }
+
+export function override() {
+    return (target: any, key: string, descriptor: PropertyDescriptor) => {
+
+        if (typeof target.__proto__[key] !== 'function') {
+            throw inRed(Errors.Msg.OverrideError);
+        }
+
+        const originFn = descriptor.value;
+
+        descriptor.value = function (...args: any[]) {
+            return originFn.call(this, ...args);
+        }
+    }
+}
+/**
+ * 1. increase readebility
+ * 2. check parent class has the method of the same name
+ */

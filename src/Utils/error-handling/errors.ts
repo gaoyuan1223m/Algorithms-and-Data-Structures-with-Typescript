@@ -75,7 +75,8 @@ enum Msg {
     NotSafeInteger = 'is NOT an Integer, or it is But UNSAFE',
     NotPositiveInteger = 'is NOT a Positive Integer',
     BeyondLowerLimit = "It is less than Lower Limit",
-    BeyondUppperLimit = "It is over Upper Limit"
+    BeyondUppperLimit = "It is over Upper Limit",
+    OverrideError = 'Cannot override the method which does NOT exist on its Parent Class'
 }
 
 export const Errors = {

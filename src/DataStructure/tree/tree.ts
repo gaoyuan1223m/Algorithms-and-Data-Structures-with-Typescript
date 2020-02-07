@@ -5,12 +5,13 @@ import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
+import { override } from "@Utils/decorator";
 
 class BST<T> implements ITree<T> {
 
     protected _rootNode: IBinaryTreeNode<T>;
     protected _size: number;
-    private _printStr: string;
+    protected _printStr: string;
 
 
     get size(): number {
@@ -58,69 +59,19 @@ class BST<T> implements ITree<T> {
 
         if (!path) return -1;
 
-        return path?.length;
+        return path.length;
     }
 
     contains(value: T): boolean {
-        if (this._size === 0) return false;
-
-        let pointer = this._rootNode;
-
-        do {
-            if (this.compare(pointer?.value).isEqualTo(value)) return true;
-
-            if (this.compare(pointer.value).isLessThan(value)) {
-                pointer = pointer.right;
-            } else {
-                pointer = pointer.left;
-            }
-        } while (pointer?.left || pointer?.right);
-
-        return this.compare(pointer?.value).isEqualTo(value);
+        return !!this._getTreeNodeByValue(value);
     }
 
     findPath(value: T): number[] {
-        let pathArr: number[] = [];
-        let pointer = this._rootNode;
-        if (!pointer) return null;
-
-        do {
-            if (this.compare(pointer?.value).isEqualTo(value)) return pathArr;
-
-            if (this.compare(pointer.value).isLessThan(value)) {
-                pathArr.push(1);
-                pointer = pointer.right;
-            } else {
-                pathArr.push(0);
-                pointer = pointer.left;
-            }
-        } while (pointer?.left || pointer?.right)
-
-        if (this.compare(pointer?.value).isEqualTo(value)) {
-            return pathArr;
-        }
-
-        return null;
+        return this._getTreeNodeByValue(value)?.path || null;
     }
 
     byPath(...path: number[]): T {
-        if (!path) return null;
-
-        let pointer = this._rootNode;
-
-        for (const n of path) {
-            if (n !== 0 && n !== 1) continue;
-
-            if (n) {
-                if (!pointer.right) return null;
-                pointer = pointer.right;
-            } else {
-                if (!pointer.left) return null;
-                pointer = pointer.left;
-            }
-        }
-
-        return pointer?.value;
+        return this._getTreeNodeByPath(path)?.value || null;
     }
 
     isComplete(): boolean {
@@ -306,6 +257,11 @@ class BST<T> implements ITree<T> {
     }
 
     //@override
+    protected _afterRemoveTreeNode(treeNode: IBinaryTreeNode<T>): this {
+        return this;
+    }
+
+    //@override
     protected _createTreeNode(value: T, parent: IBinaryTreeNode<T> = null): IBinaryTreeNode<T> {
         return new BinaryTreeNode<T>(value, parent);
     }
@@ -333,8 +289,55 @@ class BST<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _removeByIteration(treeNode: IBinaryTreeNode<T>, node: T): IBinaryTreeNode<T> {
-        return treeNode;
+    private _removeByIteration(value: T): this {
+        if (!this._isValidValue(value)) return this;
+
+        const node = this._getTreeNodeByValue(value);
+        if (!node) return this;
+
+        let { pointer, path } = node;
+
+        return this;
+    }
+
+    protected _getTreeNodeByValue(value: T): { pointer: IBinaryTreeNode<T>, path: number[] } {
+        if (!this._rootNode) return null;
+
+        let pointer = this._rootNode;
+        let path: number[] = [];
+        do {
+            if (this.compare(value).isLargerThan(pointer?.value)) {
+                pointer = pointer.right;
+                path.push(1);
+            } else if (this.compare(value).isLessThan(pointer?.value)) {
+                pointer = pointer.left;
+                path.push(0);
+            }
+
+            if (this.compare(value).isEqualTo(pointer?.value)) return { pointer, path };
+
+        } while (pointer?.left || pointer?.right)
+
+        return null;
+    }
+
+    protected _getTreeNodeByPath(path: number[]): IBinaryTreeNode<T> {
+        if (!path) return null;
+
+        let pointer = this._rootNode;
+
+        for (const n of path) {
+            if (n !== 0 && n !== 1) continue;
+
+            if (n) {
+                if (!pointer.right) return null;
+                pointer = pointer.right;
+            } else {
+                if (!pointer.left) return null;
+                pointer = pointer.left;
+            }
+        }
+        return pointer;
     }
 
     private _findPathByRecursion(treeNode: IBinaryTreeNode<T>, node: T): number {
@@ -512,12 +515,11 @@ class AVL<T> extends BST<T> {
         return this._rootNode?.height || 0;
     }
 
-
     constructor(protected compare: ICompareFunc<T> = valueTypeComparison) {
         super(compare)
     }
 
-    // override
+    @override()
     protected _afterAddTreeNode(treeNode: IAVLTreeNode<T>): this {
         let pointer = treeNode;
 
@@ -531,7 +533,7 @@ class AVL<T> extends BST<T> {
         return this;
     }
 
-    //@override
+    @override()
     protected _createTreeNode(value: T, parent: IAVLTreeNode<T> = null): IAVLTreeNode<T> {
         return new AVLTreeNode<T>(value, parent);
     }
@@ -628,7 +630,7 @@ class RBT<T> extends AVL<T> {
         super(compare);
     }
 
-    //override
+    @override()
     protected _afterAddTreeNode(treeNode: IRedBlackTreeNode<T>): this {
         let child = treeNode;
         let parent = child.parent as IRedBlackTreeNode<T>;
@@ -672,11 +674,12 @@ class RBT<T> extends AVL<T> {
         return this;
     }
 
-    // override
+    @override()
     protected _createTreeNode(value: T, parent: IRedBlackTreeNode<T> = null): IRedBlackTreeNode<T> {
         return new RedBlackTreeNode<T>(value, parent);
     }
 
+    @override()
     protected _rebalanceTree(treeNode: IRedBlackTreeNode<T>): this {
         let child = treeNode;
         let parent = child.parent as IRedBlackTreeNode<T>
@@ -704,6 +707,7 @@ class RBT<T> extends AVL<T> {
         return this;
     }
 
+    @override()
     protected _rotateToLeft(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.left) {
             child.left.parent = parent;
@@ -728,6 +732,7 @@ class RBT<T> extends AVL<T> {
         child.setBlack();
     }
 
+    @override()
     protected _rotateToRight(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.right) {
             child.right.parent = parent;
