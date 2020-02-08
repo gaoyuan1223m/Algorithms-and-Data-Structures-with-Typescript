@@ -7,6 +7,8 @@ interface ISimpleArray<T> {
     [index: number]: T
 }
 
+type CompareFn<T> = (v1: T, v2: T) => boolean;
+
 export abstract class AbstractHeap<T> implements IHeap<T> {
 
     abstract add(value: T): this;
@@ -47,25 +49,25 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
     protected _removeFromTail(): T {
         const elem = this.tail;
 
-        if(!this._isValidValue(elem)) return null;
+        if (!this._isValidValue(elem)) return null;
 
         delete this._elements[--this._size];
         return elem;
     }
 
     protected _addAtTail(value: T): number {
-        if(!this._isValidValue(value)){
+        if (!this._isValidValue(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
         this._elements[this._size++] = value;
         return this._size - 1;
     }
 
-    protected _addAtPeak(value: T): this {        
-        if(!this._isValidValue(value)){
+    protected _addAtPeak(value: T): this {
+        if (!this._isValidValue(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
-        
+
         if (this.isEmpty()) {
             this._size += 1;
         }
@@ -109,6 +111,47 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
         return Math.floor(this._size / 2);
     }
 
+    protected _siftUp(index: number, compareFn: CompareFn<T>): this {
+        const value = this._elements[index];
+        while (this._hasParent(index)) {
+            let parentIndex = this._getParentIdx(index);
+            let parentValue = this._elements[parentIndex]
+
+            if (compareFn(parentValue, value)) break;
+
+            this._elements[index] = parentValue;
+            index = parentIndex;
+        }
+        this._elements[index] = value;
+        return this;
+    }
+
+    protected _siftDown(index: number, compareFn: CompareFn<T>): this {
+        const value = this._elements[index];
+        while (this._hasChild(index)) {
+            // It must have left node if having child
+            let leftIndex = this._getLeftChildIndex(index);
+            let leftValue = this._elements[leftIndex];
+
+            let rightIndex = leftIndex + 1;
+            let rightValue = this._elements[rightIndex];
+
+            // in case right node is large than the left one
+            if (this._hasRightChild(index) && compareFn(rightValue, leftValue)) {
+                leftIndex = rightIndex;
+                leftValue = rightValue;
+            }
+
+            if (!compareFn(leftValue, value)) break;
+
+            this._elements[index] = leftValue;
+            index = leftIndex;
+        }
+
+        this._elements[index] = value;
+        return this;
+    }
+
     private __init__(): this {
         this._size = 0;
         this._elements = {} as ISimpleArray<T>;
@@ -123,7 +166,7 @@ export abstract class AbstractHeap<T> implements IHeap<T> {
             str += `, `;
         }
         str += ` ]`;
-        Console.Info(str);
+        Console.OK(str);
         return this;
     }
 

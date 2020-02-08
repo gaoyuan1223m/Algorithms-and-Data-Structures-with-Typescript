@@ -11,7 +11,7 @@ class Factory implements IFactory {
     create<T>(type: BinaryHeapTypes, compare: ICompareFunc<T> = valueTypeComparison): IHeap<T> {
         if (type === BinaryHeapTypes.MAX) return new MaxBinaryHeap<T>(compare);
 
-        if (type === BinaryHeapTypes.MIN) return new MaxBinaryHeap<T>(compare); //need to revised
+        if (type === BinaryHeapTypes.MIN) return new MinBinaryHeap<T>(compare); //need to revised
 
         throw new Errors.InvalidDataType(Errors.Msg.InvalidDataType);
     }
@@ -21,13 +21,15 @@ class Factory implements IFactory {
  */
 class MaxBH<T> extends AbstractHeap<T> {
 
+    private readonly fn = (parent: T, child: T) => this.compare(parent).isLargerOrEqualTo(child);
+
     constructor(protected compare: ICompareFunc<T>) {
         super(compare);
     }
 
     add(value: T): this {
         const newElementIndex = this._addAtTail(value);
-        return this._siftUp(newElementIndex);
+        return this._siftUp(newElementIndex, this.fn);
     }
 
     removePeak(): T {
@@ -38,7 +40,7 @@ class MaxBH<T> extends AbstractHeap<T> {
         if (this.isEmpty()) return peak;
 
         this._addAtPeak(tail);
-        this._siftDown(0);
+        this._siftDown(0, this.fn);
 
         return peak;
     }
@@ -50,52 +52,54 @@ class MaxBH<T> extends AbstractHeap<T> {
 
         if (!this._isValidValue(peak) || this._size === 1) return peak;
 
-        this._siftDown(0);
+        this._siftDown(0, this.fn);
 
         return peak;
     }
 
-    private _siftUp(index: number): this {
-        const value = this._elements[index];
-        while (this._hasParent(index)) {
-            let parentIndex = this._getParentIdx(index);
-            let parentValue = this._elements[parentIndex]
+}
 
-            if (this.compare(parentValue).isLargerOrEqualTo(value)) break;
+class MinBH<T> extends AbstractHeap<T> {
 
-            this._elements[index] = parentValue;
-            index = parentIndex;
-        }
-        this._elements[index] = value;
-        return this;
+    private readonly fn = (parent: T, child: T) => this.compare(parent).isLessOrEqualTo(child);
+
+    constructor(protected compare: ICompareFunc<T>) {
+        super(compare);
     }
 
-    private _siftDown(index: number): void {
-        const value = this._elements[index];
-        while (this._hasChild(index)) {
-            // must have left node
-            let childIndex = this._getLeftChildIndex(index);
-            let childValue = this._elements[childIndex];
+    add(value: T): this {
+        const newElementIndex = this._addAtTail(value);
+        return this._siftUp(newElementIndex, this.fn);
+    }
 
-            let rightIndex = childIndex + 1;
+    removePeak(): T {
+        const peak = this.peak;
+        if (!this._isValidValue(peak)) return peak;
 
-            // in case right node is large than the left one
-            if (this._hasRightChild(index)
-                && this.compare(this._elements[rightIndex]).isLargerThan(childValue)) {
-                childValue = this._elements[childIndex = rightIndex];
-            }
+        const tail = this._removeFromTail();
+        if (this.isEmpty()) return peak;
 
-            if (this.compare(childValue).isLessThan(value)) break;
+        this._addAtPeak(tail);
+        this._siftDown(0, this.fn);
 
-            this._elements[index] = childValue;
-            index = childIndex;
-        }
+        return peak;
+    }
 
-        this._elements[index] = value;
+    replacePeakBy(value: T): T {
+        const peak = this.peak;
+
+        this._addAtPeak(value);
+
+        if (!this._isValidValue(peak) || this._size === 1) return peak;
+
+        this._siftDown(0, this.fn);
+
+        return peak;
     }
 
 }
 
 const MaxBinaryHeap: IHeapConstructor = MaxBH
+const MinBinaryHeap: IHeapConstructor = MinBH
 
 export const HeapFactory = new Factory();
