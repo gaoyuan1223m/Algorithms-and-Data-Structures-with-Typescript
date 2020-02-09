@@ -96,11 +96,35 @@ describe(`Test for AVL Tree [BASCIS]`, () => {
         // [7, 5, 9, 4, 6, 8, 11, 3, 10, 12]
     });
 
-    xit(`#remove LEAF elements if existed`, () => {
-        expect(AVL.remove(6).size).toBe(elements.length - 1);
+    it(`#${inRed("REMOVE")} "${inGreen("LEAF: 15")}" if existed`, () => {
+        expect(AVL.remove(15).size).toBe(elements.length - 2);
         expect(AVL.height).toBe(4);
         // AVL.print(TreePrintOrder.InOrder);
-        // [3, 4, 5, 7, 8, 9 ,10, 11, 12]
+    });
+
+    it(`#${inRed("REMOVE")} "${inGreen("LEAF: 11")}" if existed`, () => {
+        expect(AVL.remove(11).size).toBe(elements.length - 3);
+        expect(AVL.height).toBe(3);
+        // AVL.print(TreePrintOrder.InOrder);
+    });
+
+    it(`#${inRed("REMOVE")} "${inGreen("2-Degree: 4")}" if existed`, () => {
+        expect(AVL.remove(4).size).toBe(elements.length - 4);
+        expect(AVL.height).toBe(3);
+        // AVL.print(TreePrintOrder.InOrder);
+    });
+
+    it(`#${inRed("REMOVE")} "${inGreen("1-Degree: 2")}" if existed`, () => {
+        expect(AVL.remove(2).size).toBe(elements.length - 5);
+        expect(AVL.height).toBe(3);
+        // AVL.print(TreePrintOrder.InOrder);
+    });
+
+    it(`#${inRed("REMOVE")} "${inGreen("LEAF: 1")}" if existed`, () => {
+        expect(AVL.remove(1).size).toBe(elements.length - 6);
+        expect(AVL.height).toBe(3);
+        expect(AVL.rootValue).toBe(9);
+        // AVL.print(TreePrintOrder.InOrder);
     });
 
     xit(`#remove PARENT elements with ONE child if existed`, () => {

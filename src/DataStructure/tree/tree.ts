@@ -1,6 +1,6 @@
 import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
 import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -49,9 +49,9 @@ class BST<T> implements ITree<T> {
     }
 
     appendRange(...values: T[]): this {
-        if (!values) return this;
-
-        values.forEach(val => { this.append(val) });
+        for (const value of values) {
+            this.append(value);
+        }
         return this;
     }
 
@@ -103,9 +103,9 @@ class BST<T> implements ITree<T> {
     }
 
     remove(value: T): this {
+        return this._removeByIteration(value);
         // this._rootNode = this._removeByRecursion(this._rootNode, value);
-        this._removeByIteration(value);
-        return this;
+        // return this;
     }
 
     isEmpty(): boolean {
@@ -592,7 +592,6 @@ class BST<T> implements ITree<T> {
     protected _isValidValue(value: T) {
         return value !== undefined
             && value !== null
-            && Number(value) !== NaN
             && Number(value) !== Infinity
             && String(value) !== ""
     }
@@ -621,6 +620,19 @@ class AVL<T> extends BST<T> {
             } else {
                 return this._rebalanceTree(pointer);
             }
+        }
+        return this;
+    }
+
+    @override()
+    protected _afterRemoveTreeNode(treeNode: IAVLTreeNode<T>): this {
+        while(treeNode) {
+            if(treeNode.isBalanced){
+                treeNode.updateHeight();
+            } else {
+                this._rebalanceTree(treeNode);
+            }
+            treeNode = treeNode.parent as IAVLTreeNode<T>;
         }
         return this;
     }
