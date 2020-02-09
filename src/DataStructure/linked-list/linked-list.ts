@@ -1,6 +1,6 @@
 import { ILinkedList, ISinglyListNode, IArray, ITree, IDoublyListNode } from "@Interface/specific";
 import { NOT_EXISTED, ICompareFunc, valueTypeComparison } from "@Utils/compare";
-import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder, PrintOrder } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder, PrintOrder, getElemType, TYPES } from "@Utils/types";
 import { SinglyListNode, DoublyListNode } from "@Entity/concrete";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -58,14 +58,11 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
 
     @Validation('value')
     append(@ValidateParams() value: T): this {
-        // if (!this._isValid(value)) {
-        //     throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        // }
-
         return this._addTailNode(new SinglyListNode<T>(value));
     }
 
-    insertByIndex(value: T, index: number): this {
+    @Validation('value')
+    insertByIndex(@ValidateParams() value: T, @ValidateParams('number') index: number): this {
         if (!this._isValid(value)) {
             throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
         }
@@ -123,9 +120,6 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
 
     @Validation()
     updateByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
-        // if (!this._isValid(value)) {
-        //     throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        // }
         const idx = this._getValidIndex(index);
         return this._updateByValidIndex(value, idx);
     }
@@ -428,7 +422,20 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _isValid(value: T) {
-        return value !== undefined && value !== null && !isNaN(Number(value)) && isFinite(Number(value)) && String(value) !== "";
+
+        if (value == null) {
+            return false;
+        }
+
+        if(getElemType(value) === TYPES.NUMBER) {
+            return !isNaN(Number(value)) && isFinite(Number(value));
+        }
+
+        if(getElemType(value) === TYPES.STRING) {
+            return String(value) !== ""
+        }
+        
+        return true;
     }
 
     protected _clearCurrentList(): this {
