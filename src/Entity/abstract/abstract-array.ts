@@ -2,7 +2,7 @@ import { IArray, ILinkedList, ITree } from "@Interface/specific";
 import { IList } from "@Interface/common";
 import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
-import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
+import { ICompareFunc } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { QuickSort, SortMethods } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
@@ -56,6 +56,8 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     abstract append(value: T): this;
 
+    abstract map<U>(callbackfn: (value: T, index: number, current: IArray<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IArray<U>
+
     toArray(arrayType: ArrayTypes): IArray<T> {
         const currLength = this._capacity;
         const array = ArrayFactory.create<T>(arrayType, this._compare, currLength);
@@ -92,7 +94,6 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return tree;
     }
 
-    abstract map<U>(callbackfn: (value: T, index: number, current: IList<T>) => U, ICompareFunc?: ICompareFunc<U>, thisArg?: any): IList<U>
 
     @Validation('index')
     removeByIndex(@ValidateParams() index: number): T {
@@ -285,6 +286,5 @@ export abstract class AbstractArray<T> implements IArray<T> {
         Console.OK(str);
         return this;
     }
-
 
 }
