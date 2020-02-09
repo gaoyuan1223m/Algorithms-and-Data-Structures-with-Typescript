@@ -8,6 +8,7 @@ import { SortMethods } from "@Algorithm/sort";
 import { ArrayFactory } from "@DataStructure/array";
 import { IFactory } from "@Interface/common";
 import { BinaryTreeFactory } from "@DataStructure/tree";
+import { Validation, ValidateParams } from "@Utils/decorator";
 
 export class Factory implements IFactory {
 
@@ -55,10 +56,11 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._size;
     }
 
-    append(value: T): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        }
+    @Validation('value')
+    append(@ValidateParams() value: T): this {
+        // if (!this._isValid(value)) {
+        //     throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        // }
 
         return this._addTailNode(new SinglyListNode<T>(value));
     }
@@ -119,10 +121,11 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return this._removeByValidIndex(idx);
     }
 
-    updateByIndex(value: T, index: number): this {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        }
+    @Validation()
+    updateByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
+        // if (!this._isValid(value)) {
+        //     throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
+        // }
         const idx = this._getValidIndex(index);
         return this._updateByValidIndex(value, idx);
     }
@@ -133,19 +136,18 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
         return pointer.value;
     }
 
-    indexOf(value: T): number {
-        if (!this._isValid(value)) {
-            throw new Errors.InvalidArgument(Errors.Msg.InvalidArg);
-        }
-
+    @Validation('value')
+    indexOf(@ValidateParams() value: T): number {
         return this._indexOf(value);
     }
 
-    contains(value: T): boolean {
+    @Validation('value')
+    contains(@ValidateParams() value: T): boolean {
         return this.indexOf(value) !== NOT_EXISTED;
     }
 
-    remove(value: T): this {
+    @Validation('value')
+    remove(@ValidateParams() value: T): this {
         const idx = this.indexOf(value);
 
         if (idx === NOT_EXISTED) return this;
@@ -400,7 +402,9 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     protected _indexOf(validValue: T): number {
         let i = -1;
         let p = this._headPointer;
-        while (p && i < this._size) {
+        const length = this._size;
+
+        while (p && i < length) {
             i += 1;
             if (this.compare(p.value).isEqualTo(validValue)) return i;
             p = p.next;
@@ -424,11 +428,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
     }
 
     protected _isValid(value: T) {
-        return value !== undefined
-            && value !== null
-            && Number(value) !== NaN
-            && Number(value) !== Infinity
-            && String(value) !== "";
+        return value !== undefined && value !== null && !isNaN(Number(value)) && isFinite(Number(value)) && String(value) !== "";
     }
 
     protected _clearCurrentList(): this {

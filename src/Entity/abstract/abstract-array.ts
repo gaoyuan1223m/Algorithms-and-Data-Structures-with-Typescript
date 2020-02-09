@@ -96,7 +96,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
 
     @Validation('index')
-    removeByIndex(@ValidateParams() index: number): T {
+    removeByIndex(@ValidateParams('number') index: number): T {
 
         const idx = this._getValidIndex(index);
 
@@ -127,7 +127,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     @Validation()
-    updateByIndex(@ValidateParams() value: T, @ValidateParams() index: number): this {
+    updateByIndex(@ValidateParams() value: T, @ValidateParams('number') index: number): this {
 
         const idx = this._getValidIndex(index);
         this[idx] = value;
@@ -136,7 +136,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     @Validation('index')
-    getByIndex(@ValidateParams() index: number): T {
+    getByIndex(@ValidateParams('number') index: number): T {
         return this[this._getValidIndex(index)]
     }
 

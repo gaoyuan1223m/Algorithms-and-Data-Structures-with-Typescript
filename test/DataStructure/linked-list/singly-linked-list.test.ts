@@ -2,6 +2,7 @@ import { LinkedListFactory } from "@DataStructure/linked-list";
 import { ILinkedList } from "@Interface/specific";
 import { Errors, catchErr } from "@Utils/error-handling";
 import { ListTypes, ArrayTypes, TreeTypes } from "@Utils/types";
+import { inRed } from "@Utils/emphasize";
 
 
 describe(`Test for SinglyLinkedList`, () => {
@@ -35,14 +36,22 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.head).toBe(5)
         expect(sll.tail).toBe(35);
         expect(sll.size).toBe(4);
-    })
+    });
 
-    it(`getByIndex - get -1.5`, () => {
+    it(`#append - invalid element`, () => {
+        expect(catchErr(sll.append.bind(sll))(null)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.append.bind(sll))(undefined)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.append.bind(sll))(NaN)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.append.bind(sll))(Infinity)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.append.bind(sll))("")).toContain(`Expect "number" but found "string"`);
+    });
+
+    it(`#getByIndex - get -1.5`, () => {
         expect<string>(catchErr(sll.getByIndex.bind(sll))(-1.5))
             .toBe<string>(Errors.Msg.InvalidIdx);
     })
 
-    it(`getByIndex - get 100`, () => {
+    it(`#getByIndex - get 100`, () => {
         expect<string>(catchErr(sll.getByIndex.bind(sll))(100))
             .toBe<string>(Errors.Msg.BeyondBoundary)
     })
@@ -55,6 +64,19 @@ describe(`Test for SinglyLinkedList`, () => {
     it(`getByIndex - get -2`, () => {
         const value = sll.getByIndex(-2);
         expect(value).toBe(0);
+    });
+
+    it(`${inRed("#UPDATE")} - invalid elements`, () => {
+        expect(catchErr(sll.updateByIndex.bind(sll))(null, 2)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))(undefined, 2)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))(NaN, 2)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))(Infinity, 2)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))("", 3)).toContain(`Expect "number" but found "string"`);
+
+        expect(catchErr(sll.updateByIndex.bind(sll))("5", "1")).toContain(Errors.Msg.NotANumber);
+        expect(catchErr(sll.updateByIndex.bind(sll))(5, NaN)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))(5, Infinity)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.updateByIndex.bind(sll))(5, -1.5)).toContain(Errors.Msg.InvalidIdx);
     });
 
     it(`getEndNodes - step 1`, () => {
@@ -105,9 +127,13 @@ describe(`Test for SinglyLinkedList`, () => {
         expect(sll.contains(321)).toBe(false);
     });
 
-    it(`IndexOf - Invalid Element`, () => {
-        expect<string>(catchErr(sll.indexOf.bind(sll))(undefined))
-            .toBe<string>(Errors.Msg.InvalidArg);
+    it(`IndexOf - Invalid Elements`, () => {
+        expect(catchErr(sll.indexOf.bind(sll))(null)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.indexOf.bind(sll))(undefined)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.indexOf.bind(sll))(NaN)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.indexOf.bind(sll))(Infinity)).toContain(Errors.Msg.InvalidArg);
+        expect(catchErr(sll.indexOf.bind(sll))("")).toContain(`Expect "number" but found "string"`);
+
     });
 
     it(`IndexOf - 123 or 321`, () => {
@@ -183,7 +209,7 @@ describe(`Test for SinglyLinkedList`, () => {
             .insertAtHead(23, 45)
             // .print()
             .reverse()
-            // .print();
+        // .print();
 
         expect(sll.head).toBe(23);
         expect(sll.tail).toBe(45);
@@ -203,7 +229,7 @@ describe(`Test for SinglyLinkedList`, () => {
             .insertAtTail(34, 18, 19, 21)
             // .print()
             .reverse()
-            // .print();
+        // .print();
         expect(sll.head).toBe(21);
         expect(sll.tail).toBe(31);
     })

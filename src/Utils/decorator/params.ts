@@ -1,7 +1,7 @@
 import { Validator } from "./utils"
 
-export function ValidateParams() {
+export function ValidateParams(dataType: string = 'number') {
     return (target: Object, key: string, index: number) => {
-        Validator.register(target, key, index);
+        Validator.register(target, key, index, dataType);
     }
 }
