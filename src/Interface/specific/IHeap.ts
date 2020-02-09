@@ -2,6 +2,7 @@ import { ICollectionBase } from "@Interface/common";
 import { ICompareFunc } from "@Utils/compare";
 
 
+
 export interface IHeap<T> extends ICollectionBase {
 
     /**
@@ -28,7 +29,7 @@ export interface IHeap<T> extends ICollectionBase {
 }
 
 export interface IHeapConstructor {
-    new <T>(compare?: ICompareFunc<T>): IHeap<T>
+    new <T>(compare: ICompareFunc<T>): IHeap<T>
 }
 
 /**

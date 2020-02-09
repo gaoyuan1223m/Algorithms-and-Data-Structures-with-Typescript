@@ -64,6 +64,7 @@ enum Msg {
     NoMoreSpace = 'Current Collection is Full!',
     InvalidArg = 'Arg cannot be Null, Undefined, NAN, INFINITY or Empty String!',
     InvalidIdx = 'Index should be safe INTEGER, both POSITIVE or NEGATIVE are acceptable!',
+    NotANumber = 'is NOT a NUMBER',
     InvalidPath = 'Invalid path number, only 0 or 1 is acceptable',
     InvalidDataType = 'Invalid input of Data Type',
     InvalidDictKey = 'Visited Key does NOT exist',

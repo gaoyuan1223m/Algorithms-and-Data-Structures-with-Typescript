@@ -1,6 +1,6 @@
 import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
 import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -49,9 +49,9 @@ class BST<T> implements ITree<T> {
     }
 
     appendRange(...values: T[]): this {
-        if (!values) return this;
-
-        values.forEach(val => { this.append(val) });
+        for (const value of values) {
+            this.append(value);
+        }
         return this;
     }
 
@@ -103,9 +103,9 @@ class BST<T> implements ITree<T> {
     }
 
     remove(value: T): this {
+        return this._removeByIteration(value);
         // this._rootNode = this._removeByRecursion(this._rootNode, value);
-        this._removeByIteration(value);
-        return this;
+        // return this;
     }
 
     isEmpty(): boolean {
@@ -300,82 +300,72 @@ class BST<T> implements ITree<T> {
         let { pointer: delNode } = node;
 
         if (delNode.isLeaf()) {
-            this._removeNodeWithZeroDegree(delNode)
-            return this._afterRemoveTreeNode(delNode);
+            const delNodeParent = this._removeNodeWithZeroDegree(delNode)
+            return this._afterRemoveTreeNode(delNodeParent);
         }
 
         if (!delNode.left || !delNode.right) {
-            this._removeNodeWithOneDegree(delNode);
-            return this._afterRemoveTreeNode(delNode);
+            const delNodeParent = this._removeNodeWithOneDegree(delNode);
+            return this._afterRemoveTreeNode(delNodeParent);
         }
 
-        this._removeNodeWithTwoDegree(delNode);
-        return this._afterRemoveTreeNode(delNode);
+        const delNodeParent = this._removeNodeWithTwoDegree(delNode);
+        return this._afterRemoveTreeNode(delNodeParent);
     }
 
-    private _removeNodeWithZeroDegree(treeNode: IBinaryTreeNode<T>): void {
-        if (!treeNode.parent) {
-            this.__init__(); // it's root node
+    private _removeNodeWithZeroDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+        const parent = treeNode.parent;
+
+        if (!parent) {
+            this.__init__();
+            return null; // it's root node
         }
 
         if (treeNode.isLeftChild(this.compare)) {
-            treeNode.parent.left = null;
+            parent.left = null;
         } else {
-            treeNode.parent.right = null;
+            parent.right = null;
         }
+        treeNode.parent = null;
 
         this._size -= 1;
+        return parent;
     }
 
-    private _removeNodeWithOneDegree(treeNode: IBinaryTreeNode<T>): void {
+    private _removeNodeWithOneDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+        const grandparent = treeNode.parent;
 
-        if (!treeNode.parent) {
+        if (!grandparent) {
             this._rootNode = treeNode.left || treeNode.right;
             this._rootNode.parent = null;
             this._size -= 1;
-            return;
+            return null;
         }
 
+        const child = treeNode.left || treeNode.right; // 
+        child.parent = grandparent;
 
-        if (!treeNode.left) { // left is null
-
-            treeNode.right.parent = treeNode.parent;
-
-            if (treeNode.isLeftChild(this.compare)) {
-                treeNode.parent.left = treeNode.right;
-            } else {
-                treeNode.parent.right = treeNode.right;
-            }
-
-            treeNode.right = null;
-
+        if (treeNode.isLeftChild(this.compare)) {
+            grandparent.left = child;
         } else {
-
-            treeNode.left.parent = treeNode.parent;
-
-            if (treeNode.isLeftChild(this.compare)) {
-                treeNode.parent.left = treeNode.left;
-            } else {
-                treeNode.parent.right = treeNode.left;
-            }
-
-            treeNode.left = null;
+            grandparent.right = child;
         }
 
         this._size -= 1;
-
+        return grandparent;
     }
 
-    private _removeNodeWithTwoDegree(treeNode: IBinaryTreeNode<T>): void {
-        const predecessor = this._getPredecessorNode(treeNode);
+    private _removeNodeWithTwoDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
+        // 2-degree node should have a predecessor node
+        const predecessor = this._getPredecessorNode(treeNode); 
 
         treeNode.value = predecessor.value;
 
         if (predecessor.isLeaf()) {
-            this._removeNodeWithZeroDegree(predecessor)
-        } else {
-            this._removeNodeWithOneDegree(predecessor);
+            return this._removeNodeWithZeroDegree(predecessor)
         }
+
+        return this._removeNodeWithOneDegree(predecessor);
     }
 
     protected _getTreeNodeByValue(value: T): { pointer: IBinaryTreeNode<T>, path: number[] } {
@@ -602,7 +592,6 @@ class BST<T> implements ITree<T> {
     protected _isValidValue(value: T) {
         return value !== undefined
             && value !== null
-            && Number(value) !== NaN
             && Number(value) !== Infinity
             && String(value) !== ""
     }
@@ -631,6 +620,19 @@ class AVL<T> extends BST<T> {
             } else {
                 return this._rebalanceTree(pointer);
             }
+        }
+        return this;
+    }
+
+    @override()
+    protected _afterRemoveTreeNode(treeNode: IAVLTreeNode<T>): this {
+        while(treeNode) {
+            if(treeNode.isBalanced){
+                treeNode.updateHeight();
+            } else {
+                this._rebalanceTree(treeNode);
+            }
+            treeNode = treeNode.parent as IAVLTreeNode<T>;
         }
         return this;
     }

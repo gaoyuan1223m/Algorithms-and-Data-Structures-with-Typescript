@@ -38,6 +38,7 @@ export interface IComparisonKeys<T> {
 }
 
 export type ICompareFunc<T> = (value1: T) => IComparisonKeys<T>;
+export type CompareFn<T> = (value1: T, value2: T) => boolean;
 
 export function valueTypeComparison<T>(value1: T): IComparisonKeys<T> {
     return {
