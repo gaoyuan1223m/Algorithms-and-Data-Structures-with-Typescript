@@ -1,32 +1,55 @@
-import { IStack } from "@Interface/specific";
+import { IStack, IQueue } from "@Interface/specific";
+import { Queue } from "@DataStructure/stack-queue";
 
 
-export class StackBy2Queue<T> implements IStack<T> {
+export class StackBy2Queues<T> implements IStack<T> {
 
-    
-    peek: T; 
-    size: number;   
+    protected _queue1: IQueue<T>;
+    protected _queue2: IQueue<T>;
+
+    constructor() {
+        this._queue1 = new Queue<T>();
+        this._queue2 = new Queue<T>();
+    }
+
+    get peek(): T {
+        return this._queue1.tail;
+    } 
+
+    get size(): number {
+        return this._queue1.size;
+    };   
     
     push(...values: T[]): this {
-        throw new Error("Method not implemented.");
+        this._queue1.enqueue(...values);
+        return this;
     }
 
     pop(): T;
     pop(n: number): T[];
     pop(n?: any) : any{
-        throw new Error("Method not implemented.");
+        if(this._queue1.isEmpty()){
+            return null;
+        }
+
+        if(!n) {
+            this._queue2.enqueue(...this._queue1.dequeue(this._queue1.size - 1));
+            return this._queue1.dequeue();
+        }
     }
 
     isEmpty(): boolean {
-        throw new Error("Method not implemented.");
+        return this._queue1.isEmpty();
     }
 
     print(): this {
-        throw new Error("Method not implemented.");
+        return this;
     }
 
     clear(): this {
-        throw new Error("Method not implemented.");
+        this._queue1.clear();
+        this._queue2.clear();
+        return this;
     }
 
 }
