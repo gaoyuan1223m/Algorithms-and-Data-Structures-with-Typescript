@@ -1,4 +1,4 @@
-import { MinStack } from "@Algorithm/stack";
+import { MinStack } from "@Algorithm/stack-queue";
 
 describe(`Test for Min-Stack`, () => {
     const minStack = new MinStack();
