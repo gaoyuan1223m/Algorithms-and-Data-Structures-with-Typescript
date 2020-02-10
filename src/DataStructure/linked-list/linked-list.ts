@@ -169,7 +169,7 @@ class SinglyLinkedList<T> implements ILinkedList<T> {
             idx++;
         }
         str += `END`;
-        Console.OK(str);
+        Console.OK(`Singly Linked List Printing: ${str}`);
         return this;
     }
 
@@ -652,7 +652,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
             idx++;
         }
         str += `TAIL`;
-        Console.OK(str);
+        Console.OK(`Doubly Linked List Printing: ${str}`);
         return this;
     }
 
@@ -666,7 +666,7 @@ class DoublyLinkedList<T> implements ILinkedList<T> {
             idx--;
         }
         str += `HEAD`;
-        Console.Err(str);
+        Console.Err(`Doubly Linked List Printing: ${str}`);
         return this;
     }
 
