@@ -1,5 +1,5 @@
 
-import { TreePrintOrder, TreeTypes } from "@Utils/types";
+import { TreePrintOrder, TreeTypes, ArrayTypes, ListTypes } from "@Utils/types";
 import { BinaryTreeFactory } from "@DataStructure/tree";
 import { inRed } from "@Utils/emphasize";
 
@@ -94,6 +94,8 @@ describe(`Test for Binary Search Tree`, () => {
         BST.print(TreePrintOrder.InOrder, true);
         BST.print(TreePrintOrder.InOrder, false);
         // [3, 4, 5, 6, 7, 8, 9 ,10, 11, 12]
+        BST.toArray(ArrayTypes.DYNAMIC).print()
+        BST.toList(ListTypes.SINGLY).print()
 
         BST.print(TreePrintOrder.PostOrder, true);
         // BST.print(TreePrintOrder.PostOrder, false);

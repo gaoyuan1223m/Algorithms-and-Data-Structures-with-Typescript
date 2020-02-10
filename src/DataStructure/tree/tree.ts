@@ -7,12 +7,14 @@ import { Console } from "@Utils/emphasize";
 import { Queue, StackFactory } from "@DataStructure/stack-queue";
 import { override } from "@Utils/decorator";
 import { IFactory } from "@Interface/common";
+import { ArrayFactory } from "@DataStructure/array";
+import { LinkedListFactory } from "@DataStructure/linked-list";
 
 class BST<T> implements ITree<T> {
 
     protected _rootNode: IBinaryTreeNode<T>;
     protected _size: number;
-    protected _printStr: string;
+    protected _printElemArr: T[];
 
 
     get size(): number {
@@ -115,14 +117,14 @@ class BST<T> implements ITree<T> {
     print(order: TreePrintOrder, isByRecursion: boolean = true): this {
         //root -> left -> right
         if (order === TreePrintOrder.PreOrder) {
-            this._printStr = "";
+            this._printElemArr = [];
 
             if (isByRecursion) {
-                this._printPreOrderByRecursion(this._rootNode);
-                Console.OK(`PreOder Printing by Recursion: [ ${this._printStr}]`);
+                this._getPreOrderPrintByRecursion(this._rootNode);
+                Console.OK(`PreOder Printing by Recursion: [${this._printElemArr}]`);
             } else {
-                this._printPreOrderByIteration(this._rootNode);
-                Console.OK(`PreOder Printing by Iteration: [ ${this._printStr}]`);
+                this._getPreOrderPrintByIteration(this._rootNode);
+                Console.OK(`PreOder Printing by Iteration: [${this._printElemArr}]`);
             }
 
             return this;
@@ -130,14 +132,14 @@ class BST<T> implements ITree<T> {
 
         //left -> root -> right
         if (order === TreePrintOrder.InOrder) {
-            this._printStr = "";
+            this._printElemArr = [];
 
             if (isByRecursion) {
-                this._printInOrderByRecursion(this._rootNode);
-                Console.Warn(`InOrder Printing by Recursion: [ ${this._printStr}]`);
+                this._getInOrderPrintByRecursion(this._rootNode);               
+                Console.Warn(`InOrder Printing by Recursion: [${this._printElemArr}]`);
             } else {
-                this._printInOrderByIteration(this._rootNode);
-                Console.Warn(`InOrder Printing by Iteration: [ ${this._printStr}]`);
+                this._getInOrderPrintByIteration(this._rootNode);             
+                Console.Warn(`InOrder Printing by Recursion: [${this._printElemArr}]`);
             }
 
             return this;
@@ -145,21 +147,22 @@ class BST<T> implements ITree<T> {
 
         // left -> right -> root
         if (order === TreePrintOrder.PostOrder) {
-            this._printStr = "";
+            this._printElemArr = [];
+
             if (isByRecursion) {
-                this._printPostOrderByRecursion(this._rootNode);
-                Console.Err(`PostOrder Printing by Recursion: [ ${this._printStr}]`);
+                this._getPostOrderPrintByRecursion(this._rootNode);
+                Console.Err(`PostOrder Printing by Recursion: [${this._printElemArr}]`);
             } else {
-                this._printPostOrderByIteration(this._rootNode);
-                Console.Err(`PostOrder Printing by Iteration: [ ${this._printStr}]`);
+                this._getPostOrderPrintByIteration(this._rootNode);;
+                Console.Err(`PostOrder Printing by Iteration: [${this._printElemArr}]`);
             }
             return this;
         }
 
         if (order === TreePrintOrder.LevelOrder) {
-            this._printStr = "";
-            this._printLevelOrder(this._rootNode);
-            Console.Info(`Level-order printing by Iteration: [${this._printStr}]`);
+            this._printElemArr = [];
+            this._getLevelOrderPrintByIteration(this._rootNode);
+            Console.Info(`Level-order printing by Iteration: [${this._printElemArr}]`);
             return this;
         }
 
@@ -171,15 +174,25 @@ class BST<T> implements ITree<T> {
     }
 
     toArray(arrayType?: ArrayTypes): IArray<T> {
-        throw new Error("Method not implemented.");
+        this._printElemArr = [];
+        this._getInOrderPrintByRecursion(this._rootNode);
+        const treeElmsInArray = ArrayFactory.create<T>(arrayType, this.compare, this._size);
+        for (const elem of this._printElemArr) {
+            treeElmsInArray.append(elem);
+        }
+        return treeElmsInArray;
     }
 
     toList(listType?: ListTypes): ILinkedList<T> {
-        throw new Error("Method not implemented.");
+        this._printElemArr = [];
+        this._getInOrderPrintByRecursion(this._rootNode);
+        return LinkedListFactory.create<T>(listType, this.compare).insertAtTail(...this._printElemArr);    
     }
 
     toTree(treeType?: TreeTypes): ITree<T> {
-        throw new Error("Method not implemented.");
+        this._printElemArr = [];
+        this._getLevelOrderPrintByIteration(this._rootNode);
+        return BinaryTreeFactory.create<T>(treeType, this.compare).appendRange(...this._printElemArr)
     }
 
     forEach(callbackfn: (value: T, index: number, current: ITree<T>) => void, thisArg?: any): void {
@@ -468,17 +481,17 @@ class BST<T> implements ITree<T> {
         return treeNode;
     }
 
-    private _printPreOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _getPreOrderPrintByRecursion(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
-        this._printStr += `${treeNode.value.toString()}, `;
+        this._printElemArr.push(treeNode.value);
 
-        this._printPreOrderByRecursion(treeNode.left);
+        this._getPreOrderPrintByRecursion(treeNode.left);
 
-        this._printPreOrderByRecursion(treeNode.right);
+        this._getPreOrderPrintByRecursion(treeNode.right);
     }
 
-    private _printPreOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _getPreOrderPrintByIteration(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
         const stack = StackFactory.create<IBinaryTreeNode<T>>();
@@ -487,24 +500,24 @@ class BST<T> implements ITree<T> {
 
         while (!stack.isEmpty()) {
             const node = stack.pop();
-            this._printStr += `${node.value.toString()}, `;
+            this._printElemArr.push(node.value);
 
             node.right && stack.push(node.right);
             node.left && stack.push(node.left);
         }
     }
 
-    private _printInOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _getInOrderPrintByRecursion(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
-        this._printInOrderByRecursion(treeNode.left);
+        this._getInOrderPrintByRecursion(treeNode.left);
 
-        this._printStr += `${treeNode.value.toString()}, `;
+        this._printElemArr.push(treeNode.value);
 
-        this._printInOrderByRecursion(treeNode.right);
+        this._getInOrderPrintByRecursion(treeNode.right);
     }
 
-    private _printInOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _getInOrderPrintByIteration(treeNode: IBinaryTreeNode<T>): void {
         let pointer = treeNode;
 
         if (!pointer) return;
@@ -517,23 +530,23 @@ class BST<T> implements ITree<T> {
                 pointer = pointer.left;
             } else {
                 pointer = stack.pop();
-                this._printStr += `${pointer.value.toString()}, `;
+                this._printElemArr.push(pointer.value);
                 pointer = pointer.right;
             }
         }
     }
 
-    private _printPostOrderByRecursion(treeNode: IBinaryTreeNode<T>): void {
+    private _getPostOrderPrintByRecursion(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
-        this._printPostOrderByRecursion(treeNode.left);
+        this._getPostOrderPrintByRecursion(treeNode.left);
 
-        this._printPostOrderByRecursion(treeNode.right);
+        this._getPostOrderPrintByRecursion(treeNode.right);
 
-        this._printStr += `${treeNode.value.toString()}, `;
+        this._printElemArr.push(treeNode.value);
     }
 
-    private _printPostOrderByIteration(treeNode: IBinaryTreeNode<T>): void {
+    private _getPostOrderPrintByIteration(treeNode: IBinaryTreeNode<T>): void {
 
     }
 
@@ -568,7 +581,7 @@ class BST<T> implements ITree<T> {
         return height;
     }
 
-    private _printLevelOrder(treeNode: IBinaryTreeNode<T>): void {
+    private _getLevelOrderPrintByIteration(treeNode: IBinaryTreeNode<T>): void {
         if (!treeNode) return;
 
         const queue = new Queue<IBinaryTreeNode<T>>();
@@ -576,7 +589,7 @@ class BST<T> implements ITree<T> {
 
         while (!queue.isEmpty()) {
             const node = queue.dequeue();
-            this._printStr += `${node.value.toString()}, `;
+            this._printElemArr.push(node.value);
 
             node.left && queue.enqueue(node.left);
             node.right && queue.enqueue(node.right);
