@@ -70,6 +70,7 @@ enum Msg {
     InvalidDictKey = 'Visited Key does NOT exist',
     UnacceptablePrintOrder = "Print order is NOT acceptable",
     BeyondBoundary = 'Index is out of boundary',
+    BeyondCapacity = 'Number Exceeds the Capacity',
     NotExisted = 'ELement to query does NOT exist',
     NoElements = 'No elements in current collection',
     NotSafeNum = 'is NOT SAFE',
