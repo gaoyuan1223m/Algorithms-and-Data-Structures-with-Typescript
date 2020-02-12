@@ -271,7 +271,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             str += `, `
         }
         str += ` ]`;
-        Console.OK(str);
+        Console.OK(`Array Printing from HEAD to TAIL: ${str}`);
         return this;
     }
 
@@ -283,7 +283,7 @@ export abstract class AbstractArray<T> implements IArray<T> {
             str += `, `
         }
         str += ` ]`;
-        Console.OK(str);
+        Console.OK(`Array Printing from TAIL to HEAD: ${str}`);
         return this;
     }
 
