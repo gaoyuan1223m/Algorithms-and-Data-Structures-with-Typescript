@@ -12,13 +12,11 @@
 
 ## Data Structures
 
-### Array
+### Linear
 
 - [Static Array](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/array/array.ts)
 
 - [Dynamic Array](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/array/array.ts)
-
-### Linked List
 
 - [Singly Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
@@ -28,37 +26,27 @@
 
 - [Skip Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-### Stack
-
 - [Stack](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/stack.ts)
 
-### Queue
-
-- [Queue](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/queue.ts)
-
-### Deque
+- [Queue](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/queue.ts
 
 - [Deque](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/deque.ts)
 
-### Tree
+### Non-Linear
 
-- BST
+- [BST](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/tree/tree.ts)
 
-- AVL
+- [AVL](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/tree/tree.ts)
 
-- RBT
+- [RBT](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/tree/tree.ts)
 
-### Hashing
+- [Dictionary](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/hash/dictionary.ts)
 
-- Dictionary
+- [UniqueSet](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/hash/unique-set.ts)
 
-- UniqueSet
-
-### Graph
-
-- Direction
+- Graph
 
 
 ## Algorithms
 
-### Sort
+- Sort
