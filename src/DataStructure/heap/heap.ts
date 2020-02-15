@@ -220,7 +220,7 @@ class MaxHeap<T> extends Heap<T> {
 class MinHeap<T> extends Heap<T> {
 
     constructor(protected compare: ICompareFunc<T>) {
-        super((parent: T, child: T) => this.compare(parent).isLessOrEqualTo(child));
+        super((parent: T, child: T) => compare(parent).isLessOrEqualTo(child));
     }
 }
 
