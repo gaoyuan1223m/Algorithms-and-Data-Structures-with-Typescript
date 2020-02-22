@@ -1,6 +1,6 @@
 import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
+import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode, IRedBlackTreeConstructor, IRBT } from "@Interface/specific";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -322,7 +322,7 @@ class BST<T> implements ITree<T> {
 
         return this._afterRemoveTreeNode(this._removeNodeWithTwoDegree(delNode));
     }
-
+    // del node would be returned
     private _removeNodeWithZeroDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         const parent = treeNode.parent;
 
@@ -340,7 +340,7 @@ class BST<T> implements ITree<T> {
         this._size -= 1;
         return treeNode;
     }
-
+    // replacement node would be returned
     private _removeNodeWithOneDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         const grandparent = treeNode.parent;
 
@@ -361,7 +361,7 @@ class BST<T> implements ITree<T> {
         }
 
         this._size -= 1;
-        return treeNode;
+        return child;
     }
 
     private _removeNodeWithTwoDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
@@ -726,12 +726,21 @@ class AVL<T> extends BST<T> {
 
 }
 
-class RBT<T> extends BST<T> {
+class RBT<T> extends BST<T> implements IRBT<T> {
 
     protected _rootNode: IRedBlackTreeNode<T>;
 
     constructor(protected compare: ICompareFunc<T>) {
         super(compare);
+    }
+
+    getColor(value: T): TreeNodeColor {
+        const node = this._getTreeNodeByValue(value);
+
+        if (!node) return null;
+
+        const pointer = node.pointer as IRedBlackTreeNode<T>;
+        return pointer.color;
     }
 
     @override()
@@ -762,19 +771,23 @@ class RBT<T> extends BST<T> {
         if (parent.isLeftChild(this.compare)) {
             if (child.isLeftChild(this.compare)) {
                 // LL
+                this._recolorize(grand, parent);
                 this._rotateToRight(grand, parent);
             } else {
                 // LR
+                this._recolorize(grand, child);
                 this._rotateToLeft(parent, child);
                 this._rotateToRight(grand, child);
             }
         } else {
             if (child.isLeftChild(this.compare)) {
                 // RL
+                this._recolorize(grand, child);
                 this._rotateToRight(parent, child);
                 this._rotateToLeft(grand, child);
             } else {
                 // RR
+                this._recolorize(grand, parent);
                 this._rotateToLeft(grand, parent);
             }
         }
@@ -789,6 +802,7 @@ class RBT<T> extends BST<T> {
     @override()
     protected _afterRemoveTreeNode(treeNode: IRedBlackTreeNode<T>): this {
         if (treeNode.isRed()) {
+            treeNode.setBlack();
             return this;
         }
 
@@ -803,46 +817,70 @@ class RBT<T> extends BST<T> {
 
         if (isLeft) {
             if (sibling.isRed()) {
+                this._recolorize(parent, sibling);
                 this._rotateToLeft(parent, sibling);
                 sibling = parent.right as IRedBlackTreeNode<T>;
             }
             // to confirm if sibing has a child, borrow one to the hole
-            let siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
-            if (siblingRightChild?.isRed()) {
-                this._rotateToLeft(parent, sibling);
-                return this;
-            }
             let siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
-            if (siblingLeftChild?.isRed()) {
-                this._rotateToRight(sibling, siblingLeftChild);
-                this._rotateToLeft(parent, siblingLeftChild);
-                return this;
+            let siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
+            let isSiblingLeftChildBlack = !siblingLeftChild || siblingLeftChild.isBlack();
+            let isSiblingRightChildBlack = !siblingRightChild || siblingRightChild.isBlack();
+
+            //sibling does NOT have red children
+            if (isSiblingLeftChildBlack && isSiblingRightChildBlack) {
+                let isParentBlack = parent.isBlack();
+                parent.setBlack();
+                sibling.setRed();
+                if(isParentBlack) {
+                    return this._afterRemoveTreeNode(parent);
+                }
+            } else {
+                if(isSiblingRightChildBlack) {
+                    this._rotateToRight(sibling, siblingLeftChild);
+                    sibling = parent.right as IRedBlackTreeNode<T>;
+                }
+
+                parent.isBlack() ? sibling.setBlack(): sibling.setRed();
+                siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
+                siblingRightChild.setBlack();
+                parent.setBlack();
+                this._rotateToLeft(parent, sibling);                
             }
         } else { // delNode used to be right child
             if (sibling.isRed()) {
+                this._recolorize(parent, sibling);
                 this._rotateToRight(parent, sibling);
                 sibling = parent.left as IRedBlackTreeNode<T>;
             }
             // to confirm if sibing has a child, borrow one to the hole
             let siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
-            if (siblingLeftChild?.isRed()) {
-                this._rotateToRight(parent, sibling);
-                return this;
-            }
             let siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
-            if (siblingRightChild?.isRed()) {
-                this._rotateToLeft(sibling, siblingRightChild);
-                this._rotateToRight(parent, siblingRightChild);
-                return this;
+            let isSiblingLeftChildBlack = !siblingLeftChild || siblingLeftChild.isBlack();
+            let isSiblingRightChildBlack = !siblingRightChild || siblingRightChild.isBlack();
+
+            //sibling does NOT have red children
+            if (isSiblingLeftChildBlack && isSiblingRightChildBlack) {
+                let isParentBlack = parent.isBlack();
+                parent.setBlack();
+                sibling.setRed();
+                if(isParentBlack) {
+                    return this._afterRemoveTreeNode(parent);
+                }
+            } else {
+                if(isSiblingLeftChildBlack) {
+                    this._rotateToLeft(sibling, siblingRightChild);
+                    sibling = parent.left as IRedBlackTreeNode<T>;
+                }
+
+                parent.isBlack() ? sibling.setBlack(): sibling.setRed();
+                siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
+                siblingLeftChild.setBlack();
+                parent.setBlack();
+                this._rotateToRight(parent, sibling);                
             }
         }
-        // up to now, sibling is a LEAF, parent goes down
-        let isParentBlack = parent.isBlack();
-        parent.setBlack();
-        sibling.setRed();
-        if (isParentBlack) {
-            return this._afterRemoveTreeNode(parent);
-        }
+
         return this;
     }
 
@@ -866,8 +904,6 @@ class RBT<T> extends BST<T> {
         parent.parent = child;
         child.left = parent;
 
-        parent.setRed();
-        child.setBlack();
     }
 
     protected _rotateToRight(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
@@ -890,6 +926,9 @@ class RBT<T> extends BST<T> {
         parent.parent = child;
         child.right = parent;
 
+    }
+
+    private _recolorize(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         parent.setRed();
         child.setBlack();
     }
@@ -897,11 +936,11 @@ class RBT<T> extends BST<T> {
 
 const BinarySearchTree: ITreeConstructor = BST;
 const BinaryAVLTree: ITreeConstructor = AVL;
-const BinaryRedBlackTree: ITreeConstructor = RBT;
+const BinaryRedBlackTree: IRedBlackTreeConstructor = RBT;
 
 class Factory implements IFactory {
 
-    create<T>(type: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
+    create<T>(type: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> | IRBT<T> {
         if (type === TreeTypes.BST) return new BinarySearchTree(compare);
         if (type === TreeTypes.AVL) return new BinaryAVLTree(compare);
         if (type === TreeTypes.RBT) return new BinaryRedBlackTree(compare);

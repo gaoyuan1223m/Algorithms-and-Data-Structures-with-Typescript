@@ -73,8 +73,20 @@ export interface ITree<T> extends ICollection<T> {
      */
 }
 
+export interface IRBT<T> extends ITree<T> {
+    /**
+     * *Get Node Color by its value*
+     * @param value the value of node to search on the Tree
+     */
+    getColor(value: T): TreeNodeColor;
+}
+
 export interface ITreeConstructor {
     new <T>(compare: ICompareFunc<T>): ITree<T>
+}
+
+export interface IRedBlackTreeConstructor {
+    new <T>(compare: ICompareFunc<T>): IRBT<T>
 }
 
 export interface IBinaryTreeNode<T> extends INode<T> {

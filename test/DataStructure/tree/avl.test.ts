@@ -274,6 +274,22 @@ describe(`Test for AVL Tree ${inRed('[Complex RL]')}`, () => {
 
 });
 
+describe(`Test for AVL Tree ${inRed("Ultimate")}`, () => {
+    const elements = [
+        98, 67, 61, 90, 49, 53, 25, 12, 16, 93, 76, 8, 70, 10, 75, 17, 
+        43, 18, 7, 15, 23, 73, 14, 94, 69, 92, 91, 30, 87, 40, 81, 59, 
+        72, 4, 68, 3, 50, 65, 19, 34, 82, 74, 85, 86
+    ];
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
+
+    beforeAll(() => {
+        AVL.appendRange(...elements);
+    });
+
+    it(`Should return right size of elements`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+})
 /**
  * *          7            *
  *          /   \
