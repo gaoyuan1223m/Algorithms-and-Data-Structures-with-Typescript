@@ -6,6 +6,7 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/Interface/**'],
+  verbose: true, // Indicates whether each individual test should be reported during the run.
   coverageThreshold: {
     global: {
       branches: 65,
@@ -14,6 +15,8 @@ module.exports = {
       statements: 75
     }
   },
-  // testRegex: 'avl.test.ts', /**Run Single Unit Test, PLEASE Remove // at the head of this line */
+  // notify: true,// show a notification panel on the right (win10)
+  // projects: ["<rootDir>/src/**/*.ts"],
+  // testRegex: 'rbt.test.ts', /**Run Single Unit Test, PLEASE Remove // at the head of this line */
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' })
 };
