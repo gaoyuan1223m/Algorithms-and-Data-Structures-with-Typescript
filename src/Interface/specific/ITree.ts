@@ -85,10 +85,6 @@ export interface ITreeConstructor {
     new <T>(compare: ICompareFunc<T>): ITree<T>
 }
 
-export interface IRedBlackTreeConstructor {
-    new <T>(compare: ICompareFunc<T>): IRBT<T>
-}
-
 export interface IBinaryTreeNode<T> extends INode<T> {
     left: IBinaryTreeNode<T>;
     right: IBinaryTreeNode<T>;

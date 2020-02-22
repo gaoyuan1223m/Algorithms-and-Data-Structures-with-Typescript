@@ -1,5 +1,5 @@
 import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode, IRedBlackTreeConstructor, IRBT } from "@Interface/specific";
+import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode, IRBT} from "@Interface/specific";
 import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
@@ -936,11 +936,11 @@ class RBT<T> extends BST<T> implements IRBT<T> {
 
 const BinarySearchTree: ITreeConstructor = BST;
 const BinaryAVLTree: ITreeConstructor = AVL;
-const BinaryRedBlackTree: IRedBlackTreeConstructor = RBT;
+const BinaryRedBlackTree: ITreeConstructor = RBT;
 
 class Factory implements IFactory {
 
-    create<T>(type: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> | IRBT<T> {
+    create<T>(type: TreeTypes, compare: ICompareFunc<T> = valueTypeComparison): ITree<T> {
         if (type === TreeTypes.BST) return new BinarySearchTree(compare);
         if (type === TreeTypes.AVL) return new BinaryAVLTree(compare);
         if (type === TreeTypes.RBT) return new BinaryRedBlackTree(compare);

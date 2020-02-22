@@ -81,7 +81,7 @@ describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")}`, () =
         expect(RBT.getColor(9)).toBe(TreeNodeColor.Red);
     });
 
-    it(`#Should remove "2-Degree" element "${inBlack(2)}"`, () => {
+    it(`#Should remove "1-Degree" element "${inBlack(2)}"`, () => {
         RBT.remove(2)
         expect(RBT.size).toBe(elements.length - 4);
         expect(RBT.getColor(8)).toBe(TreeNodeColor.Black);
@@ -92,6 +92,17 @@ describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")}`, () =
         expect(RBT.getColor(9)).toBe(TreeNodeColor.Red);
     });
 
+    it(`#Should remove "2-Degree" element "${inRed(9)}"`, () => {
+        RBT.remove(9)
+        expect(RBT.size).toBe(elements.length - 5);
+        expect(RBT.getColor(8)).toBe(TreeNodeColor.Black);
+        expect(RBT.getColor(4)).toBe(TreeNodeColor.Black);
+        expect(RBT.getColor(3)).toBe(TreeNodeColor.Black);
+        expect(RBT.getColor(10)).toBe(TreeNodeColor.Red);
+        expect(RBT.getColor(9)).toBe(null);
+    });
+
+
 })
 
 describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")} - ${inBlue("Ultimate")}`, () => {
@@ -99,7 +110,7 @@ describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")} - ${in
         55, 47, 7, 8, 68, 61, 12, 99, 11, 64, 33, 36, 9, 81, 49, 46, 70, 35, 76, 93, 32,
         94, 38, 100, 63, 22, 78, 69, 45, 18, 58, 97, 26, 59, 34, 21, 20, 5, 80, 15, 2, 4
     ];
-    const RBT = BinaryTreeFactory.create<number>(TreeTypes.RBT);
+    const RBT = BinaryTreeFactory.create<number>(TreeTypes.RBT) as IRBT<number>;
 
     beforeAll(() => {
         for (const elem of elements) {
@@ -111,9 +122,8 @@ describe(`Test for ${inRed("Red")}-${inBlack("Black")}-${inGreen("Tree")} - ${in
         expect(RBT.size).toBe(elements.length);
     });
 
-    xit(`#Should remove "LEAF" element "${inRed(1)}"`, () => {
-        RBT.remove(1)
-        expect(RBT.size).toBe(elements.length - 1);
+    xit(`#Should return right color"`, () => {
+        
     });
 
     xit(`#Should remove "2-Degree" element "${inRed(11)}"`, () => {
