@@ -127,39 +127,6 @@ describe(`Test for AVL Tree [BASCIS]`, () => {
         // AVL.print(TreePrintOrder.InOrder);
     });
 
-    xit(`#remove PARENT elements with ONE child if existed`, () => {
-        expect(AVL.remove(4).size).toBe(elements.length - 2);
-        expect(AVL.height).toBe(4);
-        // AVL.print(TreePrintOrder.InOrder);
-        // [3, 5, 7, 8, 9 ,10, 11, 12]
-    });
-
-    xit(`#remove PARENT elements with TWO Children if existed`, () => {
-        expect(AVL.remove(9).size).toBe(elements.length - 3);
-        expect(AVL.height).toBe(4);
-        // AVL.print(TreePrintOrder.InOrder);
-        // [3, 5, 7, 8, 10, 11, 12]
-    });
-
-    xit(`#remove 10 and 12 and check the current the height of tree`, () => {
-        expect(AVL.remove(10).remove(11).height).toBe(3);
-    })
-
-    xit(`#Is it COMPLETE?`, () => {
-        expect(AVL.isComplete()).toBe(false);
-    });
-
-    xit(`#Build a new AVL and judge whether it's COMPLETE`, () => {
-        AVL
-            .clear()
-            .appendRange(...elements2)
-        // .print(TreePrintOrder.InOrder, false);
-
-        expect(AVL.size).toBe(elements2.length);
-        expect(AVL.isComplete()).toBe(true)
-        expect(AVL.height).toBe(4);
-    });
-
 });
 
 
@@ -307,6 +274,22 @@ describe(`Test for AVL Tree ${inRed('[Complex RL]')}`, () => {
 
 });
 
+describe(`Test for AVL Tree ${inRed("Ultimate")}`, () => {
+    const elements = [
+        98, 67, 61, 90, 49, 53, 25, 12, 16, 93, 76, 8, 70, 10, 75, 17, 
+        43, 18, 7, 15, 23, 73, 14, 94, 69, 92, 91, 30, 87, 40, 81, 59, 
+        72, 4, 68, 3, 50, 65, 19, 34, 82, 74, 85, 86
+    ];
+    const AVL = BinaryTreeFactory.create<number>(TreeTypes.AVL);
+
+    beforeAll(() => {
+        AVL.appendRange(...elements);
+    });
+
+    it(`Should return right size of elements`, () => {
+        expect(AVL.size).toBe(elements.length);
+    });
+})
 /**
  * *          7            *
  *          /   \

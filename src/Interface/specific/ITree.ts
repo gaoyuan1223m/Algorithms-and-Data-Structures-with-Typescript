@@ -73,6 +73,14 @@ export interface ITree<T> extends ICollection<T> {
      */
 }
 
+export interface IRBT<T> extends ITree<T> {
+    /**
+     * *Get Node Color by its value*
+     * @param value the value of node to search on the Tree
+     */
+    getColor(value: T): TreeNodeColor;
+}
+
 export interface ITreeConstructor {
     new <T>(compare: ICompareFunc<T>): ITree<T>
 }
@@ -97,7 +105,7 @@ export interface IAVLTreeNode<T> extends IBinaryTreeNode<T> {
     updateHeight(): void;
 }
 
-export interface IRedBlackTreeNode<T> extends IAVLTreeNode<T> {
+export interface IRedBlackTreeNode<T> extends IBinaryTreeNode<T> {
     color: TreeNodeColor;
 
     isRed(): boolean;
@@ -105,9 +113,6 @@ export interface IRedBlackTreeNode<T> extends IAVLTreeNode<T> {
 
     setRed(): void;
     setBlack(): void;
-
-    isLeftChild(compare: ICompareFunc<T>): boolean;
-    isRightChild(compare: ICompareFunc<T>): boolean;
 
     getUncle(compare: ICompareFunc<T>): IRedBlackTreeNode<T>
     getSibling(compare: ICompareFunc<T>): IRedBlackTreeNode<T>;

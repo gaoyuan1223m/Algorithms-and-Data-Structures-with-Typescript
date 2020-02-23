@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Typescripts for Algorithms and Data Structures",
   "scripts": {
-    "test": "jest",
+    "test": "rimraf dist && jest",
     "commit": "git-cz"
   },
   "keywords": [

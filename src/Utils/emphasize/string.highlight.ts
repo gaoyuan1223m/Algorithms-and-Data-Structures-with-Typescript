@@ -8,4 +8,4 @@ export const inYellow = (text: any) => chalk.yellowBright(text.toString());
 
 export const inBlue = (text: any) => chalk.blueBright(text.toString());
 
-export const inBlack = (text: any) => chalk.black(text.toString());
+export const inBlack = (text: any) => chalk.blackBright.bgBlack(text.toString());

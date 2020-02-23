@@ -2,10 +2,10 @@
 import {
     IBinaryTreeNodeConstructor,
     IBinaryTreeNode,
-    IRedBlackTreeNodeConstructor,
-    IRedBlackTreeNode,
     IAVLTreeNodeConstructor,
-    IAVLTreeNode
+    IAVLTreeNode,
+    IRedBlackTreeNodeConstructor,
+    IRedBlackTreeNode
 } from "@Interface/specific";
 import { TreeNodeColor } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
@@ -20,11 +20,11 @@ class BSTNode<T> implements IBinaryTreeNode<T> {
     ) { }
 
     isLeftChild(compare: ICompareFunc<T>): boolean {
-        return !!this.parent && compare(this.value).isEqualTo(this.parent.left?.value);
+        return compare(this.value).isEqualTo(this.parent?.left?.value);
     }
 
     isRightChild(compare: ICompareFunc<T>): boolean {
-        return !!this.parent && compare(this.value).isEqualTo(this.parent.right?.value);
+        return compare(this.value).isEqualTo(this.parent?.right?.value);
     }
 
     isLeaf(): boolean {
@@ -58,15 +58,7 @@ class AVLNode<T> extends BSTNode<T> implements IAVLTreeNode<T> {
     }
 
 }
-class RBTNode<T> extends AVLNode<T> implements IRedBlackTreeNode<T> {
-
-    isLeftChild(compare: ICompareFunc<T>): boolean {
-        return compare(this.value).isEqualTo(this.parent?.left?.value);
-    }
-
-    isRightChild(compare: ICompareFunc<T>): boolean {
-        return compare(this.value).isEqualTo(this.parent?.right?.value);
-    }
+class RBTNode<T> extends BSTNode<T> implements IRedBlackTreeNode<T> {
 
     setRed(): void {
         this.color = TreeNodeColor.Red;
@@ -81,11 +73,13 @@ class RBTNode<T> extends AVLNode<T> implements IRedBlackTreeNode<T> {
     }
 
     getSibling(compare: ICompareFunc<T>): IRedBlackTreeNode<T> {
-        if (this.isLeftChild(compare)) return this.parent?.right as IRedBlackTreeNode<T>;
+        if (!this.parent) return null;
 
-        if (this.isRightChild(compare)) return this.parent?.left as IRedBlackTreeNode<T>;
+        if (this.isLeftChild(compare)) {
+            return this.parent.right as IRedBlackTreeNode<T>;
+        }
 
-        return null;
+        return this.parent.left as IRedBlackTreeNode<T>;
     }
 
     isRed(): boolean {
@@ -103,7 +97,7 @@ class RBTNode<T> extends AVLNode<T> implements IRedBlackTreeNode<T> {
         public left: IRedBlackTreeNode<T> = null,
         public right: IRedBlackTreeNode<T> = null
     ) {
-        super(value, parent, left, right, NaN);
+        super(value, parent, left, right);
     }
 
 }

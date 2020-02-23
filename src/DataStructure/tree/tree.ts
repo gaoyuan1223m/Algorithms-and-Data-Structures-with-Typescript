@@ -1,6 +1,6 @@
 import { BinaryTreeNode, AVLTreeNode, RedBlackTreeNode } from "@Entity/concrete";
-import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode } from "@Interface/specific";
-import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder } from "@Utils/types";
+import { ITree, IArray, ILinkedList, IBinaryTreeNode, IAVLTreeNode, ITreeConstructor, IRedBlackTreeNode, IRBT} from "@Interface/specific";
+import { ArrayTypes, ListTypes, TreeTypes, TreePrintOrder, TreeNodeColor } from "@Utils/types";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
 import { Console } from "@Utils/emphasize";
@@ -135,10 +135,10 @@ class BST<T> implements ITree<T> {
             this._printElemArr = [];
 
             if (isByRecursion) {
-                this._getInOrderPrintByRecursion(this._rootNode);               
+                this._getInOrderPrintByRecursion(this._rootNode);
                 Console.Warn(`InOrder Printing by Recursion: [${this._printElemArr}]`);
             } else {
-                this._getInOrderPrintByIteration(this._rootNode);             
+                this._getInOrderPrintByIteration(this._rootNode);
                 Console.Warn(`InOrder Printing by Recursion: [${this._printElemArr}]`);
             }
 
@@ -186,7 +186,7 @@ class BST<T> implements ITree<T> {
     toList(listType?: ListTypes): ILinkedList<T> {
         this._printElemArr = [];
         this._getInOrderPrintByRecursion(this._rootNode);
-        return LinkedListFactory.create<T>(listType, this.compare).insertAtTail(...this._printElemArr);    
+        return LinkedListFactory.create<T>(listType, this.compare).insertAtTail(...this._printElemArr);
     }
 
     toTree(treeType?: TreeTypes): ITree<T> {
@@ -313,25 +313,22 @@ class BST<T> implements ITree<T> {
         let { pointer: delNode } = node;
 
         if (delNode.isLeaf()) {
-            const delNodeParent = this._removeNodeWithZeroDegree(delNode)
-            return this._afterRemoveTreeNode(delNodeParent);
+            return this._afterRemoveTreeNode(this._removeNodeWithZeroDegree(delNode));
         }
 
         if (!delNode.left || !delNode.right) {
-            const delNodeParent = this._removeNodeWithOneDegree(delNode);
-            return this._afterRemoveTreeNode(delNodeParent);
+            return this._afterRemoveTreeNode(this._removeNodeWithOneDegree(delNode));
         }
 
-        const delNodeParent = this._removeNodeWithTwoDegree(delNode);
-        return this._afterRemoveTreeNode(delNodeParent);
+        return this._afterRemoveTreeNode(this._removeNodeWithTwoDegree(delNode));
     }
-
+    // del node would be returned
     private _removeNodeWithZeroDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         const parent = treeNode.parent;
 
         if (!parent) {
             this.__init__();
-            return null; // it's root node
+            return treeNode; // it's root node
         }
 
         if (treeNode.isLeftChild(this.compare)) {
@@ -339,12 +336,11 @@ class BST<T> implements ITree<T> {
         } else {
             parent.right = null;
         }
-        treeNode.parent = null;
 
         this._size -= 1;
-        return parent;
+        return treeNode;
     }
-
+    // replacement node would be returned
     private _removeNodeWithOneDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         const grandparent = treeNode.parent;
 
@@ -352,7 +348,7 @@ class BST<T> implements ITree<T> {
             this._rootNode = treeNode.left || treeNode.right;
             this._rootNode.parent = null;
             this._size -= 1;
-            return null;
+            return treeNode;
         }
 
         const child = treeNode.left || treeNode.right; // 
@@ -365,12 +361,12 @@ class BST<T> implements ITree<T> {
         }
 
         this._size -= 1;
-        return grandparent;
+        return child;
     }
 
     private _removeNodeWithTwoDegree(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
         // 2-degree node should have a predecessor node
-        const predecessor = this._getPredecessorNode(treeNode); 
+        const predecessor = this._getPredecessorNode(treeNode);
 
         treeNode.value = predecessor.value;
 
@@ -443,14 +439,6 @@ class BST<T> implements ITree<T> {
         }
 
         return treeNode.parent;
-    }
-
-    private _findPathByRecursion(treeNode: IBinaryTreeNode<T>, node: T): number {
-        return -1;
-    }
-
-    private _findPathByIteration(treeNode: IBinaryTreeNode<T>, node: T): number {
-        return -1;
     }
 
     private _getMaxByRecursion(treeNode: IBinaryTreeNode<T>): IBinaryTreeNode<T> {
@@ -639,13 +627,12 @@ class AVL<T> extends BST<T> {
 
     @override()
     protected _afterRemoveTreeNode(treeNode: IAVLTreeNode<T>): this {
-        while(treeNode) {
-            if(treeNode.isBalanced){
+        while (treeNode = treeNode.parent as IAVLTreeNode<T>) {
+            if (treeNode.isBalanced) {
                 treeNode.updateHeight();
             } else {
                 this._rebalanceTree(treeNode);
             }
-            treeNode = treeNode.parent as IAVLTreeNode<T>;
         }
         return this;
     }
@@ -739,12 +726,21 @@ class AVL<T> extends BST<T> {
 
 }
 
-class RBT<T> extends AVL<T> {
+class RBT<T> extends BST<T> implements IRBT<T> {
 
     protected _rootNode: IRedBlackTreeNode<T>;
 
     constructor(protected compare: ICompareFunc<T>) {
         super(compare);
+    }
+
+    getColor(value: T): TreeNodeColor {
+        const node = this._getTreeNodeByValue(value);
+
+        if (!node) return null;
+
+        const pointer = node.pointer as IRedBlackTreeNode<T>;
+        return pointer.color;
     }
 
     @override()
@@ -773,18 +769,25 @@ class RBT<T> extends AVL<T> {
         };
 
         if (parent.isLeftChild(this.compare)) {
-            if (child.isLeftChild(this.compare)) { // LL
-
+            if (child.isLeftChild(this.compare)) {
+                // LL
+                this._recolorize(grand, parent);
                 this._rotateToRight(grand, parent);
-            } else { // LR
+            } else {
+                // LR
+                this._recolorize(grand, child);
                 this._rotateToLeft(parent, child);
                 this._rotateToRight(grand, child);
             }
         } else {
-            if (child.isLeftChild(this.compare)) { // RL
+            if (child.isLeftChild(this.compare)) {
+                // RL
+                this._recolorize(grand, child);
                 this._rotateToRight(parent, child);
                 this._rotateToLeft(grand, child);
-            } else { // RR
+            } else {
+                // RR
+                this._recolorize(grand, parent);
                 this._rotateToLeft(grand, parent);
             }
         }
@@ -797,34 +800,90 @@ class RBT<T> extends AVL<T> {
     }
 
     @override()
-    protected _rebalanceTree(treeNode: IRedBlackTreeNode<T>): this {
-        let child = treeNode;
-        let parent = child.parent as IRedBlackTreeNode<T>
-        let grand = parent.parent as IRedBlackTreeNode<T>;
+    protected _afterRemoveTreeNode(treeNode: IRedBlackTreeNode<T>): this {
+        if (treeNode.isRed()) {
+            treeNode.setBlack();
+            return this;
+        }
 
-        if (child.isLeftChild(this.compare)) {
-            if (parent.isLeftChild(this.compare)) {
-                // LL -> rotate to right (grandParentNode)
-                this._rotateToRight(grand, parent);
-            } else {
-                // LR
-                this._rotateToLeft(parent, child);
-                this._rotateToRight(grand, child);
+        let parent = treeNode.parent as IRedBlackTreeNode<T>;
+
+        if (!parent) {
+            return this;
+        }
+
+        let isLeft = parent.left == null;
+        let sibling = isLeft ? parent.right as IRedBlackTreeNode<T> : parent.left as IRedBlackTreeNode<T>;
+
+        if (isLeft) {
+            if (sibling.isRed()) {
+                this._recolorize(parent, sibling);
+                this._rotateToLeft(parent, sibling);
+                sibling = parent.right as IRedBlackTreeNode<T>;
             }
-        } else {
-            if (parent.isLeftChild(this.compare)) {
-                //RL
-                this._rotateToRight(parent, child);
-                this._rotateToLeft(grand, child);
+            // to confirm if sibing has a child, borrow one to the hole
+            let siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
+            let siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
+            let isSiblingLeftChildBlack = !siblingLeftChild || siblingLeftChild.isBlack();
+            let isSiblingRightChildBlack = !siblingRightChild || siblingRightChild.isBlack();
+
+            //sibling does NOT have red children
+            if (isSiblingLeftChildBlack && isSiblingRightChildBlack) {
+                let isParentBlack = parent.isBlack();
+                parent.setBlack();
+                sibling.setRed();
+                if(isParentBlack) {
+                    return this._afterRemoveTreeNode(parent);
+                }
             } else {
-                // RR
-                this._rotateToLeft(grand, parent);
+                if(isSiblingRightChildBlack) {
+                    this._rotateToRight(sibling, siblingLeftChild);
+                    sibling = parent.right as IRedBlackTreeNode<T>;
+                }
+
+                parent.isBlack() ? sibling.setBlack(): sibling.setRed();
+                siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
+                siblingRightChild.setBlack();
+                parent.setBlack();
+                this._rotateToLeft(parent, sibling);                
+            }
+        } else { // delNode used to be right child
+            if (sibling.isRed()) {
+                this._recolorize(parent, sibling);
+                this._rotateToRight(parent, sibling);
+                sibling = parent.left as IRedBlackTreeNode<T>;
+            }
+            // to confirm if sibing has a child, borrow one to the hole
+            let siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
+            let siblingRightChild = sibling.right as IRedBlackTreeNode<T>;
+            let isSiblingLeftChildBlack = !siblingLeftChild || siblingLeftChild.isBlack();
+            let isSiblingRightChildBlack = !siblingRightChild || siblingRightChild.isBlack();
+
+            //sibling does NOT have red children
+            if (isSiblingLeftChildBlack && isSiblingRightChildBlack) {
+                let isParentBlack = parent.isBlack();
+                parent.setBlack();
+                sibling.setRed();
+                if(isParentBlack) {
+                    return this._afterRemoveTreeNode(parent);
+                }
+            } else {
+                if(isSiblingLeftChildBlack) {
+                    this._rotateToLeft(sibling, siblingRightChild);
+                    sibling = parent.left as IRedBlackTreeNode<T>;
+                }
+
+                parent.isBlack() ? sibling.setBlack(): sibling.setRed();
+                siblingLeftChild = sibling.left as IRedBlackTreeNode<T>;
+                siblingLeftChild.setBlack();
+                parent.setBlack();
+                this._rotateToRight(parent, sibling);                
             }
         }
+
         return this;
     }
 
-    @override()
     protected _rotateToLeft(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.left) {
             child.left.parent = parent;
@@ -845,11 +904,8 @@ class RBT<T> extends AVL<T> {
         parent.parent = child;
         child.left = parent;
 
-        parent.setRed();
-        child.setBlack();
     }
 
-    @override()
     protected _rotateToRight(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         if (child.right) {
             child.right.parent = parent;
@@ -870,6 +926,9 @@ class RBT<T> extends AVL<T> {
         parent.parent = child;
         child.right = parent;
 
+    }
+
+    private _recolorize(parent: IRedBlackTreeNode<T>, child: IRedBlackTreeNode<T>): void {
         parent.setRed();
         child.setBlack();
     }
