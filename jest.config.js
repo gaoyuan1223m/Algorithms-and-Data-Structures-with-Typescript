@@ -9,10 +9,10 @@ module.exports = {
   verbose: true, // Indicates whether each individual test should be reported during the run.
   coverageThreshold: {
     global: {
-      branches: 65,
-      functions: 75,
-      lines: 75,
-      statements: 75
+      branches: 70,
+      functions: 80,
+      lines: 85,
+      statements: 85
     }
   },
   // notify: true,// show a notification panel on the right (win10)
