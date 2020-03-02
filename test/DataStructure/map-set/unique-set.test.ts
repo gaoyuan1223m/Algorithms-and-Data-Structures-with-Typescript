@@ -1,4 +1,4 @@
-import { UniqueSet } from "@DataStructure/hash";
+import { UniqueSet } from "@DataStructure/map-set";
 import { IUniqueSet } from "@Interface/specific";
 import { catchErr, Errors } from "@Utils/error-handling";
 

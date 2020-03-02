@@ -1,6 +1,11 @@
-import { IDictionary, IHash } from "@Interface/specific";
+import { IDictionary, IHash, ITree, IRedBlackTreeNode, IMap, ITreeMapNode } from "@Interface/specific";
 import { Console } from "@Utils/emphasize";
 import { Errors } from "@Utils/error-handling";
+import { IMapNode } from "@Interface/common";
+import { ICompareFunc, referenceTypeComparison } from "@Utils/compare";
+import { BinaryTreeFactory } from "@DataStructure/tree";
+import { TreeTypes, TreePrintOrder } from "@Utils/types";
+import { MapNode } from "@Entity/concrete/map-node";
 
 export class Dictionary<K, V> implements IDictionary<K, V> {
 
@@ -110,6 +115,104 @@ export class Dictionary<K, V> implements IDictionary<K, V> {
     }
 
 }
+
+export class Dictionary1<K, V> implements IDictionary<K, V> {
+
+    private _rbt: ITree<IMapNode<K, V>>;
+
+    get size(): number {
+        return this._rbt.size;
+    };
+
+    constructor() {
+        this._rbt = BinaryTreeFactory.create(TreeTypes.RBT, referenceTypeComparison);
+    }
+
+    del(key: K): boolean {
+        throw new Error("Method not implemented.");
+    }
+
+    get(key: K): V {
+        throw '333'!
+    }
+
+    has(key: K): boolean {
+        return this._rbt.contains(new MapNode(key, null));
+    }
+
+    set(key: K, value: V): this {
+        this._rbt.append(new MapNode(key, value));
+        return this;
+    }
+
+    forEach(callbackfn: (value: V, key: K, dict: IDictionary<K, V>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    isEmpty(): boolean {
+        return this._rbt.isEmpty();
+    }
+
+    print(): this {
+        this._rbt.print(TreePrintOrder.InOrder, false);
+        return this;
+    }
+
+    clear(): this {
+        this._rbt.clear();
+        return this;
+    }
+
+
+}
+
+export class TreeMap<K, V> implements IMap<K, V> {
+
+    private _rootNode: ITreeMapNode<K, V>;
+    private _size: number;
+
+    del(key: K): boolean {
+        throw new Error("Method not implemented.");
+    }
+
+    get(key: K): V {
+        throw new Error("Method not implemented.");
+    }
+
+    has(key: K): boolean {
+        throw new Error("Method not implemented.");
+    }
+
+    set(key: K, value: V): this {
+        throw new Error("Method not implemented.");
+    }
+
+    forEach(callbackfn: (value: V, key: K, dict: IDictionary<K, V>) => void, thisArg?: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+    size: number;
+
+    isEmpty(): boolean {
+        throw new Error("Method not implemented.");
+    }
+
+    print(): this {
+        throw new Error("Method not implemented.");
+    }
+
+    clear(): this {
+        throw new Error("Method not implemented.");
+    }
+
+    private __init__(): this {
+        this._rootNode = undefined;
+        this._size = 0;
+        return this;
+    }
+
+}
+
 
 
 /**
