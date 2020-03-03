@@ -58,6 +58,7 @@ class AVLNode<T> extends BSTNode<T> implements IAVLTreeNode<T> {
     }
 
 }
+
 class RBTNode<T> extends BSTNode<T> implements IRedBlackTreeNode<T> {
 
     setRed(): void {

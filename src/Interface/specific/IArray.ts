@@ -15,6 +15,10 @@ export interface IArray<T> extends IList<T> {
 
 }
 
+export interface IArrayLike<T> {
+    [index: number]: T
+}
+
 export interface IArrayConstructor {
 
     /**

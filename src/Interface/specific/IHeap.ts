@@ -11,6 +11,11 @@ export interface IHeap<T> extends ICollectionBase {
     readonly peak: T;
 
     /**
+     * Return the Tail value of the Heap without removing it
+     */
+    readonly tail: T;
+
+    /**
      * *Add an element to the HEAP*
      * @param value element to add to the HEAP
      */

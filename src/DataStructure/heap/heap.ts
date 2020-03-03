@@ -1,6 +1,6 @@
 
 
-import { IHeapConstructor, } from "@Interface/specific";
+import { IHeapConstructor, IArrayLike } from "@Interface/specific";
 import { valueTypeComparison, CompareFn } from "@Utils/compare";
 import { IFactory } from "@Interface/common";
 import { BinaryHeapTypes } from "@Utils/types";
@@ -9,9 +9,6 @@ import { ICompareFunc } from "@Utils/compare";
 import { Console } from "@Utils/emphasize";
 import { Errors } from "@Utils/error-handling";
 
-interface IArrayLike<T> {
-    [index: number]: T
-}
 
 class Heap<T> implements IHeap<T> {
 
@@ -22,7 +19,7 @@ class Heap<T> implements IHeap<T> {
         return this._elements[0];
     }
 
-    protected get tail(): T {
+    get tail(): T {
         return this._elements[this._size - 1];
     }
 
@@ -189,7 +186,7 @@ class Heap<T> implements IHeap<T> {
     }
 
     private _print(): this {
-        let str = "[ ";
+        let str = "Heap: [ ";
         for (let i = 0; i < this._size; i++) {
             str += `${this._elements[i]}`;
             if (i === this._size - 1) break;

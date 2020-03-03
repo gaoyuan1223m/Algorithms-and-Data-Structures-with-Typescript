@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-> - Step 1: git clone https://github.com/gaoyuan1223m/TypescriptForAlgorithmsAndDataStructures.git
+> - Step 1: git clone
 > - Step 2: npm install
 > - Step 3: npm test
 
