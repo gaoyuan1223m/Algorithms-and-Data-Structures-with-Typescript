@@ -40,9 +40,9 @@
 
 - [RBT](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/tree/tree.ts)
 
-- [Dictionary](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/hash/dictionary.ts)
+- [TreeMap](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/map-set/tree-map.ts)
 
-- [UniqueSet](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/hash/unique-set.ts)
+- TreeSet
 
 - Graph
 
