@@ -26,7 +26,7 @@ export class MapNode<K, V> implements IMapNode<K, V> {
 export class TreeMapNode<K, V> implements ITreeMapNode<K, V> {
 
     constructor(
-        public readonly key: K,
+        public key: K,
         public value: V,
         public parent: ITreeMapNode<K, V> = null,
         public color: TreeNodeColor = TreeNodeColor.Red,
