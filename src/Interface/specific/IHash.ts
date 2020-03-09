@@ -36,7 +36,7 @@ export interface IMap<K = string, V = string> extends ICollectionBase {
      */
     set(key: K, value: V): this;
 
-    forEach(callbackfn: (value: V, key: K, IMap: IMap<K, V>) => void, thisArg?: any): void
+    forEach(callbackfn: (key: K, value: V, IMap: IMap<K, V>) => void, thisArg?: any): void
 }
 
 export interface ISet<T = string> extends ICollectionBase {

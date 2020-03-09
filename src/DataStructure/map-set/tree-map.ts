@@ -6,7 +6,6 @@ import { TreeMapNode } from "@Entity/concrete/map-node";
 import { StackFactory } from "@DataStructure/stack-queue";
 import { Console } from "@Utils/emphasize";
 
-
 export class TreeMap<K, V> implements IMap<K, V> {
 
     private _rootNode: ITreeMapNode<K, V>;
@@ -44,8 +43,25 @@ export class TreeMap<K, V> implements IMap<K, V> {
         return this._insertByIteraton(key, value);
     }
 
-    forEach(callbackfn: (value: V, key: K, IMap: IMap<K, V>) => void, thisArg?: any): void {
-        throw new Error("Method not implemented.");
+    forEach(callbackfn: (key: K, value: V, IMap: IMap<K, V>) => void, thisArg: any = this): void {
+        if(!this._rootNode) return;
+
+        let pointer = this._rootNode;        
+
+        if (!pointer) return;
+
+        const stack = StackFactory.create<ITreeMapNode<K, V>>();
+
+        while (!stack.isEmpty() || pointer) {
+            if (pointer) {
+                stack.push(pointer);
+                pointer = pointer.left;
+            } else {
+                pointer = stack.pop();
+                callbackfn(pointer.key, pointer.value, this);
+                pointer = pointer.right;
+            }
+        }
     }
 
     isEmpty(): boolean {
