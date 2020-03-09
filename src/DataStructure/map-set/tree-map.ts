@@ -2,8 +2,9 @@
 import { IMap, ITreeMapNode } from "@Interface/specific";
 import { Errors } from "@Utils/error-handling";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare";
-import { TreePrintOrder } from "@Utils/types";
 import { TreeMapNode } from "@Entity/concrete/map-node";
+import { StackFactory } from "@DataStructure/stack-queue";
+import { Console } from "@Utils/emphasize";
 
 
 export class TreeMap<K, V> implements IMap<K, V> {
@@ -51,8 +52,9 @@ export class TreeMap<K, V> implements IMap<K, V> {
         return this._size === 0;
     }
 
-    print(order?: TreePrintOrder, isByRecursion?: boolean): this {
-        throw new Error("Method not implemented.");
+    print(): this {
+        Console.OK(`${this._printInOrder(this._rootNode)}`);
+        return this;
     }
 
     clear(): this {
@@ -387,6 +389,27 @@ export class TreeMap<K, V> implements IMap<K, V> {
         } while (pointer?.left || pointer?.right)
 
         return null;
+    }
+
+    private _printInOrder(treeNode: ITreeMapNode<K, V>): string {
+        let pointer = treeNode;
+        let str = "";
+
+        if (!pointer) return;
+
+        const stack = StackFactory.create<ITreeMapNode<K, V>>();
+
+        while (!stack.isEmpty() || pointer) {
+            if (pointer) {
+                stack.push(pointer);
+                pointer = pointer.left;
+            } else {
+                pointer = stack.pop();
+                str += `${pointer.key} \t--> \t${pointer.value};\n`;
+                pointer = pointer.right;
+            }
+        }
+        return str;
     }
 
     private __init__(): this {

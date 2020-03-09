@@ -22,6 +22,7 @@ describe(`Test for Tree Map`, () => {
         for (const { id, name } of avengers) {
             treeMap.set(id, name);
         }
+        treeMap.print();
     });
 
     it(`Should return right size`, () => {

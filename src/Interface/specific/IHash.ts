@@ -64,7 +64,7 @@ export interface ISet<T = string> extends ICollectionBase {
      * @param callbackfn 
      * @param thisArg 
      */
-    forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, set: ISet<T>) => void, thisArg?: any): void;
 }
 
 export interface ITreeMapNode<K, V> {
