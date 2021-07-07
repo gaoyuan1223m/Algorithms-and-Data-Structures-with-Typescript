@@ -1,7 +1,11 @@
 
-import { ISinglyListNodeConstructor, IDoublyListNodeConstructor, ISinglyListNode, IDoublyListNode } from "@Interface/specific";
+import {
+    ISinglyListNode, ISinglyListNodeConstructor,
+    IDoublyListNode, IDoublyListNodeConstructor
+} from "@Interface/specific";
 
-export const SinglyListNode: ISinglyListNodeConstructor = class SLLNode<T> implements ISinglyListNode<T> {
+
+class SLLNode<T> implements ISinglyListNode<T> {
 
     constructor(
         public value: T = null,
@@ -9,7 +13,7 @@ export const SinglyListNode: ISinglyListNodeConstructor = class SLLNode<T> imple
     ) { }
 }
 
-export const DoublyListNode: IDoublyListNodeConstructor = class DLLNode<T> extends SinglyListNode<T> {
+class DLLNode<T> extends SLLNode<T> {
 
     constructor(
         public value: T = null,
@@ -19,3 +23,6 @@ export const DoublyListNode: IDoublyListNodeConstructor = class DLLNode<T> exten
         super(value, next)
     }
 }
+
+export const SinglyListNode: ISinglyListNodeConstructor = SLLNode;
+export const DoublyListNode: IDoublyListNodeConstructor = DLLNode;

@@ -1,11 +1,8 @@
 
 import {
-    IBinaryTreeNodeConstructor,
-    IBinaryTreeNode,
-    IAVLTreeNodeConstructor,
-    IAVLTreeNode,
-    IRedBlackTreeNodeConstructor,
-    IRedBlackTreeNode
+    IBinaryTreeNodeConstructor, IBinaryTreeNode,
+    IAVLTreeNodeConstructor, IAVLTreeNode,
+    IRedBlackTreeNodeConstructor, IRedBlackTreeNode
 } from "@Interface/specific";
 import { TreeNodeColor } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";

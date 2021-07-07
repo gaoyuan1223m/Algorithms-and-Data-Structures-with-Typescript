@@ -1,10 +1,15 @@
-import { ICollectionBase } from "@Interface/common";
+import { ICollectionBase, IKeyValPair } from "@Interface/common";
 import { TreeNodeColor } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
+import { ISinglyListNode, IRedBlackTreeNode } from "@Interface/specific";
 
 export interface HashClassInterface<T> {
     hashCode(): number;
     equals(key: T): boolean;
+}
+
+export interface IHashKeyValPair<K, V> extends IKeyValPair<K, V> {
+    hash: number;
 }
 
 export interface IMap<K = string, V = string> extends ICollectionBase {
@@ -84,4 +89,22 @@ export interface ITreeMapNode<K, V> {
     setBlack(): void;
     getUncle(compare: ICompareFunc<K>): ITreeMapNode<K, V>
     getSibling(compare: ICompareFunc<K>): ITreeMapNode<K, V>;
+}
+
+export interface IHashListNode<K, V> extends IHashKeyValPair<K, V>, ISinglyListNode<V> { }
+
+export interface IHashListNodeConstructor {
+    new <K, V>(hash?: number, key?: K, value?: V, next?: IHashListNode<K, V>): IHashListNode<K, V>
+}
+
+export interface IHashTreeNode<K, V> extends IHashKeyValPair<K, V>, IRedBlackTreeNode<V> { }
+
+export interface IHashTreeNodeConstructor {
+    new <K, V>(
+        hash?: number, key?: K, value?: V,
+        parent?: IHashTreeNode<K, V>,
+        color?: TreeNodeColor,
+        left?: IHashTreeNode<K, V>,
+        right?: IHashTreeNode<K, V>
+    ): IHashTreeNode<K, V>
 }
