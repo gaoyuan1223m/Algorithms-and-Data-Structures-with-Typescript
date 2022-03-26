@@ -4,8 +4,8 @@ import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
-import { QuickSort, SortMethods } from "@Algorithm/sort";
-import { Validation, ValidateParams, PositiveSaftInt, SafeInt } from "@Utils/decorator";
+import { QuickSort, BubbleSort, SortMethods, SortType } from "@Algorithm/sort";
+import { Validation, ValidateParams, PositiveSafeInt, SafeInt } from "@Utils/decorator";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
 import { BinaryTreeFactory } from "@DataStructure/tree";
@@ -14,13 +14,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     [n: number]: T; // index signature to present Array
 
-    @PositiveSaftInt()
+    @PositiveSafeInt()
     protected _capacity: number;
 
-    @PositiveSaftInt()
+    @PositiveSafeInt()
     protected _incrementals: number;
 
-    @PositiveSaftInt()
+    @PositiveSafeInt()
     protected _size: number;
 
     @SafeInt()
@@ -141,6 +141,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     sort(sortMethod: SortMethods = SortMethods.Quick): this {
+        if (sortMethod === SortMethods.Bubble) {
+            return this._bubbleSort(this._compare);
+        }
+
         return this._quickSort(this._compare);
     }
 
@@ -248,8 +252,16 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _quickSort(compare?: ICompareFunc<T>): this {
-        QuickSort(this, 0, this._capacity - 1, compare); // positive indice
-        QuickSort(this, 0 - this._capacity, -1, compare); // negative indice
+        QuickSort(this, 0, this._capacity - 1, compare); // positive index
+        QuickSort(this, 0 - this._capacity, -1, compare); // negative index
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+        return this;
+    }
+
+    private _bubbleSort(compare?: ICompareFunc<T>): this {
+        BubbleSort(this, 0, this._capacity - 1, compare);
+        BubbleSort(this, 0 - this._capacity, -1, compare);
 
         this._idxOfLastElm = this._findNewIdxOfLastElm();
         return this;

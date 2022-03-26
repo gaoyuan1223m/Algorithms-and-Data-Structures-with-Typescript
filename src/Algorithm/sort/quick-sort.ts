@@ -5,11 +5,16 @@ import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
  * *Sort Array by Quick-Sort*
  * *This Method selects the middle element, idx is (left + right)/2 to INT, as the PIVOT*
  * @param arr Array that needs to be sorted
- * @param left Starting index of the Array, it's generally 0; 
+ * @param left Starting index of the Array, it's generally 0;
  * @param right Ending index of the Array, it's normally (array.length - 1)
  * @param ICompareFunc Methods that compares two element
  */
-export function QuickSort<T>(arr: IArray<T>, left: number, right: number, compare: ICompareFunc<T> = valueTypeComparison): void {
+export function QuickSort<T>(
+    arr: IArray<T>,
+    left: number,
+    right: number,
+    compare: ICompareFunc<T> = valueTypeComparison
+): void {
 
     if (left >= right) return;
 

@@ -3,3 +3,8 @@ export enum SortMethods {
     Merge,
     Bubble
 }
+
+export enum SortType {
+    Increasing,
+    Decreasing,
+}

@@ -5,7 +5,7 @@ import { Errors } from "@Utils/error-handling";
  * @param upperLimit input value must be less than or equal to the Uppper Limit
  * @exception InvalidArgument
  */
-export function PositiveSaftInt(upperLimit?: number) {
+export function PositiveSafeInt(upperLimit?: number) {
     return (target: any, propertyName: string) => {
 
         let value = target[propertyName] as number;
@@ -103,7 +103,7 @@ export function Required() {
 /**
  * @PropertyDecorator
  * @param upperLimit input value must be less than or equal to the Uppper Limit
- * @execption OutOfBoundary 
+ * @exception OutOfBoundary
  */
 export function Max(upperLimit: number) {
     return (target: any, propertyName: string) => {
