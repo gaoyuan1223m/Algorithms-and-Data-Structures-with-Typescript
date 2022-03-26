@@ -10,6 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install Dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
     - name: Run Unit Test
       run: npm run test
