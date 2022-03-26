@@ -5,3 +5,5 @@ coverage
 
 dependencies.txt
 dependencies.json
+
+package-lock.json
