@@ -8,14 +8,17 @@ describe(`Test for Bubble-sort`, () => {
     let array: IArray<number>;
 
     beforeAll(() => {
-        const capacity = 5
+        const capacity = 8
         array = ArrayFactory.create(ArrayTypes.DYNAMIC, valueTypeComparison, capacity);
         array
             .append(5)
             .append(7)
             .append(6)
             .append(3)
-            .append(1);
+            .append(1)
+            .append(8)
+            .append(9)
+            .append(10);
 
     });
 
