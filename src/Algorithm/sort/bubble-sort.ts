@@ -1,8 +1,31 @@
 import { IArray } from "@Interface/specific/IArray";
 import { ICompareFunc, valueTypeComparison } from "@Utils/compare/comparison";
-import { SortType } from '@Algorithm/sort/sort-methods';
 
 export function BubbleSort<T>(
+  arr: IArray<T>,
+  left: number,
+  right: number,
+  compare: ICompareFunc<T> = valueTypeComparison
+) {
+  if (left >= right) return;
+
+  const stopPointer = left;
+
+  for (let end = right; end > stopPointer; end--) {
+    let pointerAtSorted = left + 1; // 从改index起，以后的数据为有序
+
+    for (let begin = left + 1; begin <= end; begin++) {
+      if (compare(arr[begin]).isLessThan(arr[begin - 1])) {
+        [arr[begin - 1], arr[begin]] = [arr[begin], arr[begin - 1]];
+        pointerAtSorted = begin;
+      }
+    }
+
+    end = pointerAtSorted;
+  }
+}
+
+function BubbleSort2<T>(
   arr: IArray<T>,
   left: number,
   right: number,
@@ -14,12 +37,12 @@ export function BubbleSort<T>(
   const stopPointer = left;
 
   for (let end = right; end > stopPointer; end--) {
-    let isSorted = true;
+    let isSorted = true; // 默认当前数据有序
 
     for (let begin = left + 1; begin <= end; begin++) {
       if (compare(arr[begin]).isLessThan(arr[begin - 1])) {
         [arr[begin - 1], arr[begin]] = [arr[begin], arr[begin - 1]];
-        isSorted = false;
+        isSorted = false; // 一旦发生交换，说明无序
       }
     }
 
