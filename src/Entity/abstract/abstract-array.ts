@@ -4,7 +4,7 @@ import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
-import { QuickSort, BubbleSort, SortMethods, SortType } from "@Algorithm/sort";
+import { QuickSort, BubbleSort, SortMethods, SelectionSort } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSafeInt, SafeInt } from "@Utils/decorator";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
@@ -42,6 +42,24 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     get tail(): T {
         return this[this._capacity - 1];
+    }
+
+    get isInIncreasingOrder(): boolean {
+        if (this._size < 2) {
+            return true;
+        }
+
+        for (let i = 1; i < this._size; i++) {
+            const isIncreasing = this._compare(this[i]).isLargerOrEqualTo(this[i - 1]);
+
+            if (isIncreasing) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     constructor(capacity: number, compare: ICompareFunc<T>, incrementals: number) {
@@ -143,6 +161,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
     sort(sortMethod: SortMethods = SortMethods.Quick): this {
         if (sortMethod === SortMethods.Bubble) {
             return this._bubbleSort(this._compare);
+        }
+
+        if (sortMethod === SortMethods.Selection) {
+            return this._selectionSort(this._compare);
         }
 
         return this._quickSort(this._compare);
@@ -264,6 +286,15 @@ export abstract class AbstractArray<T> implements IArray<T> {
         BubbleSort(this, 0 - this._capacity, -1, compare);
 
         this._idxOfLastElm = this._findNewIdxOfLastElm();
+        return this;
+    }
+
+    private _selectionSort(compare?: ICompareFunc<T>): this {
+        SelectionSort(this, 0, this._capacity - 1, compare);
+        SelectionSort(this, 0 - this._capacity, -1, compare);
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+
         return this;
     }
 

@@ -4,15 +4,17 @@ import { ICompareFunc } from "@Utils/compare";
 
 export interface IArray<T> extends IList<T> {
     /**
-     * @return the length of the current Array
+     * *the number of rooms in current Array*
      */
     readonly length: number;
-
+    /**
+     * *whether elements are increasingly ordered*
+     */
+    readonly isInIncreasingOrder: boolean;
     /**
      * @param n index of the element on the Array
      */
     [n: number]: T;
-
 }
 
 export interface IArrayLike<T> {

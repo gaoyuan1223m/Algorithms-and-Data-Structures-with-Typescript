@@ -1,7 +1,8 @@
 export enum SortMethods {
     Quick,
     Merge,
-    Bubble
+    Bubble,
+    Selection,
 }
 
 export enum SortType {

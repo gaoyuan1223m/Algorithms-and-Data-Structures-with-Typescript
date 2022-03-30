@@ -1,28 +1,24 @@
 import { IListBase } from "@Interface/common";
 
 export interface IDeque<T> extends IListBase<T> {
-
     /**
-     * *Add element(s) to the HEAD
-     * @param values: element(s) that need(s) to add
+     * *Add element(s) to the HEAD*
+     * @param values element(s) to add
      */
     unshift(...values: T[]): this;
-
     /**
      * *Add elements to the TAIL
-     * @param values: Elements(s) that need(s) to add
+     * @param values: elements(s) to add
      */
     push(...values: T[]): this;
-
     /**
-     * *Remove element(s) from the HEAD element and return*
+     * *Remove element(s) from the HEAD and return element*
      */
     shift(): T;
-    /** 
-     * @param n the number of element(s) that need(s) to remove from HEAD 
+    /**
+     * @param n the number of element(s) to remove from HEAD
      */
     shift(n: number): T[];
-
     /**
      * *Remove element(s) from the Tail
      */
