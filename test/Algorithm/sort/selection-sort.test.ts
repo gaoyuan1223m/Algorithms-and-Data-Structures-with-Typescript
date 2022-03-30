@@ -4,7 +4,7 @@ import { ArrayTypes } from "@Utils/types";
 import { valueTypeComparison } from "@Utils/compare";
 import { IArray } from "@Interface/specific";
 
-describe(`Test for Bubble-sort`, () => {
+describe(`Test for Selection-sort`, () => {
     let array: IArray<number>;
 
     beforeAll(() => {
@@ -16,13 +16,15 @@ describe(`Test for Bubble-sort`, () => {
             .append(6)
             .append(3)
             .append(1)
-            .append(8)
+            .append(7)
             .append(9)
-            .append(10);
-
+            .append(10)
+            .print();
     });
 
     it(`#sort increasingly`, () => {
-        expect(array.sort(SortMethods.Bubble).isInIncreasingOrder).toBe(true);
+        expect(array.sort(SortMethods.Selection).isInIncreasingOrder).toBe(true);
+
+        array.print();
     });
 })

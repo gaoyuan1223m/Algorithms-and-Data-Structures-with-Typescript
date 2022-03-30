@@ -33,7 +33,7 @@ describe(`Test for int-SQRT`, () => {
     });
 
     inValidTestCases.forEach(({params: invalidParam, err: expectedErr}) => {
-        it(`SQRT of "${invalidParam}" should throw expections`, () => {
+        it(`SQRT of "${invalidParam}" should throw exceptions`, () => {
             expect(catchErr(mySqrt)(invalidParam)).toBe(expectedErr);
         })
     })
