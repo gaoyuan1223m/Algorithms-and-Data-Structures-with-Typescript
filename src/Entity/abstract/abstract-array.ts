@@ -4,7 +4,7 @@ import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
-import { QuickSort, BubbleSort, SortMethods, SelectionSort } from "@Algorithm/sort";
+import { QuickSort, BubbleSort, SortMethods, SelectionSort, HeapSort } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSafeInt, SafeInt } from "@Utils/decorator";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
@@ -167,6 +167,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
             return this._selectionSort(this._compare);
         }
 
+        if (sortMethod === SortMethods.HEAP) {
+            return this._heapSort(this._compare);
+        }
+
         return this._quickSort(this._compare);
     }
 
@@ -274,24 +278,39 @@ export abstract class AbstractArray<T> implements IArray<T> {
     }
 
     protected _quickSort(compare?: ICompareFunc<T>): this {
-        QuickSort(this, 0, this._capacity - 1, compare); // positive index
-        QuickSort(this, 0 - this._capacity, -1, compare); // negative index
+        QuickSort(this, 0, this._capacity - 1, compare);
+
+        this._mapNegativeIndex()
 
         this._idxOfLastElm = this._findNewIdxOfLastElm();
+
         return this;
     }
 
     private _bubbleSort(compare?: ICompareFunc<T>): this {
         BubbleSort(this, 0, this._capacity - 1, compare);
-        BubbleSort(this, 0 - this._capacity, -1, compare);
+
+        this._mapNegativeIndex()
 
         this._idxOfLastElm = this._findNewIdxOfLastElm();
+
         return this;
     }
 
     private _selectionSort(compare?: ICompareFunc<T>): this {
         SelectionSort(this, 0, this._capacity - 1, compare);
-        SelectionSort(this, 0 - this._capacity, -1, compare);
+
+        this._mapNegativeIndex()
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+
+        return this;
+    }
+
+    private _heapSort(compare?: ICompareFunc<T>): this {
+        HeapSort(this, 0, this._capacity - 1, compare);
+
+        this._mapNegativeIndex()
 
         this._idxOfLastElm = this._findNewIdxOfLastElm();
 
@@ -305,6 +324,13 @@ export abstract class AbstractArray<T> implements IArray<T> {
         return kk;
     }
 
+    protected _mapNegativeIndex() {
+        let kk = 0 - this._capacity;
+        while (kk < 0) {
+            this[kk] = this[kk + this._capacity];
+            kk += 1;
+        }
+    }
 
     private _printFromHeadToTail(): this {
         let str = "[ "

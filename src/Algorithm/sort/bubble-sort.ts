@@ -25,27 +25,27 @@ export function BubbleSort<T>(
   }
 }
 
-function BubbleSort2<T>(
-  arr: IArray<T>,
-  left: number,
-  right: number,
-  compare: ICompareFunc<T> = valueTypeComparison
-) {
+// function BubbleSort2<T>(
+//   arr: IArray<T>,
+//   left: number,
+//   right: number,
+//   compare: ICompareFunc<T> = valueTypeComparison
+// ) {
 
-  if (left >= right) return;
+//   if (left >= right) return;
 
-  const stopPointer = left;
+//   const stopPointer = left;
 
-  for (let end = right; end > stopPointer; end--) {
-    let isSorted = true; // 默认当前数据有序
+//   for (let end = right; end > stopPointer; end--) {
+//     let isSorted = true; // 默认当前数据有序
 
-    for (let begin = left + 1; begin <= end; begin++) {
-      if (compare(arr[begin]).isLessThan(arr[begin - 1])) {
-        [arr[begin - 1], arr[begin]] = [arr[begin], arr[begin - 1]];
-        isSorted = false; // 一旦发生交换，说明无序
-      }
-    }
+//     for (let begin = left + 1; begin <= end; begin++) {
+//       if (compare(arr[begin]).isLessThan(arr[begin - 1])) {
+//         [arr[begin - 1], arr[begin]] = [arr[begin], arr[begin - 1]];
+//         isSorted = false; // 一旦发生交换，说明无序
+//       }
+//     }
 
-    if (isSorted) break;
-  }
-}
+//     if (isSorted) break;
+//   }
+// }

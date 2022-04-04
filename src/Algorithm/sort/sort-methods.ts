@@ -3,6 +3,7 @@ export enum SortMethods {
     Merge,
     Bubble,
     Selection,
+    HEAP,
 }
 
 export enum SortType {

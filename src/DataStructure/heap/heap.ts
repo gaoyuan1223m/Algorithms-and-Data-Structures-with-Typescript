@@ -1,5 +1,3 @@
-
-
 import { IHeapConstructor, IArrayLike } from "@Interface/specific";
 import { valueTypeComparison, CompareFn } from "@Utils/compare";
 import { IFactory } from "@Interface/common";
@@ -45,7 +43,7 @@ class Heap<T> implements IHeap<T> {
 
     add(value: T): this {
         const newElementIndex = this._addAtTail(value);
-        return this._siftUp(newElementIndex, this.compareFn);
+        return this._shiftUp(newElementIndex, this.compareFn);
     }
 
     removePeak(): T {
@@ -56,7 +54,7 @@ class Heap<T> implements IHeap<T> {
         if (this.isEmpty()) return peak;
 
         this._addAtPeak(tail);
-        this._siftDown(0, this.compareFn);
+        this._shiftDown(0, this.compareFn);
 
         return peak;
     }
@@ -68,7 +66,7 @@ class Heap<T> implements IHeap<T> {
 
         if (!this._isValidValue(peak) || this._size === 1) return peak;
 
-        this._siftDown(0, this.compareFn);
+        this._shiftDown(0, this.compareFn);
 
         return peak;
     }
@@ -115,18 +113,18 @@ class Heap<T> implements IHeap<T> {
     }
 
     protected _hasChildren(parentIndex: number): boolean {
-        return this._hasleftChild(parentIndex) && this._hasRightChild(parentIndex);
+        return this._hasLeftChild(parentIndex) && this._hasRightChild(parentIndex);
     }
 
     protected _getLeftChildIndex(parentIndex: number): number {
-        return this._hasleftChild(parentIndex) ? 2 * parentIndex + 1 : -1;
+        return this._hasLeftChild(parentIndex) ? 2 * parentIndex + 1 : -1;
     }
 
     protected _getRightChildIndex(parentIndex: number): number {
         return this._hasRightChild(parentIndex) ? 2 * parentIndex + 2 : -1;
     }
 
-    protected _hasleftChild(parentIndex: number): boolean {
+    protected _hasLeftChild(parentIndex: number): boolean {
         return 2 * parentIndex + 1 <= this._size - 1;
     }
 
@@ -138,7 +136,7 @@ class Heap<T> implements IHeap<T> {
         return Math.floor(this._size / 2);
     }
 
-    protected _siftUp(index: number, compareFn: CompareFn<T>): this {
+    protected _shiftUp(index: number, compareFn: CompareFn<T>): this {
         const value = this._elements[index];
         while (this._hasParent(index)) {
             let parentIndex = this._getParentIdx(index);
@@ -153,7 +151,7 @@ class Heap<T> implements IHeap<T> {
         return this;
     }
 
-    protected _siftDown(index: number, compareFn: CompareFn<T>): this {
+    protected _shiftDown(index: number, compareFn: CompareFn<T>): this {
         const value = this._elements[index];
         while (this._hasChild(index)) {
             // It must have left node if having child
