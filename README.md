@@ -4,11 +4,20 @@
 
 ![Algorithms and Data Structures](./assets/background.png)
 
+## Version
+
+> - npm -v => 8.0.0+
+> - node -v => 16.13.0+
+
+<br/>
+
 ## Getting Started
 
 > - Step 1: git clone
-> - Step 2: npm install
+> - Step 2: npm i --legacy-peer-deps
 > - Step 3: npm test
+
+<br/>
 
 ## Data Structures
 
@@ -30,7 +39,7 @@
 
 - [Queue](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/queue.ts)
 
-- [Deque](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/deque.ts)
+- [Dequeue](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/stack-queue/deque.ts)
 
 ### Non-Linear
 
@@ -46,7 +55,24 @@
 
 - Graph
 
+- Union Find
 
 ## Algorithms
 
 - Sort
+
+    - [BubbleSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
+
+    - [SelectionSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
+
+    - [HeapSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/heap-sort.ts)
+
+    - [QuickSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/quick-sort.ts)
+
+    - ...
+
+- Recursion
+
+- Back tracking
+
+- ...
