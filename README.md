@@ -2,7 +2,7 @@
 
 *keyword*: *Typescript, ts-jest, module-alias*
 
-![Algorithms and Data Structures](assets/background.jpg)
+![Algorithms and Data Structures](assets/1.jpeg)
 
 ## Version
 
