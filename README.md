@@ -61,13 +61,15 @@
 
 - Sort
 
-    - [BubbleSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
+    - [Bubble](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
 
-    - [SelectionSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
+    - [Selection](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
 
-    - [HeapSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/heap-sort.ts)
+    - [Heap](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/heap-sort.ts)
 
-    - [QuickSort](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/quick-sort.ts)
+    - [Quick](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/quick-sort.ts)
+
+    - [Insertion](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/insertion-sort.ts)
 
     - ...
 
