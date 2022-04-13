@@ -12,7 +12,8 @@ export function BubbleSort<T>(
   const stopPointer = left;
 
   for (let end = right; end > stopPointer; end--) {
-    let pointerAtSorted = left + 1; // 从改index起，以后的数据为有序
+     // Assume array is in-ordered from pointerAtSorted to the end
+    let pointerAtSorted = left + 1;
 
     for (let begin = left + 1; begin <= end; begin++) {
       if (compare(arr[begin]).isLessThan(arr[begin - 1])) {

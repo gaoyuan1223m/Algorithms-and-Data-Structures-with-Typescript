@@ -4,7 +4,7 @@ import { Console } from "@Utils/emphasize";
 import { ArrayTypes, ListTypes, TreeTypes, ListPrintOrder } from "@Utils/types";
 import { ICompareFunc } from "@Utils/compare";
 import { Errors } from "@Utils/error-handling";
-import { QuickSort, BubbleSort, SortMethods, SelectionSort, HeapSort } from "@Algorithm/sort";
+import { QuickSort, BubbleSort, SortMethods, SelectionSort, HeapSort, InsertionSort } from "@Algorithm/sort";
 import { Validation, ValidateParams, PositiveSafeInt, SafeInt } from "@Utils/decorator";
 import { ArrayFactory } from "@DataStructure/array";
 import { LinkedListFactory } from "@DataStructure/linked-list";
@@ -171,6 +171,10 @@ export abstract class AbstractArray<T> implements IArray<T> {
             return this._heapSort(this._compare);
         }
 
+        if (sortMethod === SortMethods.Insertion) {
+            return this._insertionSort(this._compare);
+        }
+
         return this._quickSort(this._compare);
     }
 
@@ -309,6 +313,16 @@ export abstract class AbstractArray<T> implements IArray<T> {
 
     private _heapSort(compare?: ICompareFunc<T>): this {
         HeapSort(this, 0, this._capacity - 1, compare);
+
+        this._mapNegativeIndex()
+
+        this._idxOfLastElm = this._findNewIdxOfLastElm();
+
+        return this;
+    }
+
+    private _insertionSort(compare?: ICompareFunc<T>): this {
+        InsertionSort(this, 0, this._capacity - 1, compare);
 
         this._mapNegativeIndex()
 

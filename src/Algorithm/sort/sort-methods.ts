@@ -4,6 +4,7 @@ export enum SortMethods {
     Bubble,
     Selection,
     HEAP,
+    Insertion
 }
 
 export enum SortType {
