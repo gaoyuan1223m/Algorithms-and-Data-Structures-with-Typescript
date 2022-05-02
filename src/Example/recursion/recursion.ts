@@ -108,7 +108,6 @@ const insertSort = (nums: number[]): number[] => {
     return a;
 }
 
-
 const mergeAndInserSort = (nums: number[]): number[] => {
 
     if (nums.length <= 1) return nums; //Recrursion Base

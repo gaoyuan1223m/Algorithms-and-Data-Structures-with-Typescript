@@ -1,11 +1,9 @@
-const quickSort = (array: number[]): number[] => {
+export function quickSort(array: number[]): number[] {
 
-  if (array.length <= 1) return array; //Recrursion Base
+  if (array.length <= 1) return array;
 
   const middle = Math.floor(array.length / 2);
-
   const pivot = array[middle];
-
   const left: number[] = [];
   const right: number[] = [];
 
