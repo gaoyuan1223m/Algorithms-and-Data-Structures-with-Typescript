@@ -1,6 +1,5 @@
 # Algorithms and Data Structures in TypeScript
 
-*keyword*: *Typescript, ts-jest, module-alias*
 
 ![Algorithms and Data Structures](assets/1.jpeg)
 
@@ -27,9 +26,9 @@
 
 - [Dynamic Array](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/array/array.ts)
 
-- [Singly Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
+- [One-way Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
-- [Doubly Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
+- [Two-way Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
 - [Circular Linked List](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/DataStructure/linked-list/linked-list.ts)
 
@@ -59,22 +58,25 @@
 
 ## Algorithms
 
-- Sort
+### Sort
 
-    - [Bubble](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
+- [Bubble](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
 
-    - [Selection](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
+- [Selection](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
 
-    - [Heap](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/heap-sort.ts)
+- [Heap](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/heap-sort.ts)
 
-    - [Quick](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/quick-sort.ts)
+- [Quick](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/quick-sort.ts)
 
-    - [Insertion](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/insertion-sort.ts)
-
-    - ...
-
-- Recursion
-
-- Back tracking
+- [Insertion](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/insertion-sort.ts)
 
 - ...
+
+### Recursion
+
+- ...
+
+### Back tracking
+
+- ...
+### ...
