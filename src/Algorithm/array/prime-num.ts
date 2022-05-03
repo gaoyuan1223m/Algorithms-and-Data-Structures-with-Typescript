@@ -4,7 +4,7 @@
  * @param upperLimit max value of the primes array
  */
 export const generateAllPrimes = (upperLimit: number): number[] => {
-    return filterOutCompositeNumbers(generateArrWithUpperLimit(upperLimit));
+  return filterOutCompositeNumbers(generateArrWithUpperLimit(upperLimit));
 }
 
 
@@ -12,8 +12,8 @@ export const generateAllPrimes = (upperLimit: number): number[] => {
  * Return an array<number> containing element from 0 to n (n included)
  */
 const generateArrWithUpperLimit = (n: number): number[] => {
-    // O(n)
-    return Array.from({ length: n + 1 }, (v, k) => k);
+  // O(n)
+  return Array.from({ length: n + 1 }, (v, k) => k);
 }
 
 /**
@@ -22,19 +22,19 @@ const generateArrWithUpperLimit = (n: number): number[] => {
  */
 const filterOutCompositeNumbers = (arr: number[]): number[] => {
 
-    const n = Math.ceil(Math.sqrt(arr.length));
+  const n = Math.ceil(Math.sqrt(arr.length));
 
-    for (let i = 0; i < n; i++) {
-        if (arr[i] === 0 || arr[i] === 1) continue;
+  for (let i = 0; i < n; i++) {
+    if (arr[i] === 0 || arr[i] === 1) continue;
 
-        for (let j = i + i; j < arr.length; j += i) {
-            if (arr[j] === 0) continue;
+    for (let j = i + i; j < arr.length; j += i) {
+      if (arr[j] === 0) continue;
 
-            arr[j] = 0;
-        }
+      arr[j] = 0;
     }
+  }
 
-    return arr.filter(a => a !== 0 && a !== 1);
+  return arr.filter(a => a !== 0 && a !== 1);
 }
 
 
@@ -44,25 +44,22 @@ const filterOutCompositeNumbers = (arr: number[]): number[] => {
  */
 export const primeSum = (n: number): number[][] => {
 
-    const primes = generateAllPrimes(n);
-    // console.log(primes);
-    const pairMap = new Map<number, number>();
-    const result: number[][] = [];
+  const primes = generateAllPrimes(n);
+  // console.log(primes);
+  const pairMap = new Map<number, number>();
+  const result: number[][] = [];
 
-    for (let i = 0; i < primes.length; i++) {
-        let key = Math.round(n - primes[i]);
+  for (let i = 0; i < primes.length; i++) {
+    let key = Math.round(n - primes[i]);
 
-        if (pairMap.has(primes[i])) {
-            result.unshift([key, primes[i]]);
-        } else {
-            pairMap.set(key, primes[i])
-        }
+    if (pairMap.has(primes[i])) {
+      result.unshift([key, primes[i]]);
+    } else {
+      pairMap.set(key, primes[i])
     }
-    return result.length ? result : null
+  }
+  return result.length ? result : null
 }
-
-// console.log(primeSum(12));
-
 
 /**
  * Return the number of primes less then n
@@ -70,40 +67,38 @@ export const primeSum = (n: number): number[][] => {
  * @ For LeetCode Solutions
  */
 export const numOfPrimes = (n: number): number => {
-    let count = 0;
-    let l = Math.floor(n / 32) + 1;
-    let arr = [];
-    for (let i = 0; i < l; i++) {
-        arr.push(0);
-    }
+  let count = 0;
+  let l = Math.floor(n / 32) + 1;
+  let arr = [];
+  for (let i = 0; i < l; i++) {
+    arr.push(0);
+  }
 
-    for (let i = 2; i < n; i++) {
-        if ((arr[Math.floor(i / 32)] & (1 << (i & 31))) !== 0) continue;
-        ++count;
-        for (let j = i + i; j < n; j += i) {
-            arr[Math.floor(j / 32)] |= 1 << (j & 31);
-        }
+  for (let i = 2; i < n; i++) {
+    if ((arr[Math.floor(i / 32)] & (1 << (i & 31))) !== 0) continue;
+    ++count;
+    for (let j = i + i; j < n; j += i) {
+      arr[Math.floor(j / 32)] |= 1 << (j & 31);
     }
-    return count;
+  }
+  return count;
 }
 
 export const isPrime = (n: number): boolean => {
-    if (n < 2) return false;
+  if (n < 2) return false;
 
-    const sqrt = ~~Math.sqrt(n);
+  const sqrt = ~~Math.sqrt(n);
 
-    for (let i = 2; i <= sqrt; i++) {
+  for (let i = 2; i <= sqrt; i++) {
 
-        if (n % i) continue;
+    if (n % i) continue;
 
-        return false;
-    }
+    return false;
+  }
 
-    return true;
+  return true;
 
 }
-
-
 
 /**
  * *2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 101*
