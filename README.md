@@ -60,6 +60,9 @@
 
 ### Sort
 
+![Sort-Methods Time/Space Complexity](assets/sort-methods.jpeg)
+
+
 - [Bubble](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/bubble-sort.ts)
 
 - [Selection](https://github.com/gaoyuan1223m/Algorithms-and-Data-Structures-with-Typescript/blob/master/src/Algorithm/sort/selection-sort.ts)
