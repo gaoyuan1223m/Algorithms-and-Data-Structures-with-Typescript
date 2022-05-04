@@ -1,3 +1,4 @@
+export * from './binary-search';
 export * from './prime-num';
 export * from './random';
 export * from './recursion';
