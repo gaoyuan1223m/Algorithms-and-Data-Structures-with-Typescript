@@ -29,7 +29,7 @@ class SortMethod {
 
   @logTime
   static useMergeSort(array: number[]): SortResult {
-   return this.getInstance().merge2(array);
+    return this.getInstance().merge2(array);
   }
 
   @logTime
@@ -47,17 +47,22 @@ class SortMethod {
     return this.getInstance().bubble2(array);
   }
 
+  @logTime
+  static useHeapSort(array: number[]): SortResult {
+    return this.getInstance().heap(array)
+  }
+
   /**
-   * 1s completed for 500000- (秒级50W条以内数据)
+   * 1s completed for 500000- (50W)
    */
-  protected quick(array: number[], loopCnt = 0, compCnt = 0, swapCnt = 0): SortResult{
+  protected quick(array: number[], loopCnt = 0, compCnt = 0, swapCnt = 0): SortResult {
     compCnt += 1;
 
     if (array.length <= 1) {
       return { array, loopCnt, compCnt, swapCnt };
     }
 
-    const middle = Math.floor(array.length / 2);
+    const middle = array.length >> 1;
     const pivot = array[middle];
     const left: number[] = [];
     const right: number[] = [];
@@ -93,6 +98,39 @@ class SortMethod {
   }
 
   /**
+   * Quick Sort：Pick up Pivot element,
+   * leftArray holds the elements less than or equal to the Pivot，
+   * rightArray save the others，
+   * and then selects Pivots recursively from leftArray and rightArray,
+   * till each element was selected as a Pivot
+   * @BestTimeComplexity nlogn
+   * @AverageTimeComplexity nlogn
+   * @WorstTimeComplexity n2
+   * @ExtraSpaceComplexity logn
+   * @InPlace No
+   * @Stability NO
+   */
+  protected quickSort(array: number[]): number[] {
+    if (array.length <= 1) {
+      return array;
+    }
+
+    const middle = array.length >> 1;
+    const pivot = array[middle];
+    const left: number[] = [];
+    const right: number[] = [];
+
+    for (let i = 0; i < array.length; i++) {
+      if (i === middle) continue;
+
+      const element = array[i];
+      element <= pivot ? left.push(element) : right.push(element);
+    }
+
+    return [...this.quickSort(left), pivot, ...this.quickSort(right)];
+  }
+
+  /**
    * @deprecated
    */
   protected merge(array: number[]): number[] {
@@ -117,14 +155,14 @@ class SortMethod {
   }
 
   /**
-   * 1s completed for 100000- (秒级10W条以内数据)
+   * 1s completed for 100000- (10W)
    */
   protected merge2(array: number[], loopCnt = 0, compCnt = 0, swapCnt = 0): SortResult {
     compCnt += 1;
 
     if (array.length <= 1) return { array, loopCnt, compCnt, swapCnt };
 
-    const middle = ~~(array.length / 2);
+    const middle = array.length >> 1;
     const { array: leftArray } = this.merge2(array.slice(0, middle), loopCnt, compCnt, swapCnt);
     const { array: rightArray } = this.merge2(array.slice(middle), loopCnt, compCnt, swapCnt);
 
@@ -132,7 +170,7 @@ class SortMethod {
   }
 
   /**
-   * 1s completed for 3500- (秒级3.5K条以内数据)
+   * 1s completed for 30000- (3W)
    */
   protected insert(array: number[]): SortResult {
     let loopCnt = 0;
@@ -141,19 +179,73 @@ class SortMethod {
 
     for (let i = 1; i < array.length; i++) {
       let idx = i;
-      while (idx > 0 && array[idx - 1] > array[idx]) {
-        [array[idx - 1], array[idx]] = [array[idx], array[idx - 1]];
+      const curr = array[idx];
+      while (idx > 0 && array[idx - 1] > curr) {
+        array[idx] = array[idx - 1];
         idx--;
 
         loopCnt += 1;
         compCnt += 1;
-        swapCnt += 3;
       }
+      array[idx] = curr;
 
       loopCnt += 1;
     }
 
-    return  { array, loopCnt, compCnt, swapCnt };
+    return { array, loopCnt, compCnt, swapCnt };
+  }
+
+  /**
+   * (original) Insert Sort, compare (i) to (i - 1)，
+   * if (i - 1) is larger than (i)，that means (i) should be put before (i - 1)，
+   * and swap them and proceed (i - 1 => i),
+   * till the index reduces to 1, or (i-1) is less than or equal to (i)
+   * @BestTimeComplexity n
+   * @AverageTimeComplexity n2
+   * @WorstTimeComplexity n2
+   * @ExtraSpaceComplexity 1
+   * @InPlace Yes
+   * @Stability Yes
+   */
+  private insertSort(array: number[]): number[] {
+    for (let i = 1; i < array.length; i++) {
+      let idx = i;
+      // idx > 0 compare till the index reduces to 1;
+      while (idx > 0 && array[idx - 1] > array[idx]) {
+        // TODO, too many swaps
+        [array[idx - 1], array[idx]] = [array[idx], array[idx - 1]];
+        idx--;
+      }
+    }
+
+    return array;
+  }
+
+  /**
+   * (optimization1) Insert Sort, mark [curr = (i)] and compare curr to (i - 1)，
+   * if (i - 1) is larger than the curr，that means curr should sit before (i - 1)，
+   * and assign (i - 1) to (i) and proceed,
+   * till the index reduces to 1, or (i-1) is less than or equal to the curr,
+   * and then assign the curr to its intended place
+   * @BestTimeComplexity n
+   * @AverageTimeComplexity n2
+   * @WorstTimeComplexity n2
+   * @ExtraSpaceComplexity 1
+   * @InPlace Yes
+   * @Stability Yes
+   */
+  private insertSort2(array: number[]): number[] {
+    for (let i = 1; i < array.length; i++) {
+      let idx = i;
+      const curr = array[idx];
+      while (idx > 0 && array[idx - 1] > curr) {
+        array[idx] = array[idx - 1];
+        idx--;
+      }
+      array[idx] = curr;
+    }
+
+    return array;
   }
 
   /**
@@ -177,7 +269,9 @@ class SortMethod {
         compCnt += 1;
       }
 
-      [array[idxOfMax], array[end]] = [array[end], array[idxOfMax]];
+      const temp = array[end];
+      array[end] = array[idxOfMax];
+      array[idxOfMax] = temp;
 
       // ------------ only for statistics --------
       loopCnt += 1;
@@ -221,11 +315,14 @@ class SortMethod {
 
       for (let begin = 1; begin <= end; begin++) {
         if (array[begin] < array[begin - 1]) {
-          [array[begin - 1], array[begin]] = [array[begin], array[begin - 1]];
+          const temp = array[begin];
+          array[begin] = array[begin - 1];
+          array[begin - 1] = temp;
+
           pointerAtSorted = begin;
 
-           // ---------only for statistics------
-           swapCnt += 3;
+          // ---------only for statistics------
+          swapCnt += 1;
         }
         // ---------only for statistics------
         loopCnt += 1;
@@ -236,6 +333,67 @@ class SortMethod {
 
       // ---------only for statistics------
       loopCnt += 1;
+    }
+
+    return { array, loopCnt, compCnt, swapCnt };
+  }
+
+  protected heap(array: number[]): SortResult {
+    let loopCnt = 0;
+    let compCnt = 0;
+    let swapCnt = 0;
+    let size = array.length;
+
+    // build in-place max heap
+    function shiftDown(index: number) {
+      const value = array[index]; // target value
+
+      while (index < Math.floor(size / 2)) { // has child
+        loopCnt += 1;
+        compCnt += 3; // approximate
+
+        // It must have left node if having child
+        let leftIndex = 2 * index + 1;
+        let leftValue = array[leftIndex];
+
+        let rightIndex = leftIndex + 1;
+        let rightValue = array[rightIndex];
+
+        // in case the right node is valid and it's large than the left
+        // so the right won, and we should take it's index and corresponding value instead
+        if (2 * index + 2 <= size - 1 && rightValue >= leftValue) {
+          leftIndex = rightIndex;
+          leftValue = rightValue;
+        }
+
+        // if the larger value is also less then the target value,
+        // which shows that max heap is ready
+        if (leftValue < value) break;
+
+        array[index] = leftValue;
+        index = leftIndex;
+      }
+
+      array[index] = value;
+    }
+
+    for (let i = size >> 1; i >= 0; i--) {
+      shiftDown(i);
+      loopCnt += 1;
+    }
+
+    while (size > 1) {
+      const temp = array[0];
+      array[0] = array[size - 1];
+      array[size - 1] = temp;
+
+      size -= 1;
+
+      // ----------------------------------------------------------------
+      loopCnt += 1;
+      swapCnt += 1;
+
+      shiftDown(0);
     }
 
     return { array, loopCnt, compCnt, swapCnt };

@@ -70,6 +70,6 @@ export function logTime(target: any, key: string, descriptor: PropertyDescriptor
     const timeStart = Date.now();
     const result = originFn.apply(this, args);
     const timeEnd = Date.now()
-    return { ...result, consumption: timeEnd - timeStart };
+    return { ...result, ['consumption(ms)']: timeEnd - timeStart };
   }
 }
