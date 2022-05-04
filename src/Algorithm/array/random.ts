@@ -43,8 +43,11 @@ function shuffle(array: number[], { from = 0, to = array.length - 1 }: Partial<R
   }
 
   for (let i = to; i > from; i--) {
-    const r = Math.floor(Math.random() * (i + 1));
-    [array[r], array[i]] = [array[i], array[r]]
+    const rIdx = generateRandomNumber({ min: from, max: to });
+    // [array[r], array[i]] = [array[i], array[r]]; // low efficiency
+    const temp = array[i];
+    array[i] = array[rIdx];
+    array[rIdx] = temp;
   }
 }
 
